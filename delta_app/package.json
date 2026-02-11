@@ -9,7 +9,6 @@
   ],
   "main": "webapp/index.html",
   "dependencies": {
-    "dotenv": "^17.2.4",
     "highcharts": "^12.1.2",
     "moment": "^2.30.1",
     "mongoose": "^9.1.5",
