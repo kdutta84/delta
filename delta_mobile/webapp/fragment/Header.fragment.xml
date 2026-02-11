@@ -1,0 +1,36 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <!-- Header Toolbar-->
+    <Toolbar
+        id="idHeaderToolbar"
+        design="Transparent"
+        width="400px"
+        style="Clear"
+    >
+        <HBox
+            id="idHeaderLeftOuterHBox"
+            visible="{ path: 'ScreenModel>/mHeader', formatter: '.formatter.headerTitle' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltamobilehost.fragment.HeaderLeft"
+                type="XML"
+            />
+        </HBox>
+
+        <HBox id="idHeaderMiddleOuterHBox">
+            <core:Fragment
+                fragmentName="ns.deltamobilehost.fragment.HeaderMiddle"
+                type="XML"
+            />
+        </HBox>
+
+        <HBox id="idHeaderRightOuterHBox">
+            <core:Fragment
+                fragmentName="ns.deltamobilehost.fragment.HeaderRight"
+                type="XML"
+            />
+        </HBox>
+    </Toolbar>
+</core:FragmentDefinition>

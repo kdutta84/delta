@@ -1,0 +1,39 @@
+<ActionSheet
+    xmlns:launchpad="sap.ushell.ui.launchpad"
+    id="oiTrackAction"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    core:require="{ MessageToast: 'sap/m/MessageToast' }"
+    title="Choose Your Action"
+    showCancelButton="true"
+    placement="Auto"
+>
+    <Button
+        id="idAlertOiTrackActionButton"
+        text="Alert"
+        type="{ path: 'ParaModel>/oi/action', formatter: '.formatter.oiTrackAlert' }"
+        icon="sap-icon://bell"
+        press="onOiTrackAction"
+    />
+    <Button
+        id="idBuyOiTrackActionButton"
+        text="Buy"
+        type="{ path: 'ParaModel>/oi/action', formatter: '.formatter.oiTrackBuy' }"
+        icon="sap-icon://cart"
+        press="onOiTrackAction"
+    />
+    <Button
+        id="idSellOiTrackActionButton"
+        text="Sell"
+        type="{ path: 'ParaModel>/oi/action', formatter: '.formatter.oiTrackSell' }"
+        icon="sap-icon://shipping-status"
+        press="onOiTrackAction"
+    />
+    <Button
+        id="idNoneOiTrackActionButton"
+        text="None"
+        type="{ path: 'ParaModel>/oi/action', formatter: '.formatter.oiTrackNone' }"
+        icon="sap-icon://less"
+        press="onOiTrackAction"
+    />
+</ActionSheet>

@@ -1,0 +1,123 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <HBox
+        id="idBuyOuterHBox"
+        class="sapUiTinyMarginBottom sapUiTinyMarginTop"
+    >
+        <VBox id="idBuyLeftVBox">
+            <HBox
+                id="idBuyHBox"
+                height="50px"
+                width="290px"
+            >
+                <Button
+                    id="idBuyFlagButton"
+                    press="onTrackFlag"
+                    width="70px"
+                    type="{ parts:['ParaModel>/track/flag','ParaModel>/track/time'], formatter: '.formatter.trackFlagType' }"
+                    text="Track :"
+                />
+                <TimePicker
+                    id="idBuyTimePicker"
+                    value="{ path: 'ParaModel>/track/time', formatter: '.formatter.formatTime' }"
+                    displayFormat="hh:mm a"
+                    valueFormat="hh:mm a"
+                    change="onTrackTime"
+                    minutesStep="15"
+                    secondsStep="0"
+                    width="130px"
+                    textAlign="Center"
+                    class="sapUiTinyMarginBegin"
+                />
+                <Button
+                    id="idTrackTimeGap"
+                    type="Transparent"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+            <HBox
+                id="idBuyDeltaHBox"
+                height="50px"
+            >
+                <Button
+                    id="idDeltaBuyFlagButton"
+                    press="onBuyDeltaFlag"
+                    width="70px"
+                    type="{ path: 'ParaModel>/buyDelta/flag', formatter: '.formatter.flagType' }"
+                    text="Delta :"
+                />
+                <StepInput
+                    id="idValueBuyDeltaStepInput"
+                    step="1"
+                    value="{ParaModel>/buyDelta/value}"
+                    change="onBuyDelta"
+                    textAlign="Center"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                />
+                <Button
+                    id="idDeltaTypeButton"
+                    icon="{ path: 'ParaModel>/buyDelta/type', formatter: '.formatter.buyDeltaIcon' }"
+                    type="{ parts:['ParaModel>/buyDelta/type','ParaModel>/buyDelta/flag'], formatter: '.formatter.buyDeltaType' }"
+                    class="sapUiSmallMarginBegin"
+                    press="onBuyDeltaType"
+                >
+                    <!-- press="onBuyDeltaDirectionPopup"
+                >
+                    <dependents>
+                        <core:Fragment
+                            fragmentName="ns.deltamobilehost.fragment.BuyDeltaDirection"
+                            type="XML"
+                        />
+                    </dependents> -->
+                </Button>
+            </HBox>
+        </VBox>
+        <VBox
+            id="idBuyRightVBox"
+            class="sapUiSmallMarginBegin"
+        >
+            <HBox
+                id="idBarTrackRightHBox"
+                height="50px"
+            >
+                <Label
+                    id="idHighTrackLabel"
+                    width="60px"
+                    text="High :"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idHighTrackStepInput"
+                    step="1"
+                    value="{ParaModel>/track/high}"
+                    change="onTrackHigh"
+                    width="130px"
+                    textAlign="Center"
+                />
+            </HBox>
+
+            <HBox
+                id="idBarToolbarTrackLeftHBox"
+                height="50px"
+            >
+                <Label
+                    id="idLowTrackLabel"
+                    text="Low :"
+                    width="60px"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idLowTrackStepInput"
+                    step="1"
+                    value="{ParaModel>/track/low}"
+                    change="onTrackLow"
+                    width="130px"
+                    textAlign="Center"
+                />
+            </HBox>
+        </VBox>
+    </HBox>
+</core:FragmentDefinition>

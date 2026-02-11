@@ -1,0 +1,140 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:tnt="sap.tnt"
+>
+    <VBox
+        id="idAlarmOuterHBox"
+        class="sapUiTinyMarginTop"
+    >
+        <HBox id="idAlarmTop">
+            <HBox
+                id="idAlarmTimeHBox"
+                width="275px"
+                height="50px"
+            >
+                <Button
+                    id="idAlarmFlagButton"
+                    text="Alarm :"
+                    width="70px"
+                    type="{ path: 'ParaModel>/alarm/flag', formatter: '.formatter.flagType' }"
+                    press="onAlarmFlag"
+                />
+
+                <!-- <TimePicker
+                id="idTimeAlarmTimePicker"
+                value="{ path: 'ParaModel>/alarm/time', formatter: '.formatter.formatTime' }"
+                change="onAlarm"
+                displayFormat="hh:mm a"
+                valueFormat="hh:mm a"
+                editable="{ParaModel>/alarm/flag}"
+                width="130px"
+                textAlign="Center"
+                /> -->
+                <!-- minutesStep="15" -->
+                <DateTimePicker
+                    id="idTimeAlarmTimePicker"
+                    value="{ path: 'ParaModel>/alarm/time', formatter: '.formatter.formatTime' }"
+                    change="onAlarm"
+                    placeholder="Set Alarm"
+                    secondsStep="0"
+                    displayFormat="dd MMM,  hh:mm a"
+                    width="180px"
+                    textAlign="Center"
+                    class="sapUiTinyMarginBegin"
+                />
+
+                <!-- <tnt:InfoLabel
+                id="idAlarmTimeLeft"
+                width="130px"
+                type="Transparent"
+                text="Alarm Not Set"
+                class="sapUiMediumMarginBegin sapUiTinyMarginTop"
+                colorScheme="7"
+            /> -->
+            </HBox>
+            <HBox id="idAlarmRepeatHBox">
+                <Button
+                    id="idRepeatAlarmButton"
+                    text="Repeat :"
+                    width="70px"
+                    type="{ path: 'ParaModel>/alarm/repeatFlag', formatter: '.formatter.flagType' }"
+                    press="onAlarmRepeatFlag"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginBegin"
+                />
+                <StepInput
+                    id="idAlarmRepeatStepInput"
+                    step="1"
+                    min="0"
+                    value="{ParaModel>/alarm/repeatCount}"
+                    change="onAlarmRepeatCount"
+                    width="130px"
+                    textAlign="Center"
+                />
+            </HBox>
+        </HBox>
+        <HBox id="idAlarmActionOuterBox">
+            <HBox
+                id="idAlarmActionHBox"
+                width="280px"
+            >
+                <Button
+                    id="idDeltaCheckBox"
+                    text="Delta"
+                    type="{ path: 'ParaModel>/alarm/delta', formatter: '.formatter.alarmActionType' }"
+                    press="onAlarmDelta"
+                    icon="sap-icon://back-to-top"
+                    width="97px"
+                    class="sapUiTinyMarginBegin"
+                />
+                <Button
+                    id="idTrackCheckBox"
+                    text="Track"
+                    type="{ path: 'ParaModel>/alarm/track', formatter: '.formatter.alarmActionType' }"
+                    icon="sap-icon://journey-change"
+                    press="onAlarmtrack"
+                    width="97px"
+                    class="sapUiMediumMarginBegin"
+                />
+                <Button
+                    id="idVolumeCheckBox"
+                    text="Volume"
+                    type="{ path: 'ParaModel>/alarm/volume', formatter: '.formatter.alarmActionType' }"
+                    icon="sap-icon://measuring-point"
+                    press="onAlarmVolume"
+                    width="97px"
+                    class="sapUiMediumMarginBegin"
+                />
+                <Button
+                    id="idOICheckBox"
+                    text="OI"
+                    type="{ path: 'ParaModel>/alarm/oi', formatter: '.formatter.alarmActionType' }"
+                    icon="sap-icon://capital-projects"
+                    press="onAlarmOi"
+                    width="97px"
+                    class="sapUiMediumMarginBegin"
+                />
+                <!-- <CheckBox
+                    id="idDeltaCheckBox"
+                    text="Delta"
+                    width="100px"
+                /> -->
+                <!-- <CheckBox
+                    id="idTrackCheckBox"
+                    text="Track"
+                    width="100px"
+                />
+                <CheckBox
+                    id="idVolumeCheckBox"
+                    text="Volume"
+                    width="100px"
+                />
+                <CheckBox
+                    id="idOICheckBox"
+                    text="OI"
+                    width="100px"
+                /> -->
+            </HBox>
+        </HBox>
+    </VBox>
+</core:FragmentDefinition>

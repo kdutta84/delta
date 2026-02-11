@@ -1,0 +1,98 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="amountPopup"
+        title="Account Info"
+    >
+        <content>
+            <VBox id="cont">
+                <HBox
+                    id="accountCont"
+                    class="sapUiTinyMarginTop"
+                    width="450px"
+                >
+                    <Label
+                        id="walletLbl"
+                        text="Wallet :"
+                        width="60px"
+                        class="sapUiSmallMarginBegin sapUiTinyMarginTop"
+                    />
+                    <Input
+                        id="walletAmt"
+                        value="{ parts:['ParaModel>/account/wallet','ParaModel>/account/currency'], formatter: '.formatter.calcAmt' }"
+                        editable="false"
+                        textAlign="Center"
+                        width="150px"
+                        class="sapUiSmallMarginBegin sapUiSmallMarginEnd"
+                    />
+                    <Text
+                        id="walletCurr"
+                        text="{ParaModel>/account/currency}"
+                        class="sapUiTinyMarginTop"
+                    />
+                </HBox>
+
+                <HBox
+                    id="amountCont"
+                    class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+                >
+                    <HBox
+                        id="amountBox"
+                        width="300px"
+                    >
+                        <Label
+                            id="amountLbl"
+                            text="Amount :"
+                            width="75px"
+                            class="sapUiSmallMarginBegin sapUiTinyMarginTop"
+                        />
+                        <StepInput
+                            id="amount"
+                            min="0"
+                            step="10"
+                            value="{ parts:['ParaModel>/account/amount','ParaModel>/account/currency'], formatter: '.formatter.calcAmt' }"
+                            change="onAmount"
+                            width="150px"
+                            textAlign="Center"
+                            class="sapUiSmallMarginEnd"
+                        />
+                        <Text
+                            id="amountCurr"
+                            text="{ParaModel>/account/currency}"
+                            class="sapUiTinyMarginTop"
+                        />
+                    </HBox>
+                    <GenericTag
+                        id="amountPer"
+                        text="{ path: 'ParaModel>/account/per', formatter: '.formatter.addPercantage' }"
+                        status="{ path: 'ParaModel>/account/per', formatter: '.formatter.amountPerStatus' }"
+                        class="sapUiLargeMarginBegin sapUiSmallMarginEnd"
+                    />
+                </HBox>
+            </VBox>
+        </content>
+
+        <buttons>
+            <Button
+                id="currency"
+                icon="sap-icon://lead"
+                press="onAmountCurr"
+            />
+            <Button
+                id="calcAmt"
+                icon="sap-icon://simulate"
+                press="onCalcAmount"
+                class="sapUiSmallMarginBegin"
+            />
+
+            <Button
+                id="amountSubmit"
+                text="Ok"
+                press="onAmountConfirm"
+                type="Emphasized"
+            />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

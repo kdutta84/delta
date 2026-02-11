@@ -1,0 +1,85 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Toolbar
+        id="idhSep_1_Toolbar"
+        width="500px"
+        class="sapUiTinyMarginBottom appBackground"
+    >
+        <Title
+            id="idInput2Title"
+            level="H1"
+            text="{ path: 'ScreenModel>/input2', formatter: '.formatter.input2Title' }"
+        />
+        <ToolbarSpacer id="idInput2ToolbarSpacer" />
+
+        <Button
+            id="idWindowInputButton"
+            icon="sap-icon://draw-rectangle"
+            press="onInput2Button"
+        />
+        <Button
+            id="idActionInputButton"
+            icon="sap-icon://activate"
+            press="onInput2Button"
+        />
+        <Button
+            id="idSellInputButton"
+            icon="sap-icon://shipping-status"
+            press="onInput2Button"
+        />
+        <Button
+            id="idTrackInputButton"
+            icon="sap-icon://journey-change"
+            press="onInput2Button"
+        />
+    </Toolbar>
+    <VBox
+        id="idhInput2BoxVBox"
+        height="90px"
+    >
+        <VBox
+            id="idhWindowBoxVBox"
+            visible="{ path: 'ScreenModel>/input2', formatter: '.formatter.windowBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaapphost.fragment.WindowBox"
+                type="XML"
+            />
+        </VBox>
+
+        <VBox
+            id="idhSellBoxVBox"
+            visible="{ path: 'ScreenModel>/input2', formatter: '.formatter.sellBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaapphost.fragment.SellBox"
+                type="XML"
+            />
+        </VBox>
+
+        <VBox
+            id="idhTrackBoxVBox"
+            class="sapUiTinyMarginTop"
+            height="90px"
+            visible="{ path: 'ScreenModel>/input2', formatter: '.formatter.trackBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaapphost.fragment.TrackBox"
+                type="XML"
+            />
+        </VBox>
+
+        <VBox
+            id="idhButtonVBox"
+            height="90px"
+            visible="{ path: 'ScreenModel>/input2', formatter: '.formatter.actionBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaapphost.fragment.ActionBox"
+                type="XML"
+            />
+        </VBox>
+    </VBox>
+</core:FragmentDefinition>

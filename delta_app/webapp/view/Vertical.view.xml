@@ -1,0 +1,122 @@
+<mvc:View
+    controllerName="ns.deltaapphost.controller.Vertical"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="idVerticalPage"
+        showHeader="false"
+        floatingFooter="true"
+        class="appBackground"
+    >
+        <VBox id="idVerticalVBox">
+            <HBox
+                id="idvHeaderHBox"
+                class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+            >
+                <HBox
+                    id="idHeaderLeftBox"
+                    justifyContent="Center"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.HeaderLeft"
+                        type="XML"
+                    />
+                </HBox>
+                <HBox
+                    id="idSpaceHBox"
+                    class="sapUiTinyMarginTop"
+                    width="150px"
+                >
+                    <Text
+                        id="alarmtext"
+                        text="|"
+                    />
+                </HBox>
+                <HBox
+                    id="idHeaderRightBox"
+                    justifyContent="Center"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.HeaderRight"
+                        type="XML"
+                    />
+                </HBox>
+            </HBox>
+            <VBox id="idvOptionChart">
+                <core:HTML
+                    id="idStockChartHTML"
+                    content="&lt;div id=&quot;StockChartV&quot; class=&quot;highcharts-dark&quot; &gt;&lt;/div&gt;"
+                />
+            </VBox>
+            <HBox
+                id="idvFooterHBox"
+                class="sapUiSmallMarginBegin sapUiTinyMarginTop"
+            >
+                <core:Fragment
+                    fragmentName="ns.deltaapphost.fragment.ButtonBox"
+                    type="XML"
+                />
+
+                <HBox
+                    id="idSpace1HBox"
+                    width="50px"
+                />
+                <core:Fragment
+                    fragmentName="ns.deltaapphost.fragment.HeaderMiddle"
+                    type="XML"
+                />
+            </HBox>
+            <HBox id="idControlHBox">
+                <VBox
+                    id="idControlLeftVBox"
+                    class="sapUiSmallMarginBegin"
+                    width="530px"
+                >
+                    <VBox
+                        id="idvPnlVBox"
+                        height="210px"
+                        class="sapUiTinyMarginTop"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaapphost.fragment.PnlBox"
+                            type="XML"
+                        />
+                    </VBox>
+                    <VBox
+                        id="idInput1BoxVBox"
+                        height="130px"
+                        class="sapUiSmallMarginTop"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaapphost.fragment.Input1Box"
+                            type="XML"
+                        />
+                    </VBox>
+
+                    <VBox
+                        id="idInput2BoxVBox"
+                        height="140px"
+                        class="sapUiSmallMarginTop"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaapphost.fragment.Input2Box"
+                            type="XML"
+                        />
+                    </VBox>
+                </VBox>
+                <VBox
+                    id="idControlRightVBox"
+                    class="sapUiTinyMarginBegin"
+                    width="550px"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.Bar"
+                        type="XML"
+                    />
+                </VBox>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

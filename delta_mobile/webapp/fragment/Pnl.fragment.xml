@@ -1,0 +1,558 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <VBox id="idPnlOuterVBox">
+        <!-- Pnl Info Container -->
+        <HBox
+            id="idPnlInfoHBox"
+            height="50px"
+        >
+            <HBox
+                id="idAddonHBox"
+                width="150px"
+                visible="{ path: 'PnlModel>/addon/flag', formatter: '.formatter.displayAddon' }"
+            >
+                <GenericTag
+                    id="idAddonPerGenericTag"
+                    text="Addon :"
+                    design="StatusIconHidden"
+                    press="onAddonInfo"
+                    status="{ path: 'PnlModel>/addonPer', formatter: '.formatter.pnlTagStatus' }"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                >
+                    <ObjectNumber
+                        id="idAddonPerObjectNumber"
+                        state="{ path: 'PnlModel>/addonPer', formatter: '.formatter.pnlTagStatus' }"
+                        emphasized="true"
+                        number="{ path: 'PnlModel>/addonPer', formatter: '.formatter.pnlTagPer' }"
+                        unit="%"
+                    />
+                </GenericTag>
+            </HBox>
+
+            <HBox
+                id="idAddonPnlHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+                visible="{ path: 'PnlModel>/addon/flag', formatter: '.formatter.displayAddonPnl' }"
+            >
+                <GenericTag
+                    id="idAddonPnlGenericTag"
+                    text="Pnl :"
+                    design="StatusIconHidden"
+                    press="onAddonInfo"
+                    status="{ path: 'PnlModel>/addon/pnl', formatter: '.formatter.pnlTagStatus' }"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                >
+                    <ObjectNumber
+                        id="idAddonPnlObjectNumber"
+                        state="{ path: 'PnlModel>/addon/pnl', formatter: '.formatter.pnlTagStatus' }"
+                        emphasized="true"
+                        number="{ path: 'PnlModel>/addon/pnl', formatter: '.formatter.pnlTagPer' }"
+                        unit="%"
+                    />
+                </GenericTag>
+            </HBox>
+
+            <HBox
+                id="idAddonActiveIconHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin"
+            >
+                <core:Icon
+                    id="idPnlActiveFlagIcon"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+                    src="sap-icon://cancel"
+                    color="red"
+                    visible="{ parts:['PnlModel>/flag','PnlModel>/mode'], formatter: '.formatter.PnlActive' }"
+                />
+            </HBox>
+
+            <HBox
+                id="idSupportPerPnlHBox"
+                width="150px"
+                visible="{ path: 'PnlModel>/addon/flag', formatter: '.formatter.displayAddon' }"
+            >
+                <GenericTag
+                    id="idSupportPerPnlGenericTag"
+                    text="Support :"
+                    design="StatusIconHidden"
+                    status="{ path: 'PnlModel>/supportPer', formatter: '.formatter.pnlTagStatus' }"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                >
+                    <ObjectNumber
+                        id="idBuyAddonBuyObjectNumber"
+                        state="{ path: 'PnlModel>/supportPer', formatter: '.formatter.pnlTagStatus' }"
+                        emphasized="true"
+                        number="{ path: 'PnlModel>/supportPer', formatter: '.formatter.pnlTagPer' }"
+                        unit="%"
+                    />
+                </GenericTag>
+            </HBox>
+
+            <HBox
+                id="idBuyAddonHBox"
+                width="150px"
+                visible="{ path: 'PnlModel>/addon/flag', formatter: '.formatter.displayAddonPnl' }"
+            >
+                <GenericTag
+                    id="idBuyAddonGenericTag"
+                    text="Buy :"
+                    design="StatusIconHidden"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                >
+                    <ObjectNumber
+                        id="idUsdAddonPnlObjectNumber"
+                        emphasized="true"
+                        number="{PnlModel>/addon/buy}"
+                    />
+                </GenericTag>
+            </HBox>
+
+            <HBox
+                id="idSupportActiveIconHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin"
+            >
+                <core:Icon
+                    id="idTopFlagIcon"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+                    color="{ path: 'PnlModel>/direction', formatter: '.formatter.pnlDirColor' }"
+                    src="{ path: 'PnlModel>/direction', formatter: '.formatter.pnlDirection' }"
+                    visible="{PnlModel>/flag}"
+                />
+            </HBox>
+            <HBox
+                id="idSlippagePnlHBox"
+                width="150px"
+                visible="{ path: 'PnlModel>/addon/flag', formatter: '.formatter.displayAddon' }"
+            >
+                <GenericTag
+                    id="idSlippagePnlGenericTag"
+                    text="Slippage :"
+                    design="StatusIconHidden"
+                    status="{ path: 'PnlModel>/slippage', formatter: '.formatter.pnlTagStatus' }"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                >
+                    <ObjectNumber
+                        id="idSlippagePnlObjectNumber"
+                        state="{ path: 'PnlModel>/slippage', formatter: '.formatter.pnlTagStatus' }"
+                        emphasized="true"
+                        number="{ path: 'PnlModel>/slippage', formatter: '.formatter.pnlTagPer' }"
+                        unit="%"
+                    />
+                </GenericTag>
+            </HBox>
+
+            <HBox
+                id="idAddonAmountHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+                visible="{ path: 'PnlModel>/addon/flag', formatter: '.formatter.displayAddonPnl' }"
+            >
+                <GenericTag
+                    id="idAmountAddonGenericTag"
+                    text="Amt :"
+                    design="StatusIconHidden"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                >
+                    <ObjectNumber
+                        id="idAddonBuyObjectNumber"
+                        emphasized="true"
+                        number="{PnlModel>/addon/usd}"
+                        unit="$"
+                    />
+                </GenericTag>
+            </HBox>
+        </HBox>
+        <!-- Pnl Line 1 Container -->
+        <HBox
+            id="idPnlLine1HBox"
+            height="50px"
+            class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+        >
+            <!-- Both Pnl -->
+            <HBox
+                id="idPnlBothHBox"
+                width="140px"
+                class="sapUiTinyMarginBegin"
+            >
+                <Label
+                    id="idPnLPnlBothLabel"
+                    text="PnL :"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idPnlPnlBothObjectStatus"
+                    text="{ path: 'PnlModel>/pnl', formatter: '.formatter.addPercantage' }"
+                    state="{ path: 'PnlModel>/pnl', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge"
+                    inverted="true"
+                />
+            </HBox>
+            <!-- Process End Flag -->
+            <HBox
+                id="idPnlActiveFlagHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+            >
+                <core:Icon
+                    id="idAddonMainIcon"
+                    src="sap-icon://cart"
+                    color="blue"
+                    class="sapUiTinyMarginBegin"
+                    visible="{ parts:[ 'PnlModel>/addon/flag', 'PnlModel>/addon/category'], formatter: '.formatter.addonMainIcon' }"
+                />
+            </HBox>
+
+            <!-- Count -->
+            <HBox
+                id="idCountHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+            >
+                <HBox
+                    id="idSupportCountHBox"
+                    width="80px"
+                    alignItems="Center"
+                    visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlSupport' }"
+                >
+                    <Label
+                        id="idSupportCountLabel"
+                        text=" Sup :"
+                        class="sapUiTinyMarginEnd"
+                    />
+                    <ObjectStatus
+                        id="idSupportCountObjectStatus"
+                        text="{PnlModel>/support}"
+                        state="Indication20"
+                        class="sapMObjectStatusLarge sapUiTinyMarginEnd"
+                        inverted="true"
+                    />
+                </HBox>
+
+                <HBox
+                    id="idAddonCountPnlHBox"
+                    width="80px"
+                    alignItems="Center"
+                    visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlReverse' }"
+                >
+                    <Label
+                        id="idAddonCountLabel"
+                        text=" Add :"
+                        class="sapUiTinyMarginEnd"
+                    />
+                    <ObjectStatus
+                        id="idAddonCountObjectStatus"
+                        text="{PnlModel>/addonCount}"
+                        state="Indication20"
+                        class="sapMObjectStatusLarge sapUiTinyMarginEnd"
+                        inverted="true"
+                    />
+                </HBox>
+
+                <Button
+                    id="idReverseFlagButton"
+                    icon="sap-icon://value-help"
+                    type="Transparent"
+                    press="onReverseButton"
+                />
+            </HBox>
+
+            <HBox
+                id="idDirectionHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+            >
+                <core:Icon
+                    id="idAddonSupportIcon"
+                    src="sap-icon://compare"
+                    color="blue"
+                    class="sapUiTinyMarginBegin"
+                    visible="{ parts:[ 'PnlModel>/addon/flag', 'PnlModel>/addon/category'], formatter: '.formatter.addonSupportIcon' }"
+                />
+            </HBox>
+
+            <!-- Reverse -->
+            <HBox
+                id="idReverseCountHBox"
+                width="80px"
+                class="sapUiTinyMarginBegin"
+                visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlSupport' }"
+            >
+                <Label
+                    id="idReverseCountLabel"
+                    text=" Rev :"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idReverseCountObjectStatus"
+                    text="{PnlModel>/reverse}"
+                    state="Indication20"
+                    class="sapMObjectStatusLarge sapUiSmallMarginEnd"
+                    inverted="true"
+                />
+            </HBox>
+
+            <HBox
+                id="idSlippageCountHBox"
+                width="80px"
+                class="sapUiTinyMarginBegin"
+                visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlReverse' }"
+            >
+                <Label
+                    id="idSlippageCountLabel"
+                    text=" Slp :"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idSlippageCountObjectStatus"
+                    text="{PnlModel>/slippage}"
+                    state="Indication20"
+                    class="sapMObjectStatusLarge sapUiSmallMarginEnd"
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+        <!-- Pnl Line 2 Container -->
+        <HBox
+            id="idPnlLine2HBox"
+            height="50px"
+            class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+        >
+            <!-- Call Pnl -->
+            <HBox
+                id="idPnlHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+            >
+                <Label
+                    id="idPnLCallLabel"
+                    text="PnL :"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idPnlCallObjectStatus"
+                    text="{ path: 'PnlModel>/call/pnl', formatter: '.formatter.addPercantage' }"
+                    state="{ path: 'PnlModel>/call/pnl', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge"
+                    inverted="true"
+                />
+            </HBox>
+            <!-- Call Buy Flag -->
+            <HBox
+                id="idCallBuyFlagHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+            >
+                <core:Icon
+                    id="idCallBuyIconIcon"
+                    src="sap-icon://cart"
+                    color="green"
+                    class="sapUiTinyMarginBegin"
+                    visible="{ parts:[ 'PnlModel>/call/flag', 'PnlModel>/call/category'], formatter: '.formatter.ceMainFlag' }"
+                />
+            </HBox>
+
+            <!-- Call Buy Price -->
+            <HBox
+                id="idBuyCallHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+                visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlSupport' }"
+            >
+                <Label
+                    id="idBuyCallLabel"
+                    text="Buy :"
+                    width="35px"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idBuyCallObjectStatus"
+                    text="{ path: 'PnlModel>/call/buy', formatter: '.formatter.formatBuy' }"
+                    state="Indication20"
+                    class="sapMObjectStatusLarge sapUiSmallMarginEnd"
+                    inverted="true"
+                />
+            </HBox>
+            <!-- Call Buy Lot -->
+            <HBox
+                id="idCallLotHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+                visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlReverse' }"
+            >
+                <Label
+                    id="idQtyCallLabel"
+                    text="Amt :"
+                    width="35px"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idQtyCallObjectStatus"
+                    text="{ path: 'PnlModel>/call/usd', formatter: '.formatter.pnlAmount' }"
+                    state="Indication20"
+                    class="sapMObjectStatusLarge sapUiSmallMarginEnd"
+                    inverted="true"
+                />
+            </HBox>
+            <!-- Call Support Flag -->
+            <!-- text="{PnlModel>/call/usd}" -->
+            <HBox
+                id="idCallSupportFlagHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+            >
+                <core:Icon
+                    id="idCallSupportIcon"
+                    src="sap-icon://compare"
+                    color="green"
+                    class="sapUiTinyMarginBegin"
+                    visible="{ parts:[ 'PnlModel>/call/flag', 'PnlModel>/call/category'], formatter: '.formatter.ceSupportFlag' }"
+                />
+            </HBox>
+
+            <!-- Call Ltp -->
+            <HBox
+                id="idCallLtpHBox"
+                width="140px"
+                class="sapUiTinyMarginBegin"
+            >
+                <Label
+                    id="idLtpCallLabel"
+                    text="Ltp :"
+                    width="40px"
+                    class="sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idLtpCallObjectStatus"
+                    text="{PnlModel>/call/ltp}"
+                    state="{ parts:['PnlModel>/call/flag','PnlModel>/call/ltp'], formatter: '.formatter.ltpState' }"
+                    class="sapMObjectStatusLarge "
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+
+        <!-- Pnl Line 3 Container -->
+        <HBox
+            id="idPnlLine3HBox"
+            height="50px"
+            class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+        >
+            <!-- Put Pnl -->
+            <HBox
+                id="idPnlPutHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+            >
+                <Label
+                    id="idPnLPutLabel"
+                    text="PnL :"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idPnlPutObjectStatus"
+                    text="{ path: 'PnlModel>/put/pnl', formatter: '.formatter.addPercantage' }"
+                    state="{ path: 'PnlModel>/put/pnl', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge"
+                    inverted="true"
+                />
+            </HBox>
+            <!-- Put Buy Flag -->
+            <HBox
+                id="idPutMainFlagHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+            >
+                <core:Icon
+                    id="idPutMainIcon"
+                    src="sap-icon://cart"
+                    color="red"
+                    class="sapUiTinyMarginBegin"
+                    visible="{ parts:[ 'PnlModel>/put/flag', 'PnlModel>/put/category'], formatter: '.formatter.peMainFlag' }"
+                />
+            </HBox>
+
+            <!-- Put Buy Price -->
+            <HBox
+                id="idPutBuyHBox"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+                visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlSupport' }"
+            >
+                <Label
+                    id="idBuyPutLabel"
+                    text="Buy :"
+                    width="35px"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idBuyPutObjectStatus"
+                    text="{ path: 'PnlModel>/put/buy', formatter: '.formatter.formatBuy' }"
+                    state="Indication20"
+                    class="sapMObjectStatusLarge sapUiSmallMarginEnd"
+                    inverted="true"
+                />
+            </HBox>
+
+            <!-- Put Buy Lot -->
+            <HBox
+                id="idPutQtyHBox"
+                visible="{ path: 'ScreenModel>/pnlSupport', formatter: '.formatter.pnlReverse' }"
+                width="150px"
+                class="sapUiTinyMarginBegin"
+            >
+                <Label
+                    id="idQtyPutLabel"
+                    text="Amt :"
+                    width="35px"
+                    class="sapUiTinyMarginEnd sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idQtyPutObjectStatus"
+                    text="{ path: 'PnlModel>/put/usd', formatter: '.formatter.pnlAmount' }"
+                    state="Indication20"
+                    class="sapMObjectStatusLarge sapUiSmallMarginEnd"
+                    inverted="true"
+                />
+            </HBox>
+            <!-- Put Support Flag -->
+            <HBox
+                id="idPutSupportFlagHBox"
+                width="50px"
+                class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+            >
+                <core:Icon
+                    id="idPutSupportFlagIcon"
+                    src="sap-icon://compare"
+                    class="sapUiTinyMarginBegin"
+                    color="red"
+                    visible="{ parts:[ 'PnlModel>/put/flag', 'PnlModel>/put/category'], formatter: '.formatter.peSupportFlag' }"
+                />
+            </HBox>
+
+            <!-- Put Ltp -->
+            <HBox
+                id="idPutLtpHBox"
+                width="140px"
+                class="sapUiTinyMarginBegin"
+            >
+                <Label
+                    id="idLtpPutLabel"
+                    text="Ltp :"
+                    width="40px"
+                    class="sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idLtpPutObjectStatus"
+                    text="{PnlModel>/put/ltp}"
+                    state="{ parts:['PnlModel>/put/flag','PnlModel>/put/ltp'], formatter: '.formatter.ltpState' }"
+                    class="sapMObjectStatusLarge "
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+    </VBox>
+</core:FragmentDefinition>

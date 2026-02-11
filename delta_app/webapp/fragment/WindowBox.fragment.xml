@@ -1,0 +1,115 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <HBox
+        id="idWindowOuterHBox"
+        class="sapUiTinyMarginTop"
+    >
+        <!-- Left Parameters 1 -->
+        <VBox
+            id="idWindowLeftVBox"
+            class="sapUiTinyMarginBegin"
+            width="280px"
+        >
+            <!-- Profit -->
+            <HBox
+                id="idProfitHBox"
+                class="sapUiSmallMarginBottom"
+            >
+                <Label
+                    id="idProfitLabel"
+                    text="Profit :"
+                    width="70px"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idProfitStepInput"
+                    step="5"
+                    value="{ParaModel>/profit}"
+                    change="onProfit"
+                    width="130px"
+                    textAlign="Center"
+                />
+                <Button
+                    id="idProfitTrailButton"
+                    text="{ parts: ['ParaModel>/profitTrail/flag', 'ParaModel>/profitTrail/per'], formatter: '.formatter.trailPer' }"
+                    icon="sap-icon://download"
+                    type="{ path:'ParaModel>/profitTrail/flag', formatter: '.formatter.profitTrailType' }"
+                    class="sapUiTinyMarginBegin"
+                    ariaHasPopup="Dialog"
+                    press="onProfitTrailPopup"
+                />
+            </HBox>
+            <!-- Loss -->
+            <HBox id="idLossHBox">
+                <Label
+                    id="idLossLabel"
+                    text="Loss :"
+                    width="70px"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idLossStepInput"
+                    step="5"
+                    value="{ParaModel>/loss}"
+                    change="onLoss"
+                    width="130px"
+                    textAlign="Center"
+                />
+                <Button
+                    id="idLossTrailButton"
+                    text="{ parts: ['ParaModel>/lossTrail/flag', 'ParaModel>/lossTrail/per'], formatter: '.formatter.trailPer' }"
+                    icon="sap-icon://back-to-top"
+                    type="{ path:'ParaModel>/lossTrail/flag', formatter: '.formatter.lossTrailType' }"
+                    class="sapUiTinyMarginBegin"
+                    ariaHasPopup="Dialog"
+                    press="onLossTrailPopup"
+                />
+            </HBox>
+        </VBox>
+
+        <VBox
+            id="idWindowRightVBox"
+            class="sapUiSmallMarginBegin"
+        >
+            <HBox
+                id="idSupportWindowHBox"
+                class="sapUiSmallMarginBottom"
+            >
+                <Label
+                    id="idHoldLabel"
+                    text="Hold :"
+                    width="60px"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idHoldStepInput"
+                    min="0"
+                    value="{ParaModel>/hold}"
+                    step="5"
+                    change="onHold"
+                    width="130px"
+                    textAlign="Center"
+                />
+            </HBox>
+            <HBox id="idExitHBox">
+                <Label
+                    id="idExitLabel"
+                    text="Exit :"
+                    width="60px"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idExitStepInput"
+                    min="0"
+                    value="{ParaModel>/exit}"
+                    step="5"
+                    change="onExit"
+                    width="130px"
+                    textAlign="Center"
+                />
+            </HBox>
+        </VBox>
+    </HBox>
+</core:FragmentDefinition>

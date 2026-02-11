@@ -1,0 +1,32 @@
+<ActionSheet
+    xmlns:launchpad="sap.ushell.ui.launchpad"
+    id="clockSetting"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    core:require="{ MessageToast: 'sap/m/MessageToast' }"
+    title="Choose Your Action"
+    showCancelButton="true"
+    placement="Bottom"
+>
+    <Button
+        id="idStopWatchSettingButton"
+        text="Stopwatch"
+        type="{ path: 'ScreenModel>/clockType', formatter: '.formatter.clockTypeStopwatch' }"
+        icon="sap-icon://fob-watch"
+        press="onClockSetting"
+    />
+    <Button
+        id="idClockSettingButton"
+        text="Clock"
+        type="{ path: 'ScreenModel>/clockType', formatter: '.formatter.clockTypeClock' }"
+        icon="sap-icon://in-progress"
+        press="onClockSetting"
+    />
+    <Button
+        id="idBuySettingButton"
+        text="Buy"
+        type="{ path: 'ScreenModel>/clockType', formatter: '.formatter.clockTypeBuy' }"
+        icon="sap-icon://cart"
+        press="onClockSetting"
+    />
+</ActionSheet>

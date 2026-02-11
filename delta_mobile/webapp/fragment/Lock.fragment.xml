@@ -1,0 +1,52 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <Dialog
+        id="idServerDialog"
+        title="Lock Status"
+    >
+        <content>
+            <Panel
+                id="idLockPanel"
+                class="sapUiSmallMarginTop"
+            >
+                <!-- <headerToolbar>
+                    <OverflowToolbar id="idLockToolbar">
+                        <Title
+                            id="idLockTitle"
+                            text="Lock Status"
+                        />
+                    </OverflowToolbar>
+                </headerToolbar> -->
+                <content>
+                    <HBox id="idLockVBox">
+                        <Switch
+                            id="idLockSwitch"
+                            type="AcceptReject"
+                            state="{ScreenModel>/mLocked}"
+                            change="onLockChange"
+                        />
+                        <ObjectStatus
+                            id="idLockStatusObjectStatus"
+                            text="{ path: 'ScreenModel>/mLocked', formatter: '.formatter.lockText' }"
+                            state="{ path: 'ScreenModel>/mLocked', formatter: '.formatter.lockStatus' }"
+                            inverted="true"
+                            press="onLockText"
+                            class="sapMObjectStatusLarge sapUiSmallMarginBegin"
+                        />
+                    </HBox>
+                </content>
+            </Panel>
+        </content>
+
+        <buttons>
+            <Button
+                id="idLockSubmit"
+                text="Confirm"
+                press="onLockConfirm"
+                type="Emphasized"
+            />
+        </buttons>
+    </Dialog>
+</c:FragmentDefinition>

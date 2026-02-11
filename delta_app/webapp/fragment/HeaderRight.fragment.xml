@@ -1,0 +1,173 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <HBox id="idHeaderRightHBox">
+        <!-- Time Frame -->
+        <HBox
+            id="idTimeframeHBox"
+            width="90px"
+            visible="{ path: 'ScreenModel>/headerRight', formatter: '.formatter.headerZoom' }"
+        >
+            <MenuButton
+                id="idTimeframeMenuButton"
+                text="{ path: 'ParaModel>/timeframe', formatter: '.formatter.selectedTimeframe' }"
+                enabled="true"
+                type="Transparent"
+                width="80px"
+            >
+                <Menu
+                    id="idTimeframeMenu"
+                    itemSelected="onTimeFrame"
+                    items="{path: 'TimeframeModel>/'}"
+                >
+                    <MenuItem
+                        id="idTextTimeframeMenuItem"
+                        key="{TimeframeModel>key}"
+                        text="{TimeframeModel>text}"
+                        startsSection="{TimeframeModel>section}"
+                    />
+                </Menu>
+            </MenuButton>
+        </HBox>
+        <!-- Zoom Box -->
+        <HBox
+            id="idZoomHBox"
+            width="250px"
+            visible="{ path: 'ScreenModel>/headerRight', formatter: '.formatter.headerZoom' }"
+        >
+            <SegmentedButton
+                id="idZoomSegmentedButton"
+                selectedItem="idAllZoomSegmentedButtonItem"
+            >
+                <items>
+                    <SegmentedButtonItem
+                        id="idHZoom1SegmentedButtonItem"
+                        width="60px"
+                        press="onZoom1"
+                    />
+                    <SegmentedButtonItem
+                        id="idHZoom2SegmentedButtonItem"
+                        width="60px"
+                        press="onZoom2"
+                    />
+                    <SegmentedButtonItem
+                        id="idHZoom3SegmentedButtonItem"
+                        width="60px"
+                        press="onZoom3"
+                    />
+                    <SegmentedButtonItem
+                        id="idAllZoomSegmentedButtonItem"
+                        text="All"
+                        width="60px"
+                        press="onZoomAll"
+                    />
+                </items>
+            </SegmentedButton>
+        </HBox>
+
+        <!-- Update Box  -->
+        <HBox
+            id="idHeaderUpdateHBox"
+            width="340px"
+            visible="{ path: 'ScreenModel>/headerRight', formatter: '.formatter.headerUpdate' }"
+        >
+            <HBox
+                id="idHeaderUpdateCallHBox"
+                width="150px"
+            >
+                <core:Icon
+                    id="idHeaderUpdateCallIcon"
+                    src="sap-icon://trend-up"
+                    color="green"
+                    class="sapUiTinyMarginTop sapUiSmallMarginBegin"
+                />
+                <Title
+                    id="idHeaderUpdateCallTitle"
+                    level="H3"
+                    text="0:0"
+                    class="sapUiTinyMarginTop sapUiSmallMarginBegin"
+                />
+            </HBox>
+
+            <HBox
+                id="idHeaderUpdatePutHBox"
+                width="150px"
+            >
+                <core:Icon
+                    id="idHeaderUpdatePutIcon"
+                    src="sap-icon://trend-down"
+                    color="red"
+                    class="sapUiTinyMarginTop sapUiSmallMarginBegin"
+                />
+                <Title
+                    id="idHeaderUpdatePutTitle"
+                    level="H3"
+                    text="0:0"
+                    class="sapUiTinyMarginTop sapUiSmallMarginBegin"
+                />
+            </HBox>
+        </HBox>
+        <!-- Ask Gap Box  -->
+        <HBox
+            id="idAskGapHBox"
+            width="340px"
+            visible="{ path: 'ScreenModel>/headerRight', formatter: '.formatter.headerAskbid' }"
+        >
+            <HBox
+                id="idaskGapTypeHBox"
+                width="40px"
+            >
+                <core:Icon
+                    id="idaskGapIcon"
+                    src="sap-icon://trend-up"
+                    color="green"
+                    press="onAskGapType"
+                    class="sapUiTinyMarginTop sapUiTinyMarginBegin"
+                />
+            </HBox>
+            <ToolbarSeparator id="idSep3ToolbarSeparator" />
+            <HBox
+                id="idaskGapBuyHBox"
+                width="150px"
+            >
+                <core:Icon
+                    id="idaskGapBuyIcon"
+                    src="sap-icon://cart"
+                    color="green"
+                    class=" sapUiTinyMarginTop sapUiSmallMarginBegin"
+                />
+                <ObjectStatus
+                    id="idaskGapBuyObjectStatus"
+                    text="0 %"
+                    state="Indication10"
+                    class="sapMObjectStatusLarge sapUiSmallMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idaskGapSellHBox"
+                width="150px"
+            >
+                <core:Icon
+                    id="idaskGapSellIcon"
+                    src="sap-icon://shipping-status"
+                    color="red"
+                    class="sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idaskGapSellObjectStatus"
+                    text="0 %"
+                    state="Indication10"
+                    class="sapMObjectStatusLarge sapUiSmallMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+        <HBox
+            id="idHeaderhistoryHBox"
+            width="340px"
+            visible="{ path: 'ScreenModel>/headerRight', formatter: '.formatter.headerHistory' }"
+        />
+    </HBox>
+</core:FragmentDefinition>

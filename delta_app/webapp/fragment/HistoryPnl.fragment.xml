@@ -1,0 +1,173 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <VBox
+        id="idPnlVBox"
+        class="sapUiTinyMarginBegin"
+    >
+        <HBox
+            id="idHistoryPnlOuterHBox"
+            height="60px"
+        >
+            <HBox
+                id="idHistoryPnlPnlHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idHistoryPnlPnlTitle"
+                    text="Pnl :"
+                    class="sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idHistoryPnlPnlPerObjectStatus"
+                    text="{ path: 'ItemModel>/pnl', formatter: '.formatter.addPercentage' }"
+                    state="{ path: 'ItemModel>/pnl', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idHistoryPnlRevHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idHistoryPnlRevTitle"
+                    text="Rev :"
+                    class="sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idHistoryPnlRevObjectStatus"
+                    text="{ItemModel>/rev}"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idHistoryPnlAmtHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idHistoryPnlAmtTitle"
+                    text="Amt :"
+                    class="sapUiTinyMarginTop"
+                />
+                <ObjectStatus
+                    id="idHistoryPnlAmtObjectStatus"
+                    text="{ path: 'ItemModel>/amt', formatter: '.formatter.addDollar' }"
+                    state="{ path: 'ItemModel>/amt', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+
+        <HBox
+            id="idHistoryPnlDetailOuterHBox"
+            height="40px"
+        >
+            <HBox
+                id="idHistoryPnlSupportHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Button
+                    id="idHistoryPnlSupportLabel"
+                    text="Support :"
+                    type="Transparent"
+                    icon="sap-icon://compare"
+                />
+
+                <Title
+                    id="idHistoryPnlSupportTitle"
+                    text="{ItemModel>/support}"
+                    class="sapUiTinyMarginTop"
+                />
+            </HBox>
+            <HBox
+                id="idHistoryPnlAddonHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Button
+                    id="idHistoryPnlAddonLabel"
+                    text="Addon :"
+                    type="Transparent"
+                    icon="sap-icon://split"
+                />
+
+                <Title
+                    id="idHistoryPnlAddonTitle"
+                    text="{ItemModel>/addon}"
+                    class="sapUiTinyMarginTop"
+                />
+            </HBox>
+            <HBox
+                id="idHistoryPnlSlippageHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Button
+                    id="idHistoryPnlSlippagePerLabel"
+                    text="Slippage :"
+                    type="Transparent"
+                    icon="sap-icon://decision"
+                />
+
+                <Title
+                    id="idHistoryPnlSlippageTitle"
+                    text="{ItemModel>/slippage}"
+                    class="sapUiTinyMarginTop"
+                />
+            </HBox>
+        </HBox>
+
+        <HBox
+            id="idHistoryPnlSupportPerOuterHBox"
+            height="50px"
+        >
+            <HBox
+                id="idHistoryPnlSupportPerHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <ObjectStatus
+                    id="idHistoryPnlSupportPerObjectStatus"
+                    text="{ path: 'ItemModel>/supportPer', formatter: '.formatter.addPercentage' }"
+                    state="{ path: 'ItemModel>/supportPer', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idHistoryPnlAddonPerHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <ObjectStatus
+                    id="idHistoryPnlAddonPerObjectStatus"
+                    text="{ path: 'ItemModel>/addonPer', formatter: '.formatter.addPercentage' }"
+                    state="{ path: 'ItemModel>/addonPer', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idHistoryPnlSlippagePerHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <ObjectStatus
+                    id="idHistoryPnlSlippagePerObjectStatus"
+                    text="{ path: 'ItemModel>/slippagePer', formatter: '.formatter.addPercentage' }"
+                    state="{ path: 'ItemModel>/slippagePer', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+    </VBox>
+</c:FragmentDefinition>

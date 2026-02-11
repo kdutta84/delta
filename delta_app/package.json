@@ -1,0 +1,44 @@
+{
+  "name": "delta_app_host",
+  "version": "0.0.1",
+  "description": "Delta Exc App",
+  "keywords": [
+    "ui5",
+    "openui5",
+    "sapui5"
+  ],
+  "main": "webapp/index.html",
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "highcharts": "^12.1.2",
+    "moment": "^2.30.1",
+    "mongoose": "^9.1.5",
+    "npm": "^11.9.0",
+    "ui5-tooling-modules": "^3.24.3"
+  },
+  "devDependencies": {
+    "@sap-ux/eslint-plugin-fiori-tools": "^0.4.0",
+    "@sap/eslint-plugin-ui5-jsdocs": "2.0.5",
+    "@sap/ux-ui5-tooling": "1",
+    "@sapui5/ts-types": "~1.139.0",
+    "@ui5/cli": "^4.0.38",
+    "eslint": "8.57.0",
+    "eslint-plugin-fiori-custom": "2.6.7",
+    "highcharts": "^12.3.0",
+    "highcharts-draggable-points": "^2.0.10",
+    "ui5-middleware-simpleproxy": "^3.4.3",
+    "ui5-tooling-modules": "^3.30.1"
+  },
+  "scripts": {
+    "start": "fiori run --open \"test/flp.html#app-preview\"",
+    "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
+    "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
+    "deploy": "fiori verify",
+    "deploy-config": "fiori add deploy-config",
+    "start-noflp": "fiori run --open \"/index.html?sap-ui-xx-viewCache=false\"",
+    "int-test": "fiori run --open \"test/integration/opaTests.qunit.html\"",
+    "start-variants-management": "fiori run --open \"/preview.html#app-preview\"",
+    "unit-test": "fiori run --open \"test/unit/unitTests.qunit.html\""
+  },
+  "sapuxLayer": "CUSTOMER_BASE"
+}

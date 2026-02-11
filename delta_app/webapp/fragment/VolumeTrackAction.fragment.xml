@@ -1,0 +1,39 @@
+<ActionSheet
+    xmlns:launchpad="sap.ushell.ui.launchpad"
+    id="volumeTrackAction"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    core:require="{ MessageToast: 'sap/m/MessageToast' }"
+    title="Choose Your Action"
+    showCancelButton="true"
+    placement="Auto"
+>
+    <Button
+        id="idAlertVolumeTrackActionButton"
+        text="Alert"
+        type="{ path: 'ParaModel>/volume/action', formatter: '.formatter.volumeTrackAlert' }"
+        icon="sap-icon://bell"
+        press="onVolumeTrackAction"
+    />
+    <Button
+        id="idBuyVolumeTrackActionButton"
+        text="Buy"
+        type="{ path: 'ParaModel>/volume/action', formatter: '.formatter.volumeTrackBuy' }"
+        icon="sap-icon://cart"
+        press="onVolumeTrackAction"
+    />
+    <Button
+        id="idSellVolumeTrackActionButton"
+        text="Sell"
+        type="{ path: 'ParaModel>/volume/action', formatter: '.formatter.volumeTrackSell' }"
+        icon="sap-icon://shipping-status"
+        press="onVolumeTrackAction"
+    />
+    <Button
+        id="idNoneVolumeTrackActionButton"
+        text="None"
+        type="{ path: 'ParaModel>/volume/action', formatter: '.formatter.volumeTrackNone' }"
+        icon="sap-icon://less"
+        press="onVolumeTrackAction"
+    />
+</ActionSheet>
