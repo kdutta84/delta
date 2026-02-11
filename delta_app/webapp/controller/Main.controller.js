@@ -33,6 +33,7 @@ sap.ui.define(
       formatter: formatter,
 
       onInit: async function () {
+        debugger;
         try {
           // this.initConstants();
           let conn = await this.checkServerConn();
