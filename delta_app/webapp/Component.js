@@ -26,7 +26,7 @@ sap.ui.define(
         this.getRouter().initialize();
 
         sap.ui.getCore().layout = "";
-        sap.ui.getCore().apiPath = "http://localhost:4000"; // "http://deltaapi.coinpress.cloud"; //
+        sap.ui.getCore().apiPath = "https://deltaapi.coinpress.cloud"; // "http://localhost:4000"; //
         sap.ui.getCore().deltaPath = "https://api.india.delta.exchange";
 
         this.setInit();

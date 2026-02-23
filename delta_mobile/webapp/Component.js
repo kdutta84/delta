@@ -35,7 +35,7 @@ sap.ui.define(
         });
         ////////////////////////////////
         sap.ui.getCore().layout = "";
-        sap.ui.getCore().apiPath = "http://deltaapi.coinpress.cloud"; // "http://localhost:4000"; //
+        sap.ui.getCore().apiPath = "https://deltaapi.coinpress.cloud"; // "http://localhost:4000"; //
         sap.ui.getCore().deltaPath = "https://api.india.delta.exchange";
       },
     });
