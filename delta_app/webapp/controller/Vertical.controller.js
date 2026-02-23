@@ -38,12 +38,8 @@ sap.ui.define(
         this.getOwnerComponent()
           .getRouter()
           .attachRouteMatched(this._onRouteMatched, this);
-
-        // if (sap.ui.getCore().layout === "Vertical") {
-        //   this.initController();
-        // }
       },
-      _onRouteMatched: function () {
+      _onRouteMatched: async function () {
         if (sap.ui.getCore().layout === "Vertical") {
           this.initController();
         }

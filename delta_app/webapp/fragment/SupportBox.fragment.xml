@@ -99,8 +99,8 @@
                     id="idSupportCountFlagButton"
                     press="onAddonFlag"
                     type="{ path: 'ParaModel>/addon/flag', formatter: '.formatter.flagType' }"
-                    width="80px"
-                    text="AddOn :"
+                    width="77px"
+                    text="Addon :"
                 />
                 <StepInput
                     id="idPerAddonStepInput"

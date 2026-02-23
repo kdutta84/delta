@@ -38,7 +38,7 @@ async function initPara() {
 
 async function checkNewCandle() {
   // Within Chart Period and no Active Buy
-  if (getCurrentTime() <= M.P_Chart.endCandle || M.Buy.flag === true) {
+  if (getCurrentTime() <= M.P_Chart.endCandle) {
     return false;
   }
 
@@ -73,6 +73,8 @@ async function checkNewCandle() {
   // Check Volume Trigger
   checkOiTrigger();
 
+  M.paraFlag = true;
+
   return true;
 }
 
@@ -84,6 +86,7 @@ function checkAlarmTrigger() {
   if (
     M.P_Alarm.flag === false ||
     M.P_Alarm?.time === undefined ||
+    M.Para.switch !== C.none ||
     getCurrentTime() < M.P_Alarm?.time
   ) {
     return;
@@ -109,7 +112,7 @@ function checkAlarmTrigger() {
     M.P_Oi.flag = true;
   }
 
-  if (M.P_Alarm.repeatCount > 0) {
+  if (M.P_Alarm.repeatFlag === true && M.P_Alarm.repeatCount > 0) {
     M.P_Alarm.repeatCount = M.P_Alarm.repeatCount - 1;
   } else {
     resetWithRef(M.P_Alarm, M.I_Para.alarm);
@@ -278,6 +281,43 @@ function setAlert(Trigger, Action, Index, Type) {
   alert.action = Action;
   alert.index = Index;
   alert.type = Type;
+  // Update Alert Info
+  switch (Trigger) {
+    case C.reverse:
+      alert.type = M.P_SellReversal.count;
+      break;
+    case C.delta:
+      alert.type = M.P_SellDelta.count;
+      break;
+    case C.support:
+      alert.type = M.P_SellSupport.count;
+      break;
+    case C.addon:
+      alert.type = M.P_SellAddon.count;
+      break;
+    case C.alarm:
+      alert.type = 0;
+      if (M.P_Alarm.repeatFlag === true) {
+        alert.type = M.P_Alarm.repeatCount + 1;
+      }
+      break;
+    case C.volume:
+      if (M.P_Volume.type === C.average) {
+        alert.type = "~ " + M.P_Volume.per;
+      } else {
+        alert.type = "% " + M.P_Volume.per;
+      }
+      break;
+    case C.oi:
+      if (M.P_Oi.type === C.up) {
+        alert.type = "> " + M.P_Oi.per;
+      } else {
+        alert.type = "< " + M.P_Oi.per;
+      }
+
+      break;
+  }
+
   M.aAlert.push(alert);
   M.alertFlag = true;
 }
@@ -432,6 +472,9 @@ function initDeltaWindow() {
 }
 
 function updateDeltaWindow() {
+  if (M.DeltaWindow.status === false) {
+    return;
+  }
   updateDeltaWindowGap();
   setDeltaWindow();
   captureBuy();
@@ -765,13 +808,14 @@ function initExpiryPara() {
     0,
   ); // 5:30:00 PM
 
+  // Default Next date
+  if (today.getTime() > expiry.getTime()) {
+    expiry.setDate(today.getDate() + 1);
+  }
+
+  // Set Next Date for Expiry
   if (M.Para.headerMiddle === C.backtest) {
     expiry.setDate(today.getDate() + 1);
-  } else {
-    // Default Next date
-    if (today.getTime() > expiry.getTime()) {
-      expiry.setDate(today.getDate() + 1);
-    }
   }
   // Set Expiry Para
   setExpiryPara(expiry);
@@ -929,7 +973,7 @@ function addMessage(type, message, priority) {
   if (type === C.error && message !== "Insufficient Amount") {
     debugger;
   }
-
+  debugger;
   // Avoid Duplicate Messages
   if (M.lastMsg?.type === type && M.lastMsg?.message === message) {
     return;

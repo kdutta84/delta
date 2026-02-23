@@ -43,6 +43,11 @@ async function checkBuyDelta(index) {
       throw new Error("Buy Delta => Inactive Switch");
     }
 
+    // Validate +ve Candle
+    if (call.per < 0 && put.per < 0) {
+      return;
+    }
+
     M.P_Buy.flag = true;
     M.P_Buy.index = index;
     M.P_Buy.type = call.per > put.per ? C.call : C.put;

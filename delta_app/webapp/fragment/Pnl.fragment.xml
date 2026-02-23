@@ -127,16 +127,17 @@
                 <!-- visible="{ path: 'PnlModel>/addon/flag', formatter: '.formatter.displayAddon' }" -->
                 <GenericTag
                     id="idSlippagePnlGenericTag"
-                    text="Slippage :"
+                    text="Slip :"
                     design="StatusIconHidden"
-                    status="{ path: 'PnlModel>/slippage', formatter: '.formatter.pnlTagStatus' }"
-                    class="sapUiTinyMarginBottom"
+                    status="{ path: 'PnlModel>/slippagePer', formatter: '.formatter.pnlTagStatus' }"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                    press="onShowSlippage"
                 >
                     <ObjectNumber
                         id="idSlippagePnlObjectNumber"
-                        state="{ path: 'PnlModel>/slippage', formatter: '.formatter.pnlTagStatus' }"
+                        state="{ path: 'PnlModel>/slippagePer', formatter: '.formatter.pnlTagStatus' }"
                         emphasized="true"
-                        number="{ path: 'PnlModel>/slippage', formatter: '.formatter.pnlTagPer' }"
+                        number="{ path: 'PnlModel>/slippagePer', formatter: '.formatter.pnlTagPer' }"
                         unit="%"
                     />
                 </GenericTag>
@@ -180,7 +181,7 @@
                 />
                 <ObjectStatus
                     id="idPnlPnlBothObjectStatus"
-                    text="{ path: 'PnlModel>/pnl', formatter: '.formatter.addPercantage' }"
+                    text="{ path: 'PnlModel>/pnl', formatter: '.formatter.addPercentage' }"
                     state="{ path: 'PnlModel>/pnl', formatter: '.formatter.PercentageState' }"
                     class="sapMObjectStatusLarge"
                     inverted="true"
@@ -328,7 +329,7 @@
                 />
                 <ObjectStatus
                     id="idPnlCallObjectStatus"
-                    text="{ path: 'PnlModel>/call/pnl', formatter: '.formatter.addPercantage' }"
+                    text="{ path: 'PnlModel>/call/pnl', formatter: '.formatter.addPercentage' }"
                     state="{ path: 'PnlModel>/call/pnl', formatter: '.formatter.PercentageState' }"
                     class="sapMObjectStatusLarge"
                     inverted="true"
@@ -447,7 +448,7 @@
                 />
                 <ObjectStatus
                     id="idPnlPutObjectStatus"
-                    text="{ path: 'PnlModel>/put/pnl', formatter: '.formatter.addPercantage' }"
+                    text="{ path: 'PnlModel>/put/pnl', formatter: '.formatter.addPercentage' }"
                     state="{ path: 'PnlModel>/put/pnl', formatter: '.formatter.PercentageState' }"
                     class="sapMObjectStatusLarge"
                     inverted="true"

@@ -85,7 +85,7 @@
                 <Title
                     id="idIncBacktestTitle"
                     level="H3"
-                    text="Inc :"
+                    text="Gap :"
                     class="sapUiTinyMarginBegin sapUiTinyMarginTop"
                 />
                 <MenuButton

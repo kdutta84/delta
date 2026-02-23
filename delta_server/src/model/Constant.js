@@ -132,8 +132,8 @@ const defaultPara = {
   initPara: model,
   switch: test,
   interval: "15m",
-  scale: small,
-  strikeGap: 3,
+  scale: medium,
+  strikeGap: 4,
   barType: option,
 };
 
@@ -168,6 +168,8 @@ const historySchema = {
   buy: Number,
   ltp: Number,
   per: Number,
+  buySlp: Number,
+  sellSlp: Number,
 };
 
 module.exports = {

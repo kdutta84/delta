@@ -140,7 +140,7 @@
                             <Button
                                 id="idWithDbButton"
                                 text="Use Database"
-                                icon="sap-icon://overflow"
+                                icon="sap-icon://fridge"
                                 press="onResetServerUsingDatabase"
                                 width="130px"
                             />
@@ -173,6 +173,7 @@
                                 id="idSelectBitcoin"
                                 text="Bitcoin"
                                 width="130px"
+                                icon="sap-icon://bold-text"
                                 type="{ path: 'ParaModel>/select/bitcoin', formatter: '.formatter.selectCoin' }"
                                 class="sapUiMediumMarginEnd"
                                 press="onSelectBitcoin"
@@ -181,6 +182,7 @@
                                 id="idSelectEthereumButton"
                                 text="Ethereum"
                                 width="130px"
+                                icon="sap-icon://collapse"
                                 type="{ path: 'ParaModel>/select/Ethereun', formatter: '.formatter.selectCoin' }"
                                 class="sapUiMediumMarginEnd"
                                 press="onSelectEthereum"
@@ -189,6 +191,7 @@
                                 id="idSelectSolana"
                                 text="Solana"
                                 width="130px"
+                                icon="sap-icon://simple-payment"
                                 type="{ path: 'ParaModel>/select/solana', formatter: '.formatter.selectCoin' }"
                                 press="onSelectSolana"
                             />

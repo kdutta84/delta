@@ -66,7 +66,7 @@
                     </HBox>
                     <GenericTag
                         id="amountPer"
-                        text="{ path: 'ParaModel>/account/per', formatter: '.formatter.addPercantage' }"
+                        text="{ path: 'ParaModel>/account/per', formatter: '.formatter.addPercentage' }"
                         status="{ path: 'ParaModel>/account/per', formatter: '.formatter.amountPerStatus' }"
                         class="sapUiLargeMarginBegin sapUiSmallMarginEnd"
                     />

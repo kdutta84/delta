@@ -30,7 +30,7 @@ const I_Para = {
   lossTrail: { flag: false, per: 0 },
   account: {
     wallet: 0,
-    amount: 10,
+    amount: 5,
     per: 0,
     currency: C.usd,
   },
@@ -107,7 +107,7 @@ const I_Para = {
   },
   addon: {
     flag: true,
-    value: 2,
+    value: 1,
     per: 0,
   },
   sell: {
@@ -117,7 +117,7 @@ const I_Para = {
     reversal: { flag: false, count: 0, action: C.alert },
   },
   notify: {
-    email: true,
+    email: false,
     whatsapp: false,
     firebase: false,
   },
@@ -167,6 +167,8 @@ const I_Buy = {
       ltp: 0,
       per: 0,
       usd: 0,
+      buySlp: 0,
+      sellSlp: 0,
     },
     window: {
       status: false,
@@ -198,6 +200,8 @@ const I_Buy = {
       ltp: 0,
       per: 0,
       usd: 0,
+      buySlp: 0,
+      sellSlp: 0,
     },
     window: {
       status: false,
@@ -245,6 +249,8 @@ const I_Buy = {
       ltp: 0,
       per: 0,
       usd: 0,
+      buySlp: 0,
+      sellSlp: 0,
     },
   },
   capture: {

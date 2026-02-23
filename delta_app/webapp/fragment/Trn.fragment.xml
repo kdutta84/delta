@@ -68,6 +68,7 @@
                 width="150px"
             >
                 <c:Icon
+                    id="idSupportIcon"
                     src="sap-icon://compare"
                     color="{ path: 'TrnModel>/', formatter: '.formatter.historySupportIconColor' }"
                     class="sapUiTinyMarginTop sapUiSmallMarginEnd"
@@ -75,6 +76,7 @@
                 <GenericTag
                     id="idSupportGenericTag"
                     text="0 s"
+                    press="onShowSlippage"
                 />
             </HBox>
         </HBox>
@@ -124,6 +126,7 @@
                     id="idTrnBuyTimeColumn"
                     width="70px"
                     hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.hideSlippage' }"
                 >
                     <Label
                         id="idBuyTimeLabel"
@@ -140,6 +143,7 @@
                     id="idTrnSellTimeColumn"
                     width="70px"
                     hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.hideSlippage' }"
                 >
                     <Label
                         id="idSellTimeLabel"
@@ -149,6 +153,44 @@
                         <Text
                             id="idSellTimeTrnText"
                             text="{ path: 'TrnModel>sellTimeText', formatter: '.formatter.historyTime' }"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnBuySlpColumn"
+                    width="70px"
+                    hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.showSlippage' }"
+                >
+                    <Label
+                        id="idBuySlpLabel"
+                        text="Buy %"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idBuySlpTrnObjectStatus"
+                            text="{ path: 'TrnModel>buySlp', formatter: '.formatter.addSlpPercentage' }"
+                            state="{ path: 'TrnModel>buySlp', formatter: '.formatter.slpStatus' }"
+                            inverted="false"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnSellSlpColumn"
+                    width="70px"
+                    hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.showSlippage' }"
+                >
+                    <Label
+                        id="idSellSlpLabel"
+                        text="Sell %"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idSellSlpTrnObjectStatus"
+                            text="{ path: 'TrnModel>sellSlp', formatter: '.formatter.addSlpPercentage' }"
+                            state="{ path: 'TrnModel>sellSlp', formatter: '.formatter.slpStatus' }"
+                            inverted="false"
                         />
                     </table:template>
                 </table:Column>

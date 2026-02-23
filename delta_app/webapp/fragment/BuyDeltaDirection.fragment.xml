@@ -28,5 +28,5 @@
         type="{ path: 'ParaModel>/buyDelta/type', formatter: '.formatter.buyDeltaDirNone' }"
         icon="sap-icon://less"
         press="onBuyDeltaDirection"
-    />    
+    />
 </ActionSheet>

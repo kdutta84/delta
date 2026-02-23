@@ -175,7 +175,7 @@
                     id="idEthVBox"
                     alignItems="Start"
                     alignContent="Center"
-                    height="190px"
+                    height="200px"
                 >
                     <Button
                         id="idEthereumButton"
@@ -228,13 +228,13 @@
                 <core:HTML
                     id="idBarChart"
                     visible="{ path: 'ParaModel>/layout', formatter: '.formatter.barHorizontalLayout' }"
-                    content="&lt;div id=&quot;BarChart&quot; style=&quot;width:420px; height:490px;&quot;&gt;&lt;/div&gt;"
+                    content="&lt;div id=&quot;BarChart&quot; style=&quot;width:420px; height:498px;&quot;&gt;&lt;/div&gt;"
                 />
 
                 <core:HTML
                     id="idBarChartV"
                     visible="{ path: 'ParaModel>/layout', formatter: '.formatter.barVerticalLayout' }"
-                    content="&lt;div id=&quot;BarChartV&quot; style=&quot;width:420px; height:490px;&quot;&gt;&lt;/div&gt;"
+                    content="&lt;div id=&quot;BarChartV&quot; style=&quot;width:420px; height:498px;&quot;&gt;&lt;/div&gt;"
                 />
             </VBox>
 

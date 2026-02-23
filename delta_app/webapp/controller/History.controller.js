@@ -38,7 +38,20 @@ sap.ui.define(
 
       onInit: function () {
         this.initVariables();
+        this.initScreenModel();
         this.onSubmit();
+      },
+      initScreenModel: function () {
+        this.screen = {
+          dispSlp: false,
+        };
+
+        var oModel = new JSONModel(this.screen);
+        this.getView().setModel(oModel, "ScreenModel");
+      },
+      onShowItemSlippage: function () {
+        this.screen.dispSlp = !this.screen.dispSlp;
+        this.updateModel("ScreenModel", this.screen);
       },
       filterHistory: function () {
         // Filter Mode
@@ -281,6 +294,7 @@ sap.ui.define(
       onItemSelected: async function (oEvent) {
         let history = this.aFilter[oEvent.getSource().getSelectedIndex()];
         // Pnl Model
+
         this.itemPnl.pnl = history.pnl;
         this.itemPnl.rev = history.reverse;
         this.itemPnl.amt = this.formatDecimal(
@@ -371,8 +385,8 @@ sap.ui.define(
 
         // Variables
         this.filter = {
-          from: new Date(),
-          to: new Date(),
+          from: from,
+          to: to,
           days: days,
           mode: this.test,
           coin: this.all,

@@ -84,7 +84,7 @@
                         <HBox
                             id="idBookToolbarLeftHBox"
                             justifyContent="Center"
-                            width="190px"
+                            width="200px"
                         >
                             <Title
                                 id="idBuyTitle"

@@ -357,6 +357,7 @@ async function handleAction(req, res) {
       // await Helper.sendEmail();
       // Helper.initExpiryPara();
       // await Helper.restartProcess();
+      // await Helper.checkNewCandle();
       // return;
       //////////////
       Buy.refreshBuyInfo();
@@ -432,6 +433,8 @@ async function handleAction(req, res) {
       break;
 
     case "SellAll":
+      M.appAction = key;
+      Helper.sendMessage(res, C.info, "Manual Trigger ==> Sell All");
       break;
 
     case "Backtest":
@@ -575,6 +578,10 @@ async function processAppAction() {
         await Buy.sellBoth();
         break;
 
+      case "SellAll":
+        await Buy.sellAll();
+        break;
+
       case "BuySupport":
         if (M.Buy.type == C.call) {
           await Buy.buyPutSupport();
@@ -587,9 +594,21 @@ async function processAppAction() {
 
       case "SellSupport":
         if (M.Buy.type == C.call) {
+          // Call Condition
+          let callCond =
+            M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
+            M.BuyCapture?.callPer >= 0;
+          // Sell Put Support
           await Buy.sellPutSupport(M.Buy.put, false);
+          // Buy Call Addon
+          await Buy.processBuyCallAddon(callCond);
         } else {
+          let putCond =
+            M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
+            M.BuyCapture?.putPer >= 0;
           await Buy.sellCallSupport(M.Buy.call, false);
+          // Buy Put Addon
+          await Buy.processBuyPutAddon(putCond);
         }
         break;
 

@@ -210,13 +210,9 @@ sap.ui.define(
         }
       },
       startProcess: async function () {
-        // Check Server Connection
-
         try {
-          // await this.checkServerConn();
           // Get Server Para & Set Default Bar Type
           await this.updateServerPara("barType", this.option);
-          // await this.serverAction("StartApp", true);
           // Set Chart Layout
           this.initScreenPara();
           this.setTimeArray();
@@ -228,8 +224,6 @@ sap.ui.define(
           await this.setBarType();
           this.setZoomPara();
           this.getLiveData();
-          // Check Open Positions
-          // this.onOpenPosition();
         } catch (error) {
           this.setMessage(this.error, error, this.P1);
         }
@@ -404,7 +398,10 @@ sap.ui.define(
           }
         }
 
-        if (this.flags.candle) {
+        if (
+          this.flags.candle === true ||
+          this.getCurrentTime() > this.para.chart.endCandle
+        ) {
           await this.serverAction("NewCandle", true);
         }
 
@@ -472,6 +469,9 @@ sap.ui.define(
         // Check Server Messages
         this.displayServerMsg();
 
+        // if (this.para.chart.startCandle > 1771490400000) {
+        //   debugger;
+        // }
         // Check Server Flags
         await this.checkServerFLags();
 
@@ -2383,10 +2383,10 @@ sap.ui.define(
             this.setMessage(this.error, "Please Set Time", this.P3);
             return;
           }
-          if (this.para.alarm.time <= this.getCurrentTime()) {
-            this.setMessage(this.error, "Alarm Time Cannot be Past", this.P3);
-            return;
-          }
+          // if (this.para.alarm.time <= this.getCurrentTime()) {
+          //   this.setMessage(this.error, "Alarm Time Cannot be Past", this.P3);
+          //   return;
+          // }
           if (
             this.para.alarm.delta === false &&
             this.para.alarm.track === false &&
@@ -2541,12 +2541,11 @@ sap.ui.define(
               this.serverAction("BuySupport", true);
             })
             .catch((err) => {
-              this.setMessage(this.error, err, this.P1);
+              MessageToast.show("Action Cancelled");
             });
         } else if (this.buyInfo?.supportFlag === true) {
           this.setMessage(this.error, "Support Exists", this.P3);
         }
-        // this.serverAction("BuySupport", true);
       },
       onSellSupport: function () {
         if (this.buyInfo?.flag == false || this.buyInfo?.flag == undefined) {
@@ -2560,13 +2559,11 @@ sap.ui.define(
               this.serverAction("SellSupport", true);
             })
             .catch((err) => {
-              this.setMessage(this.error, err, this.P1);
+              MessageToast.show("Action Cancelled");
             });
         } else {
           this.setMessage(this.error, "Support Donot Exists", this.P3);
         }
-
-        // this.serverAction("SellSupport", true);
       },
       onBuyAddon: function () {
         if (this.buyInfo?.flag == false || this.buyInfo?.flag == undefined) {
@@ -2580,7 +2577,7 @@ sap.ui.define(
               this.serverAction("BuyAddon", true);
             })
             .catch((err) => {
-              this.setMessage(this.error, err, this.P1);
+              MessageToast.show("Action Cancelled");
             });
         } else if (this.buyInfo?.addon?.flag === true) {
           this.setMessage(this.error, "Addon Exists", this.P3);
@@ -2599,13 +2596,11 @@ sap.ui.define(
               this.serverAction("SellAddon", true);
             })
             .catch((err) => {
-              this.setMessage(this.error, err, this.P1);
+              MessageToast.show("Action Cancelled");
             });
         } else {
-          this.setMessage(this.error, "Addon Donot Exists", this.P3);
+          this.setMessage(this.error, "No Addon Found", this.P3);
         }
-
-        // this.serverAction("SellSupport", true);
       },
       onReverseWithSupport: function () {
         if (this.buyInfo?.flag == false || this.buyInfo?.flag == undefined) {
@@ -2618,10 +2613,8 @@ sap.ui.define(
             this.serverAction("ReverseWithSupport", true);
           })
           .catch((err) => {
-            this.setMessage(this.error, err, this.P1);
+            MessageToast.show("Action Cancelled");
           });
-
-        // this.serverAction("ReverseWithSupport", true);
       },
       onReverseWithoutSupport: function () {
         if (this.buyInfo?.flag == false || this.buyInfo?.flag == undefined) {
@@ -2634,10 +2627,8 @@ sap.ui.define(
             this.serverAction("ReverseWithoutSupport", true);
           })
           .catch((err) => {
-            this.setMessage(this.error, err, this.P1);
+            MessageToast.show("Action Cancelled");
           });
-
-        // this.serverAction("ReverseWithoutSupport", true);
       },
       enableBarCandle: function () {
         if (this.para.barType == undefined) {
@@ -2801,7 +2792,6 @@ sap.ui.define(
             return "LongDash";
           default:
             return "Line";
-            break;
         }
       },
 
@@ -2923,9 +2913,23 @@ sap.ui.define(
           this.stockChart.xAxis[0].update();
         }
       },
-
       onOpenPosition: function () {
-        this.serverAction("OpenPosition", true);
+        this.confirmPopup("Get Open Position")
+          .then((result) => {
+            this.serverAction("OpenPosition", true);
+          })
+          .catch((err) => {
+            MessageToast.show("Action Cancelled");
+          });
+      },
+      onSellAll: function () {
+        this.confirmPopup("Sell All Positions")
+          .then((result) => {
+            this.serverAction("SellAll", true);
+          })
+          .catch((err) => {
+            MessageToast.show("Action Cancelled");
+          });
       },
       displayDefaultChart: async function () {
         this.updateMarketChartInfo(this.btcSymbol);
@@ -3785,8 +3789,10 @@ sap.ui.define(
             break;
 
           case "NewCandle":
+            debugger;
+
             this.para = Data;
-            this.updateModel("ParaModel", this.para);
+            // this.updateModel("ParaModel", this.para);
             // Bar Chart Title
             this.setBarClock();
             // Add New Candle
@@ -3914,6 +3920,8 @@ sap.ui.define(
         this.updatePopupMsgButton(this.info);
       },
       addNewChartCandle: function () {
+        debugger;
+        MessageToast.show("New Candle");
         try {
           this.addNewCandle(0);
           this.addNewLine(5);
@@ -4150,7 +4158,7 @@ sap.ui.define(
                 // Update Para Model
                 that.updateModel("ParaModel", this.para);
                 MessageToast.show("Server ==> " + key);
-
+                debugger;
                 // that.updateParaPlotlines(key);
                 // Upadate PlotLines
                 if (
@@ -4166,6 +4174,10 @@ sap.ui.define(
                   if (key == "track" && this.para.track.flag == false) {
                     this.getView().byId("idTrackTimeGap").setText("");
                   }
+                }
+
+                if (key == "hold" || key == "exit") {
+                  this.updateBuyWindow();
                 }
 
                 // Refresh Chart
@@ -4660,7 +4672,7 @@ sap.ui.define(
         this.initStockChart();
         this.initBarChart();
 
-        if (sap.ui.getCore().layout === "Horizontal") {
+        if (sap.ui.getCore().layout === this.horizontal) {
           this.stockChart = $("#StockChart").highcharts();
           this.barChart = $("#BarChart").highcharts();
           // this.stockChart.setSize(1380, 1030, false);
@@ -4883,6 +4895,10 @@ sap.ui.define(
         var oModel = new JSONModel(this.backtestModel);
         this.getView().setModel(oModel, "BacktestModel");
       },
+      onShowSlippage: function () {
+        this.screen.dispSlp = !this.screen.dispSlp;
+        this.updateModel("ScreenModel", this.screen);
+      },
       initScreenModel: function () {
         this.screen = {
           msgSetting: this.auto,
@@ -4901,6 +4917,7 @@ sap.ui.define(
           addonPnl: this.addon,
           input1: "idBuyInputButton",
           input2: "idActionInputButton",
+          dispSlp: false,
         };
 
         var oModel = new JSONModel(this.screen);
@@ -4918,6 +4935,7 @@ sap.ui.define(
         }
       },
       setMessage: function (Type, Message, priority) {
+        debugger;
         let time = this.getTimeString();
         Message = time + " - " + Message;
         // var aTime = new Date().toTimeString().split(":");
@@ -5145,6 +5163,7 @@ sap.ui.define(
         this.getView().byId("idMessagePopoverButton").setType(type);
       },
       onZoom1: function () {
+        debugger;
         this.zoomType = this.zoom1;
         var to = this.para.chart.startCandle;
         var gap = this.para.chart.interval * 8;
@@ -5182,6 +5201,15 @@ sap.ui.define(
               this.para.chart.endCandle - this.getCurrentTime(),
             );
             this.getView().byId("idStopwatchButton").setText(String(timeText));
+
+            let aWatch = timeText.split(":");
+            if (aWatch[0] < 0 || aWatch[1] < 0) {
+              this.getView().byId("idStopwatchButton").setType(this.reject);
+            } else if (aWatch[0] < 1) {
+              this.getView().byId("idStopwatchButton").setType(this.emphasized);
+            } else {
+              this.getView().byId("idStopwatchButton").setType(this.default);
+            }
             break;
           case this.clock:
             this.getView()
@@ -5278,7 +5306,8 @@ sap.ui.define(
         var barType = oEvent.getParameters().item.getText();
 
         if (barType == this.book && this.para.chart.category == this.market) {
-          this.setMessage(this.error, "Please Select Option Chart", this.P3);
+          MessageToast.show("Please Select Option Chart");
+          // this.setMessage(this.error, "Please Select Option Chart", this.P3);
           return;
         }
 
@@ -5370,7 +5399,6 @@ sap.ui.define(
           })
           .catch((err) => {
             MessageToast.show("Action Cancelled");
-            // this.setMessage(this.error, "Action Cancelled", this.P3);
           });
 
         //////////////////////////
@@ -5411,8 +5439,9 @@ sap.ui.define(
         this.updateServerPara("reversal", this.para.reversal);
       },
       onSupportFlag: function (oEvent) {
-        this.para.support.flag = !this.para.support.flag;
-        this.updateServerPara("support", this.para.support);
+        MessageToast("Support cannot be removed");
+        // this.para.support.flag = !this.para.support.flag;
+        // this.updateServerPara("support", this.para.support);
       },
       onSupport: function (oEvent) {
         this.updateServerPara("support", this.para.support);
@@ -5426,6 +5455,10 @@ sap.ui.define(
         this.updateServerPara("supportDelta", this.para.supportDelta);
       },
       onAddonFlag: function (oEvent) {
+        if (this.para.addon.value <= 0) {
+          MessageToast.show("Invalid Addon Count");
+          return;
+        }
         this.para.addon.flag = !this.para.addon.flag;
         this.updateServerPara("addon", this.para.addon);
       },
@@ -6035,33 +6068,15 @@ sap.ui.define(
         this.para.chartLayout = this.horizontalHalf;
         await this.updateServerPara("layout", this.horizontal);
         await this.updateServerPara("chartLayout", this.horizontalHalf);
-        // window.open(window.location.href, "_blank");
-        // this.stockChart.destroy();
-        // this.barChart.destroy();
         location.reload();
-        // this.stockChart.setSize(1200, 1300);
-        // var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-        // oRouter.navTo("Horizontal", {});
       },
       onVerticalLayout: async function () {
         this.para.layout = this.vertical;
         this.para.chartLayout = this.verticalHalf;
         await this.updateServerPara("layout", this.vertical);
         await this.updateServerPara("chartLayout", this.verticalHalf);
-        // window.open(window.location.href, "_blank");
-        // this.stockChart.destroy();
-        // this.barChart.destroy();
         location.reload();
-        // this.stockChart.setSize(1200, 1300);
-        // var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-        // oRouter.navTo("Vertical", {});
       },
-      // setHorizontalLayout: function () {
-      //   this.stockChart.setSize(1200, 1300);
-      // },
-      // setVerticalLayout: function () {
-      //   this.stockChart.setSize(1200, 1300);
-      // },
       onVolumeTypeMarket: function () {
         this.optionVolType = this.market;
       },
@@ -6071,12 +6086,6 @@ sap.ui.define(
       onAddonInfo: function () {
         this.showAddonBar = !this.showAddonBar;
         this.displayAddonBar();
-        // if (this.screen.addonPnl == this.pnl) {
-        //   this.screen.addonPnl = this.addon;
-        // } else {
-        //   this.screen.addonPnl = this.pnl;
-        // }
-        // this.updateModel("ScreenModel", this.screen);
       },
       onSellReversalFlag: function () {
         if (this.para.sell.reversal.count == 0) {
@@ -6931,7 +6940,7 @@ sap.ui.define(
           ],
         };
 
-        if (sap.ui.getCore().layout === "Horizontal") {
+        if (sap.ui.getCore().layout === this.horizontal) {
           highcharts.stockChart("StockChart", options);
         } else {
           highcharts.stockChart("StockChartV", options);
@@ -7073,7 +7082,8 @@ sap.ui.define(
             },
           ],
         };
-        if (sap.ui.getCore().layout === "Horizontal") {
+
+        if (sap.ui.getCore().layout === this.horizontal) {
           highcharts.chart("BarChart", options);
         } else {
           highcharts.chart("BarChartV", options);

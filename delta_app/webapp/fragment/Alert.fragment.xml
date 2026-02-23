@@ -168,7 +168,7 @@
                     >
                         <Label
                             id="idAlertTypeLabel"
-                            text="Process"
+                            text="Info"
                         />
                         <table:template>
                             <ObjectStatus

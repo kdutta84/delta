@@ -19,10 +19,15 @@ async function initBuy() {
     // Init Buy Header
     initbuyHeader();
 
+    // Init Addon
+    Helper.resetWithRef(M.BuyAddon, M.I_Buy.addon);
+
     // Init Options
     if (M.P_Buy.type == C.call) {
+      Helper.addMessage(C.info, "Init Buy ==> Call (Main)", C.P2);
       await initBuyCall();
     } else if (M.P_Buy.type == C.put) {
+      Helper.addMessage(C.info, "Init Buy ==> Put (Main)", C.P2);
       await initBuyPut();
     } else {
       resetBuy();
@@ -30,7 +35,9 @@ async function initBuy() {
     }
 
     // Init Support
-    initSupport();
+    if (M.P_Support.flag === true) {
+      initSupport();
+    }
 
     // Init Delta
     if (M.P_SupportDelta.flag === true) {
@@ -42,9 +49,6 @@ async function initBuy() {
 
     // Capture Buy
     Helper.captureBuy();
-
-    // // Trail Loss
-    // M.P_LossTrail.flag = true;
 
     // Flags
     M.paraFlag = true;
@@ -72,40 +76,47 @@ async function delay(ms) {
 async function initBuyCall() {
   ///////////////  Main --> Call  ///////////////
   if (M.BuyCall.flag === true) {
-    Helper.notifyMe(C.error + "Buy ==> Call ( Main ), Exists");
-    throw new Error("Buy ==> Call ( Main ), Exists");
+    Helper.notifyMe(C.error + "Buy Error ==> Call (Main) Exists");
+    throw new Error("Buy Error ==> Call (Main) Exists");
   }
 
-  // Init Call
-  M.BuyCall.symbol = M.P_Buy.callSymbol;
-  M.BuyCall.type = C.call;
-  M.BuyCall.category = C.main;
+  try {
+    // Init Call
+    M.BuyCall.symbol = M.P_Buy.callSymbol;
+    M.BuyCall.type = C.call;
+    M.BuyCall.category = C.main;
 
-  // Buy Order
-  var order = await buyMain(M.BuyCall, true);
+    // Buy Order with Addon
+    var order = await buyMain(M.BuyCall, true);
 
-  if (order == undefined) {
-    throw new Error("Buy => Call ( Main )");
+    if (order == undefined) {
+      throw new Error("No Order Processed");
+    }
+  } catch (error) {
+    Helper.addMessage(C.error, "Buy Call ==> " + error);
   }
 }
 
 async function initBuyPut() {
   ////////////// Main --> Put  //////////////
   if (M.BuyPut.flag === true) {
-    Helper.notifyMe(C.error + "Buy ==> Put ( Main ), Exists");
-    Helper.addMessage(C.error, "Buy ==> Put ( Main ), Exists");
+    Helper.notifyMe(C.error + "Buy Error ==> Put (Main) Exists");
+    Helper.addMessage(C.error, "Buy Error ==> Put (Main) Exists");
     return;
   }
+  try {
+    M.BuyPut.symbol = M.P_Buy.putSymbol;
+    M.BuyPut.type = C.put;
+    M.BuyPut.category = C.main;
 
-  M.BuyPut.symbol = M.P_Buy.putSymbol;
-  M.BuyPut.type = C.put;
-  M.BuyPut.category = C.main;
+    // Buy Put
+    var order = await buyMain(M.BuyPut, true);
 
-  // Buy Put
-  var order = await buyMain(M.BuyPut, true);
-
-  if (order == undefined) {
-    throw new Error("Buy => Put ( Main )");
+    if (order == undefined) {
+      throw new Error("Buy => Put (Main)");
+    }
+  } catch (error) {
+    throw new Error("Buy Put => " + error);
   }
 }
 
@@ -158,23 +169,19 @@ function getBuyQty(Ticker) {
   return qty;
 }
 
-async function buyMain(Ticker, buyAddon) {
+async function buyMain(Ticker, buyAddonFlag) {
   var order;
 
   if (Ticker?.flag === undefined) {
-    throw new Error("Order Undefined");
+    throw new Error("Invalid Order Ticker");
   }
 
   if (Ticker.flag === true) {
-    Helper.addMessage(
-      C.error,
-      "Buy ==> " + Ticker.type + " (Main), Already Exists",
-    );
-    return;
+    throw new Error(Ticker.type + " (Main) Exists");
   }
 
   // Place Buy Order
-  order = await buyOrder(Ticker, buyAddon);
+  order = await buyOrder(Ticker, buyAddonFlag);
 
   if (order == undefined) {
     Helper.notifyMe(C.error + " : Buy ==> " + Ticker.type + " (Main)");
@@ -184,21 +191,21 @@ async function buyMain(Ticker, buyAddon) {
   // Init Main
   initMain(Ticker, order);
 
-  if (M.P_SupportDelta.flag === true) {
+  if (M.P_SupportDelta.flag === true && M.DeltaWindow.status === false) {
     Helper.initDeltaWindow();
   }
 
   // Init Addon
-  if (buyAddon === true) {
+  if (M.BuyAddon.flag === true) {
     initAddon(Ticker, order);
   }
 
-  let slippagePer = Helper.getPercentage(Ticker.candle.close, order.average);
-  if (slippagePer < 0) {
+  // Slippage
+  let slippagePer = Ticker.pnl.buySlp + M.AddonPnl.buySlp;
+  if (slippagePer != 0) {
     M.Buy.slippage = M.Buy.slippage + 1;
     M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
   }
-
   return order;
 }
 
@@ -209,10 +216,11 @@ async function sellMain(Ticker) {
     return;
   }
 
+  // Sell Order
   var order = await sellOrder(Ticker);
 
   if (order == undefined) {
-    return order;
+    throw new Error("Sell Main ==> " + Ticker.type + " Order Not Found");
   }
 
   // Update Ticker
@@ -222,28 +230,29 @@ async function sellMain(Ticker) {
 
   updatePnl(Ticker, order);
 
-  // Update Parent
-  M.Buy.supportPer = Helper.formatDecimal(M.Buy.supportPer + Ticker.pnl.per);
-
-  let slippagePer = Helper.getPercentage(Ticker.candle.close, order.average);
-  if (slippagePer < 0) {
-    M.Buy.slippage = M.Buy.slippage + 1;
-    M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
-  }
-
   // Reset Window
   resetWindow(Ticker.window);
 
   // Start Support Trn
   updateTrn(C.sell, Ticker);
 
+  // Support %
+  M.Buy.supportPer = Helper.formatDecimal(M.Buy.supportPer + Ticker.pnl.per);
+
+  // // Slippage
+  // let slippagePer = Ticker.pnl.sellSlp + M.AddonPnl.sellSlp;
+  // if (slippagePer < 0) {
+  //   M.Buy.slippage = M.Buy.slippage + 1;
+  //   M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
+  // }
+
   // Settle Addon
   if (M.BuyAddon.flag === true && Ticker.type === M.BuyAddon.type) {
-    settleAddon(order, false);
+    Ticker.addon = false;
+    settleAddon(Ticker, order);
   }
-
   // Send Message
-  Helper.addMessage(C.success, "Sell =>" + Ticker.type + " ( Main )", C.P2);
+  Helper.addMessage(C.success, "Sell =>" + Ticker.type + " (Main)", C.P2);
 
   return order;
 }
@@ -269,7 +278,7 @@ function initAddon(Ticker, order) {
   updateTrn(C.buy, M.BuyAddon);
 
   // Send Message
-  Helper.addMessage(C.success, "Buy => " + Ticker.type + " ( Addon )", C.P2);
+  Helper.addMessage(C.success, "Buy => " + Ticker.type + " (Addon)", C.P2);
 }
 
 function initBuyInfo(Ticker) {
@@ -294,31 +303,18 @@ function initMain(Ticker, order) {
   updateTrn(C.buy, Ticker);
 
   // Send Message
-  Helper.addMessage(C.success, "Buy => " + Ticker.type + " ( Main )", C.P2);
+  Helper.addMessage(C.success, "Buy => " + Ticker.type + " (Main)", C.P2);
   Helper.notifyMe(C.success, " : Buy ==> " + Ticker.type + " (Main)");
 }
 
 function initPnl(Ticker, order) {
-  Ticker.pnl.ltp = order.average;
-  Ticker.pnl.per = 0;
+  Ticker.pnl.buySlp = Helper.formatDecimal(
+    (Helper.getPercentage(Ticker.pnl.ltp, order.average) * Ticker.pnl.qty) /
+      order.amount,
+  );
+  Ticker.pnl.ltp = Helper.formatDecimal(order.average);
   Ticker.pnl.buy = Helper.formatDecimal(order.average);
-
-  // switch (Ticker.category) {
-  //   case C.main:
-  //   case C.support:
-  //     Ticker.pnl.qty = order.amount;
-  //     Ticker.pnl.usd = Helper.formatDecimal(
-  //       Ticker.pnl.qty * order.average * M.Buy.lotsize,
-  //     ); // Helper.formatDecimal(order.cost);
-  //     break;
-  //   case C.mainAddon:
-  //   case C.supportAddon:
-  //     Ticker.pnl.qty = order.amount * M.P_Addon.value;
-  //     Ticker.pnl.usd = Helper.formatDecimal(order.cost * M.P_Addon.value);
-  //     break;
-  //   default:
-  //     throw new Error("Invalid Buy Category");
-  // }
+  Ticker.pnl.per = 0;
 }
 
 function initCandle(candle, ltp) {
@@ -437,11 +433,8 @@ function initDelta() {
   // Init Delta Candle
   initDeltaCandle();
 
-  // Update Delta Window
-  // Helper.updateDeltaWindow();
-
   // Init Delta Window
-  if (M.P_SupportDelta.flag === true) {
+  if (M.P_SupportDelta.flag === true && M.DeltaWindow.status === false) {
     Helper.initDeltaWindow();
   }
 }
@@ -520,12 +513,14 @@ function initDeltaCandle() {
   M.DeltaCandle = candle;
 }
 
-async function buyOrder(Ticker, buyAddon) {
+async function buyOrder(Ticker, buyAddonFlag) {
   let order = {};
+  let qty = 0;
+  let share = 1;
 
   // Validation
   if (Ticker.flag == true) {
-    throw new Error("Buy ==> " + Ticker.type + " Already Exists");
+    throw new Error(Ticker.type + " Exists");
   }
 
   // Get Qty
@@ -541,50 +536,56 @@ async function buyOrder(Ticker, buyAddon) {
   Ticker.pnl.ltp = data.close;
   Ticker.pnl.qty = getBuyQty(Ticker);
   Ticker.pnl.usd = M.Buy.amount;
+  qty = Ticker.pnl.qty;
 
-  if (buyAddon === true && M.P_Addon.flag === true && Ticker.addon === false) {
-    M.BuyAddon.pnl.qty = getAddonQty(Ticker);
+  if (
+    buyAddonFlag === true &&
+    M.P_Addon.flag === true &&
+    Ticker.addon === false &&
+    M.BuyAddon.flag === false
+  ) {
+    getAddonQty(Ticker);
+    qty = qty + M.AddonPnl.qty;
   }
-
-  let qty = Ticker.pnl.qty + M.BuyAddon.pnl.qty;
 
   switch (M.Para.switch) {
     case C.active:
-      if (M.Para.orderType == C.market) {
-        order = await buyMarketOrder(Ticker, qty);
-      } else {
-        order = await buyLimitOrder(Ticker, qty);
+      switch (M.Para.orderType) {
+        case C.market:
+          order = await buyMarketOrder(Ticker, qty);
+          break;
+        case C.limit:
+          order = await buyLimitOrder(Ticker, qty);
+          break;
+        default:
+          throw new Error("Invalid Order Type");
       }
       break;
     case C.test:
       order = await buyTestOrder(Ticker, qty);
       break;
+    case C.none:
+      throw new Error("Switch Inactive");
     default:
-      throw new Error("Inactive Switch");
+      throw new Error("Invalid Switch");
   }
 
-  if (buyAddon === false) {
-    // Ticker
-    Ticker.pnl.qty = Helper.formatDecimal(order.amount);
-    Ticker.pnl.usd = Helper.formatDecimal(order.cost);
-  } else {
-    // Flags
-    Ticker.addon = true;
-    M.BuyAddon.flag = true;
-
-    // Update Buy Qty & Cost
-    let parts = M.P_Addon.value + 1; // Including Parent
-    let qtyShare = Helper.formatDecimal(order.amount / parts);
-    let costShare = Helper.formatDecimal(order.cost / parts);
-
-    // Ticker
-    Ticker.pnl.qty = Helper.formatDecimal(qtyShare);
-    Ticker.pnl.usd = Helper.formatDecimal(costShare);
-
-    // Addon
-    M.AddonPnl.qty = Helper.formatDecimal(qtyShare * M.P_Addon.value);
-    M.AddonPnl.usd = Helper.formatDecimal(costShare * M.P_Addon.value);
+  // Addon
+  if (M.BuyAddon.flag === true) {
+    M.AddonPnl.buy = Helper.formatDecimal(order.average);
+    share = share + M.P_Addon.value;
+    M.AddonPnl.qty = Helper.formatDecimal(
+      (order.amount / share) * M.P_Addon.value,
+    );
+    M.AddonPnl.usd = Helper.formatDecimal(
+      (order.cost / share) * M.P_Addon.value,
+    );
   }
+
+  // Ticker
+  Ticker.pnl.buy = Helper.formatDecimal(order.average);
+  Ticker.pnl.qty = Helper.formatDecimal(order.amount / share);
+  Ticker.pnl.usd = Helper.formatDecimal(order.cost / share);
 
   return order;
 }
@@ -629,7 +630,7 @@ function getSellQty(Ticker) {
     case C.main:
     case C.support:
       qty = Ticker.pnl.qty;
-      if (Ticker.addon === true) {
+      if (Ticker.addon === true && M.BuyAddon.flag === true) {
         qty = qty + M.AddonPnl.qty;
       }
       break;
@@ -637,15 +638,14 @@ function getSellQty(Ticker) {
       let parent,
         parentQty = 0;
 
-      if (Ticker.parent === true) {
+      if (Ticker.parent === true && M.BuyAddon.flag === true) {
         if (Ticker.type === C.call) {
           parent = M.BuyCall;
         } else {
           parent = M.BuyPut;
         }
-
         parentQty = getBuyQty(parent);
-        qty = Ticker.pnl.qty + parent.pnl.qty - parentQty;
+        qty = parent.pnl.qty + M.AddonPnl.qty - parentQty;
         parent.pnl.qty = parentQty;
       } else {
         qty = Ticker.pnl.qty;
@@ -713,15 +713,6 @@ async function sellLimitOrder(Ticker) {
 }
 
 async function buyTestOrder(Ticker, Qty) {
-  // let qty = Qty;
-  // let cost = Helper.formatDecimal(Ticker.pnl.usd + M.AddonPnl.usd);
-
-  // if (M.P_Addon.flag === true && Ticker.addon === false) {
-  //   Ticker.addon = true;
-  //   qty = qty + getAddonQty(Ticker);
-  //   cost = cost * 2;
-  // }
-
   let res = await delay(500);
   return (order = {
     average: Ticker.pnl.ltp,
@@ -734,27 +725,23 @@ async function sellTestOrder(Ticker) {
   // Sell Qty
   let qty = getSellQty(Ticker);
 
-  if (Ticker.addon === true) {
-    Ticker.addon = false;
-    qty = qty + M.AddonPnl.qty;
-  }
-
   let res = await delay(500);
   return (order = {
     average: Ticker.pnl.ltp,
-    amount: Ticker.pnl.qty,
-    cost: Ticker.pnl.ltp,
+    amount: qty,
+    cost: qty * Ticker.pnl.ltp * M.Buy.lotsize,
   });
 }
 
 function getAddonQty(Ticker) {
   // Addon Qty
   if (M.P_Addon?.flag === true && M.BuyAddon?.flag === false) {
+    M.BuyAddon.flag = true;
     M.AddonPnl.ltp = Ticker.pnl.ltp;
     M.AddonPnl.qty = Ticker.pnl.qty * M.P_Addon.value;
     M.AddonPnl.usd = M.Buy.amount * M.P_Addon.value;
   }
-  return M.AddonPnl.qty;
+  // return M.AddonPnl.qty;
 }
 
 function preBuySetup() {
@@ -764,7 +751,7 @@ function preBuySetup() {
   // Reset Tracking
   Helper.resetTrack();
 
-  // Reset Buy Info ( Not Para Buy )
+  // Reset Buy Info (Not Para Buy )
   Helper.resetWithRef(M.Buy, M.I_Buy);
 
   // Reset Trn
@@ -821,10 +808,13 @@ function updateTrn(action, ticker) {
         buyTimeText: Helper.getCurrentTimeText(),
         sellTime: 0,
         sellTimeText: " ",
-        buy: ticker.pnl.buy,
-        ltp: ticker.pnl.ltp,
+        buy: Helper.formatDecimal(ticker.pnl.buy),
+        ltp: Helper.formatDecimal(ticker.pnl.ltp),
         per: Helper.formatDecimal(ticker.pnl.per),
+        buySlp: Helper.formatDecimal(ticker.pnl.buySlp),
+        sellSlp: "",
       };
+
       M.aTrn.push(trn);
       break;
     case C.sell:
@@ -838,8 +828,9 @@ function updateTrn(action, ticker) {
         record.flag = false;
         record.sellTime = new Date().getTime();
         record.sellTimeText = Helper.getCurrentTimeText();
-        record.ltp = ticker.pnl.ltp;
+        record.ltp = Helper.formatDecimal(ticker.pnl.ltp);
         record.per = Helper.formatDecimal(ticker.pnl.per);
+        record.sellSlp = Helper.formatDecimal(ticker.pnl.sellSlp);
       }
       break;
     case C.reverse:
@@ -873,7 +864,7 @@ function updateTrn(action, ticker) {
         // Update Info
         record.category = ticker.category;
         record.icon = getTrnIcon(ticker.category);
-        record.buy = ticker.pnl.buy;
+        record.buy = Helper.formatDecimal(ticker.pnl.buy);
       }
       break;
     case C.adjust:
@@ -883,15 +874,24 @@ function updateTrn(action, ticker) {
           item.category == ticker.category &&
           item.symbol == ticker.symbol,
       );
+      // Adjust %
       if (record != undefined) {
         var trn = { ...record };
         trn.flag = false;
+        trn.ltp = ticker.pnl.ltp;
         trn.category = record.category + C.adjust;
         trn.sellTime = new Date().getTime();
         trn.sellTimeText = Helper.getCurrentTimeText();
+        trn.sellSlp = 0;
       }
 
       M.aTrn.push(trn);
+
+      // Reset Parent
+      record.buy = ticker.pnl.ltp;
+      record.ltp = ticker.pnl.ltp;
+      record.per = 0;
+      record.buySlp = 0;
       break;
     default:
       throw new Error("Invalid Trn Action");
@@ -1085,6 +1085,7 @@ function updateAddonPnl() {
     } else {
       M.AddonPnl.ltp = M.PutCandle.close;
     }
+
     M.AddonPnl.per = Helper.getPercentage(M.AddonPnl.buy, M.AddonPnl.ltp) ?? 0;
 
     // Consider the Addon Count
@@ -1157,16 +1158,16 @@ async function validateBuyPnl() {
 
   // Trail Pnl
   if (M.Buy.pnl > M.Buy.max) {
-    M.Buy.max = M.Buy.pnl;
+    M.Buy.max = Helper.formatDecimal(M.Buy.pnl, 0);
   }
 
   if (M.Buy.pnl < M.Buy.min) {
-    M.Buy.min = M.Buy.pnl;
+    M.Buy.min = Helper.formatDecimal(M.Buy.pnl, 0);
   }
 
   // From Buy
-  M.Buy.fromMax = Helper.formatDecimal(M.Buy.pnl - M.Buy.max);
-  M.Buy.fromMin = Helper.formatDecimal(M.Buy.pnl - M.Buy.min);
+  M.Buy.fromMax = Helper.formatDecimal(M.Buy.pnl - M.Buy.max, 0);
+  M.Buy.fromMin = Helper.formatDecimal(M.Buy.pnl - M.Buy.min, 0);
 
   // Profit Trail
   if (M.P_ProfitTrail.flag === true && M.Buy.fromMax < -M.P_ProfitTrail.per) {
@@ -1177,26 +1178,26 @@ async function validateBuyPnl() {
 
   // Loss Trail
   if (M.P_LossTrail.flag === true && M.Buy.fromMin > M.P_LossTrail.per) {
-    await sellBoth();
     Helper.addMessage(C.info, "Loss Trail Hit", C.P2);
+    await sellBoth();
     return;
   }
 }
 
 async function manageBuy() {
-  let callPer = M.BuyCapture?.callPer,
-    putPer = M.BuyCapture?.putPer,
-    buyType = C.none;
+  let buyType = C.none;
 
-  if (callPer === undefined || putPer === undefined) {
-    return;
-  }
-
-  if (callPer > putPer && callPer > 0) {
+  if (
+    M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
+    M.BuyCapture?.callPer >= 0
+  ) {
     buyType = C.call;
   }
 
-  if (putPer > callPer && putPer > 0) {
+  if (
+    M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
+    M.BuyCapture?.putPer >= 0
+  ) {
     buyType = C.put;
   }
 
@@ -1216,9 +1217,12 @@ async function manageBuy() {
           }
 
           // Buy Call Addon
-          if (M.P_Addon.flag === true && M.BuyCall.addon === false) {
-            // Trigger Message
-            Helper.addMessage(C.info, "Delta Trigger ==> Call ( Main )", C.P2);
+          if (
+            M.P_Addon.flag === true &&
+            M.BuyCall.addon === false &&
+            M.BuyAddon.flag === false
+          ) {
+            Helper.addMessage(C.info, "Delta Trigger ==> Call (Main)", C.P2);
             await buyAddon(M.BuyCall);
           }
           break;
@@ -1229,7 +1233,7 @@ async function manageBuy() {
           }
 
           // Trigger Message
-          Helper.addMessage(C.info, "Delta Trigger ==> Call ( Support )", C.P2);
+          Helper.addMessage(C.info, "Delta Trigger ==> Call (Support)", C.P2);
 
           // Manage Call Support
           if (M.Buy.supportFlag === true) {
@@ -1258,7 +1262,7 @@ async function manageBuy() {
           // Buy Put Addon
           if (M.BuyPut.addon === false && M.P_Addon.flag === true) {
             // Trigger Message
-            Helper.addMessage(C.info, "Delta Trigger ==> Put ( Main )", C.P2);
+            Helper.addMessage(C.info, "Delta Trigger ==> Put (Main)", C.P2);
             await buyAddon(M.BuyPut);
           }
           break;
@@ -1269,7 +1273,7 @@ async function manageBuy() {
           }
 
           // Trigger Message
-          Helper.addMessage(C.info, "Delta Trigger ==> Put ( Support )", C.P2);
+          Helper.addMessage(C.info, "Delta Trigger ==> Put (Support)", C.P2);
           // Manage Put Support
           if (M.Buy.supportFlag === true) {
             // Buy Put Addon
@@ -1293,15 +1297,15 @@ async function manageBuy() {
 }
 
 async function processBuyCallSupport() {
-  if (M.BuyCall.flag === true || M.P_Support.flag === false) {
+  if (M.BuyCall.flag === true) {
     return;
   }
 
-  // Capture Top Validation
-  let callPer = Helper.getPercentage(M.BuyCapture.call, M.CallCandle.close);
-  let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-
-  if (callPer > putPer && callPer > 0) {
+  if (
+    M.BuyCapture?.callPer > M.BuyCapture?.putPer &&
+    M.BuyCapture?.callPer >= 0
+  ) {
+    Helper.addMessage(C.info, "Buy Support ==> Put > 0", C.P2);
     // Buy Call Support
     await buyCallSupport();
 
@@ -1310,18 +1314,16 @@ async function processBuyCallSupport() {
   }
 }
 
-async function processBuyPutSupport() {
+async function processBuyPutSupport(condition) {
   if (M.BuyPut.flag === true) {
     return;
   }
 
-  // Capture Top Validation
-  let callPer = Helper.getPercentage(M.BuyCapture.call, M.CallCandle.close);
-  let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-
-  if (putPer > callPer && putPer > 0) {
-    // Trigger Message
-    Helper.addMessage(C.info, "Support Trigger ==> Put % > Min %", C.P2);
+  if (
+    condition === true ||
+    (M.BuyCapture?.putPer > M.BuyCapture?.callPer && M.BuyCapture?.putPer > 0)
+  ) {
+    Helper.addMessage(C.info, "Buy Support ==> Put > 0", C.P2);
 
     // Buy Put Support
     await buyPutSupport();
@@ -1330,20 +1332,19 @@ async function processBuyPutSupport() {
     Helper.updateDeltaWindow();
   }
 }
-async function processBuyCallAddon() {
+async function processBuyCallAddon(condition) {
   if (M.BuyCall.flag === false) {
     return;
   }
 
-  // Capture Top Validation
-  let callPer = Helper.getPercentage(M.BuyCapture.call, M.CallCandle.close);
-  let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-
-  if (callPer > putPer && callPer > 0) {
+  if (
+    condition === true ||
+    (M.BuyCapture?.callPer > M.BuyCapture?.putPer && M.BuyCapture?.callPer > 0)
+  ) {
     // Buy Put Addon
     order = await buyAddon(M.BuyCall);
     if (order === undefined) {
-      throw new Error("Buy ==> Call ( Addon )");
+      throw new Error("Buy ==> Call (Addon)");
     }
 
     // Set Delta Window
@@ -1351,25 +1352,24 @@ async function processBuyCallAddon() {
 
     // Trigger Message
     if (M.BuyAddon.flag == true) {
-      Helper.addMessage(C.info, "Support Trigger ==> Call % > Min %", C.P2);
+      Helper.addMessage(C.info, "Support Trigger ==> Call > 0", C.P2);
     }
   }
 }
 
-async function processBuyPutAddon() {
+async function processBuyPutAddon(condition) {
   if (M.BuyPut.flag === false) {
     return;
   }
 
-  // Capture Top Validation
-  let callPer = Helper.getPercentage(M.BuyCapture.call, M.CallCandle.close);
-  let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-
-  if (putPer > callPer && putPer > 0) {
+  if (
+    condition === true ||
+    (M.BuyCapture?.putPer > M.BuyCapture?.callPer && M.BuyCapture?.putPer > 0)
+  ) {
     // Buy Put Addon
     order = await buyAddon(M.BuyPut);
     if (order === undefined) {
-      throw new Error("Buy ==> Put ( Addon )");
+      throw new Error("Buy ==> Put (Addon)");
     }
 
     // Set Delta Window
@@ -1377,7 +1377,7 @@ async function processBuyPutAddon() {
 
     // Trigger Message
     if (M.BuyAddon.flag === true) {
-      Helper.addMessage(C.info, "Support Trigger ==> Put % > Min %", C.P2);
+      Helper.addMessage(C.info, "Support Trigger ==> Put > 0", C.P2);
     }
   }
 }
@@ -1398,243 +1398,186 @@ async function buyCallAddon() {
   return order;
 }
 
-async function buyPutAddon() {
-  let order = false;
-
-  if (M.P_Addon.flag === false || M.BuyAddon.flag === true) {
-    return order;
-  }
-
-  if (
-    M.PutCandle.candlePer > M.CallCandle.candlePer &&
-    M.PutCandle.candlePer > 0
-  ) {
-    order = await buyAddon(M.BuyPut);
-  }
-  return order;
-}
-
 async function processCall() {
-  //////////////    LTP Below Red   ////////////////
-  if (M.CallCandle.close < M.CallWindow.red) {
-    // "Sell : Max Reversal Reached"
-    if (
-      M.P_SellReversal.flag == true &&
-      M.P_SellReversal.count >= M.Buy.reverse - 1
-    ) {
-      // Trigger Message
-      Helper.addMessage(
-        C.info,
-        "Support Trigger ==> Call ( Main ) < Red ",
-        C.P2,
-      );
+  try {
+    //////////////    LTP Below Red   ////////////////
+    if (M.CallCandle.close < M.CallWindow.red) {
+      if (
+        M.P_SellReversal.flag == true &&
+        M.P_SellReversal.count >= M.Buy.reverse + 1
+      ) {
+        // Max Reversal Reached
+        Helper.addMessage(C.info, "Sell Both ==> Max Reversal Reached", C.P2);
+        Helper.performAction(
+          C.reverse,
+          M.P_SellReversal.action,
+          M.Buy.index,
+          C.call,
+        );
+        M.P_SellReversal.flag = false;
+        M.paraFlag = true;
+        return;
+      }
 
-      Helper.performAction(
-        C.reverse,
-        M.P_SellReversal.action,
-        M.Buy.index,
-        C.call,
-      );
-
-      M.P_SellReversal.flag = false;
-      M.paraFlag = true;
-
+      // Else Reverse Options
+      Helper.addMessage(C.info, "Reversal ==> Call (Main) < Red", C.P2);
+      await reverseCallWithoutSupport();
       return;
-      // if (M.P_SellReversal.action === C.sell) {
-      //   await sellBoth();
-      // }
     }
 
-    // Trigger Message
-    Helper.addMessage(
-      C.info,
-      "Support Trigger ==> Reverse, Call ( Main ) < Red ",
-      C.P2,
-    );
+    //////////////    LTP Below Orange ////////////////
+    if (M.CallCandle.close < M.CallWindow.orange) {
+      let putCond = false;
 
-    // Else Reverse Options
-    await reverseCallWithoutSupport();
-    return;
-  }
+      // Sell Call Addon
+      if (M.BuyCall.addon === true) {
+        // Put Condition
+        putCond =
+          M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
+          M.BuyCapture?.putPer >= 0;
 
-  //////////////    LTP Below Orange ////////////////
-  if (M.CallCandle.close < M.CallWindow.orange) {
-    // Sell Call Addon
-    if (M.BuyCall.addon === true) {
-      // Trigger Message
-      Helper.addMessage(
-        C.info,
-        "Support Trigger ==> Call ( Main ) < Orange ",
-        C.P2,
-      );
+        Helper.addMessage(C.info, "Sell Addon ==> Call (Main) < Orange", C.P2);
+        await sellAddon(M.BuyCall);
+      }
 
-      await sellAddon(M.BuyCall);
+      switch (M.BuyPut.flag) {
+        case true:
+          // Sell Put Support Validation
+          if (M.PutCandle.close < M.PutWindow.red) {
+            Helper.addMessage(C.info, "Sell ==> Put (Support) < Red", C.P2);
+            await sellPutSupport();
+          }
+          break;
+        case false:
+          // Buy Put Support
+          await processBuyPutSupport(putCond);
+          break;
+      }
     }
 
-    switch (M.BuyPut.flag) {
-      case true:
-        // Sell Put Support
-        if (M.PutCandle.close < M.PutWindow.red) {
-          // Trigger Message
-          Helper.addMessage(
-            C.info,
-            "Support Trigger ==> Put ( Support ) < Red ",
-            C.P2,
-          );
-
-          await sellPutSupport();
-        }
-        break;
-      case false:
-        // Buy Put Support
-        await processBuyPutSupport();
-        break;
-    }
-  }
-
-  //////////////    LTP Above Orange   ////////////////
-  if (M.CallCandle.close > M.CallWindow.orange) {
-    // Sell Put & Addon
-    if (M.BuyPut.flag === true) {
-      // Trigger Message
-      Helper.addMessage(
-        C.info,
-        "Support Trigger ==> Call ( Main ) > Orange ",
-        C.P2,
-      );
+    //////////////    LTP Above Orange   ////////////////
+    if (M.CallCandle.close > M.CallWindow.orange) {
+      // Since the capture is overwritten in Put Support
+      let callCond = false;
 
       // Sell Put Support
-      await sellPutSupport();
-    }
+      if (M.BuyPut.flag === true) {
+        // Call Condition
+        callCond =
+          M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
+          M.BuyCapture?.callPer >= 0;
 
-    if (M.BuyCall.addon === false && M.BuyAddon.flag === false) {
-      await processBuyCallAddon();
-      moveOrangeDown(M.BuyCall);
+        Helper.addMessage(C.info, "Sell Put Support => Call > Orange", C.P2);
+        await sellPutSupport();
+      }
+
+      // Buy Call Addon
+      if (
+        M.P_Addon.flag === true &&
+        M.BuyCall.addon === false &&
+        M.BuyAddon.flag === false
+      ) {
+        await processBuyCallAddon(callCond);
+        if (M.BuyCall.addon === true && M.BuyPut.flag === false) {
+          moveOrangeDown(M.BuyCall);
+        }
+      }
     }
-    //   // Buy Call Addon
-    //   if (
-    //     M.P_Addon.flag === true &&
-    //     M.BuyCall.flag === true &&
-    //     M.BuyCall.addon === false
-    //   ) {
-    //     await processBuyCallAddon();
-    //   }
-    // } else if (M.BuyCall.addon === false) {
-    //   await buyAddon(M.BuyCall);
-    //   moveOrangeDown(M.BuyCall);
-    // }
+  } catch (error) {
+    throw new Error("Process Call ==> " + error);
   }
 }
 
 async function processPut() {
-  //////////////    LTP Below Red   ////////////////
-  if (M.PutCandle.close < M.PutWindow.red) {
-    // "Sell : Max Reversal Reached"
-    if (
-      M.P_SellReversal.flag == true &&
-      M.P_SellReversal.count >= M.Buy.reverse - 1
-    ) {
-      // Trigger Message
-      Helper.addMessage(
-        C.info,
-        "Support Trigger ==> Call ( Main ) < Red ",
-        C.P2,
-      );
+  try {
+    //////////////    LTP Below Red   ////////////////
+    if (M.PutCandle.close < M.PutWindow.red) {
+      // "Sell : Max Reversal Reached"
+      if (
+        M.P_SellReversal.flag == true &&
+        M.P_SellReversal.count >= M.Buy.reverse + 1
+      ) {
+        // Trigger Message
+        Helper.addMessage(C.info, "Support Trigger => Call (Main) < Red", C.P2);
 
-      Helper.performAction(
-        C.reverse,
-        M.P_SellReversal.action,
-        M.Buy.index,
-        C.put,
-      );
-      M.P_SellReversal.flag = false;
-      M.paraFlag = true;
+        Helper.performAction(
+          C.reverse,
+          M.P_SellReversal.action,
+          M.Buy.index,
+          C.put,
+        );
+        M.P_SellReversal.flag = false;
+        M.paraFlag = true;
+        return;
+      }
 
+      // Else Reverse Options
+      Helper.addMessage(C.info, "Reversal => Put (Main) < Red ", C.P2);
+      await reversePutWithoutSupport();
       return;
-      // if (M.P_SellReversal.action === C.sell) {
-      //   await sellBoth();
-      //   return;
-      // }
     }
 
-    // Trigger Message
-    Helper.addMessage(
-      C.info,
-      "Support Trigger ==> Reverse, Put ( Main ) < Red ",
-      C.P2,
-    );
+    //////////////    LTP Below Orange ////////////////
+    if (M.PutCandle.close < M.PutWindow.orange) {
+      let callCond = false;
 
-    // Else Reverse Options
-    await reversePutWithoutSupport();
-    return;
-  }
+      // Sell Put Addon
+      if (M.BuyPut.addon === true) {
+        // Call Condition
+        callCond =
+          M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
+          M.BuyCapture?.callPer >= 0;
 
-  //////////////    LTP Below Orange ////////////////
-  if (M.PutCandle.close < M.PutWindow.orange) {
-    // Sell Put Addon
-    if (M.BuyPut.addon === true) {
-      // Trigger Message
-      Helper.addMessage(
-        C.info,
-        "Support Trigger ==> Put ( Main ) < Orange ",
-        C.P2,
-      );
+        Helper.addMessage(C.info, "Sell Addon ==> Put (Main) < Orange", C.P2);
+        await sellAddon(M.BuyPut);
+      }
 
-      await sellAddon(M.BuyPut);
+      switch (M.BuyCall.flag) {
+        case true:
+          // Sell Call Support Validation
+          if (M.CallCandle.close < M.CallWindow.red) {
+            // Trigger Message
+            Helper.addMessage(C.info, "Sell ==> Call (Support) < Red", C.P2);
+            await sellCallSupport(callCond);
+          }
+          break;
+        case false:
+          // Buy Call Support
+          await processBuyCallSupport();
+          break;
+      }
     }
 
-    switch (M.BuyCall.flag) {
-      case true:
-        // Sell Call Support
-        if (M.CallCandle.close < M.CallWindow.red) {
-          // Trigger Message
-          Helper.addMessage(
-            C.info,
-            "Support Trigger ==> Call ( Support ) < Red ",
-            C.P2,
-          );
+    //////////////    LTP Above Orange   ////////////////
+    if (M.PutCandle.close > M.PutWindow.orange) {
+      // Since the capture is overwritten in Call Support
+      let putCond = false;
 
-          await sellCallSupport();
+      // Sell Call Support
+      if (M.BuyCall.flag === true) {
+        // Put Condition
+        putCond =
+          M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
+          M.BuyCapture?.putPer >= 0;
+
+        Helper.addMessage(C.info, "Sell Call Support ==> Put > Orange", C.P2);
+        await sellCallSupport();
+      }
+
+      // Buy Put Addon
+      if (
+        M.P_Addon.flag === true &&
+        M.BuyPut.addon === false &&
+        M.BuyAddon.flag === false
+      ) {
+        await processBuyPutAddon(putCond);
+        if (M.BuyPut.addon === true && M.BuyCall.flag === false) {
+          moveOrangeDown(M.BuyPut);
         }
-        break;
-      case false:
-        // Buy Call Support
-        await processBuyCallSupport();
-        break;
+      }
     }
-  }
-
-  //////////////    LTP Above Orange   ////////////////
-  if (M.PutCandle.close > M.PutWindow.orange) {
-    // Sell Call & Addon
-    if (M.BuyCall.flag === true) {
-      // Trigger Message
-      Helper.addMessage(
-        C.info,
-        "Support Trigger ==> Put ( Main ) > Orange ",
-        C.P2,
-      );
-
-      // Sell Put Support
-      await sellCallSupport();
-    }
-
-    if (M.BuyPut.addon === false && M.BuyAddon.flag === false) {
-      await processBuyPutAddon();
-      moveOrangeDown(M.BuyPut);
-    }
-    //     // Buy Call Addon
-    //     if (
-    //       M.P_Addon.flag === true &&
-    //       M.BuyPut.flag === true &&
-    //       M.BuyPut.addon === false
-    //     ) {
-    //       await processBuyPutAddon();
-    //     }
-    //   } else if (M.BuyPut.addon === false) {
-    //     await buyAddon(M.BuyPut);
-    //     moveOrangeDown(M.BuyPut);
-    //   }
+  } catch (error) {
+    throw new Error("Process Put ==> " + error);
   }
 }
 
@@ -1701,139 +1644,164 @@ function reverseTrn() {
 
 async function reverseCallWithoutSupport() {
   var order;
-  let buyAddon = false;
+  let buyAddonFlag = false;
 
-  // Sell Call
-  if (M.BuyCall.flag == true) {
-    order = await sellMain(M.BuyCall);
-    if (order == undefined) {
-      throw new Error("Sell => Call ( Main )");
-    }
-  } else {
-    throw new Error("Call Buy Not Found");
-  }
-
-  // Reverse Category
-  M.BuyPut.category = C.main;
-  M.BuyCall.category = C.support;
-
-  // Buy Addon
-  if (M.P_Addon.flag === true && M.BuyAddon.flag === false) {
-    let callPer = Helper.getPercentage(M.BuyCapture.call, M.CallCandle.close);
-    let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-    if (putPer > callPer && putPer > 0) {
-      buyAddon = true;
-    }
-  }
-
-  // Check Put
-  if (M.BuyPut.flag == true) {
-    // Init Main Window
-    initMainWindow(M.PutWindow, M.PutCandle.close);
-
-    if (buyAddon === true) {
-      // Buy Addon
-      await buyAddon(M.BuyPut);
+  try {
+    // Sell Call
+    if (M.BuyCall.flag == true) {
+      order = await sellMain(M.BuyCall);
+      if (order == undefined) {
+        throw new Error("Sell => Call (Main)");
+      }
     } else {
-      // Reverse Category
-      M.BuyAddon.category = C.mainAddon;
+      throw new Error("Call Buy Not Found");
     }
 
-    // Reverse Trn
-    reverseTrn();
-  } else {
-    order = await buyMain(M.BuyPut, buyAddon);
-    if (order == undefined) {
-      throw new Error("Buy => Put ( Main )");
+    // Reverse Category
+    M.BuyPut.category = C.main;
+    M.BuyCall.category = C.support;
+
+    // Buy Addon Validation
+    if (
+      M.P_Addon.flag === true &&
+      M.BuyPut.addon === false &&
+      M.BuyAddon.flag === false
+    ) {
+      if (
+        M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
+        M.BuyCapture?.putPer >= 0
+      ) {
+        buyAddonFlag = true;
+      }
     }
-    Helper.addMessage(C.success, "Buy => Put ( Main )", C.P2);
+
+    // Check Put
+    if (M.BuyPut.flag == true) {
+      // Init Main Window
+      initMainWindow(M.PutWindow, M.PutCandle.close);
+
+      if (buyAddonFlag === true) {
+        // Buy Addon
+        await buyAddon(M.BuyPut);
+      } else if (
+        M.BuyAddon.flag === true &&
+        M.BuyAddon.symbol === M.BuyPut.symbol
+      ) {
+        // Reverse Category
+        M.BuyAddon.category = C.mainAddon;
+      }
+
+      // Reverse Trn
+      reverseTrn();
+    } else {
+      order = await buyMain(M.BuyPut, buyAddonFlag);
+      if (order == undefined) {
+        throw new Error("Buy => Put (Main)");
+      }
+      Helper.addMessage(C.success, "Buy => Put (Main)", C.P2);
+    }
+
+    // Update Buy Info
+    M.Buy.reverse = M.Buy.reverse + 1;
+    M.Buy.supportFlag = false;
+    M.Buy.direction = C.up;
+    M.Buy.type = C.put;
+
+    // Update Buy Para
+    M.P_Buy.type = C.put;
+
+    // Update Para Flag
+    M.paraFlag = true;
+
+    // Capture Buy
+    Helper.captureBuy();
+
+    // Update Buy Log
+    Helper.updateLog(C.buy);
+  } catch (error) {
+    Helper.addMessage(C.error, "Call reversal ==> " + error);
+    Helper.notifyMe(C.error + "Call reversal ==> " + error);
   }
-
-  // Update Buy Info
-  M.Buy.reverse = M.Buy.reverse + 1;
-  M.Buy.supportFlag = false;
-  M.Buy.direction = C.up;
-  M.Buy.type = C.put;
-
-  // Update Buy Para
-  M.P_Buy.type = C.put;
-
-  // Update Para Flag
-  M.paraFlag = true;
-
-  // Capture Buy
-  Helper.captureBuy();
-
-  // Update Buy Log
-  Helper.updateLog(C.buy);
 }
 
 async function reversePutWithoutSupport() {
   var order;
-  let buyAddon = false;
+  let buyAddonFlag = false;
 
-  // Sell Put
-  if (M.BuyPut.flag == true) {
-    order = await sellMain(M.BuyPut);
-    if (order == undefined) {
-      throw new Error("Sell => Put ( Main )");
-    }
-  } else {
-    throw new Error("Put Buy Not Found");
-  }
-
-  // Reverse Category
-  M.BuyCall.category = C.main;
-  M.BuyPut.category = C.support;
-
-  if (M.P_Addon.flag === true && M.BuyAddon.flag === false) {
-    // Capture Top Validation
-    let callPer = Helper.getPercentage(M.BuyCapture.call, M.CallCandle.close);
-    let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-    if (callPer > putPer && callPer > M.P_SupportDelta.value) {
-      buyAddon = true;
-    }
-  }
-
-  // Check Call
-  if (M.BuyCall.flag == true) {
-    initMainWindow(M.CallWindow, M.CallCandle.close);
-
-    if (buyAddon === true) {
-      // Buy Addon
-      await buyAddon(M.BuyCall);
+  try {
+    // Sell Put
+    if (M.BuyPut.flag == true) {
+      order = await sellMain(M.BuyPut);
+      if (order == undefined) {
+        throw new Error("Sell => Put (Main)");
+      }
     } else {
-      // Reverse Category
-      M.BuyAddon.category = C.mainAddon;
+      throw new Error("Put Buy Not Found");
     }
 
-    // Reverse Trn
-    reverseTrn();
-  } else {
-    order = await buyMain(M.BuyCall, buyAddon);
-    if (order == undefined) {
-      throw new Error("Buy => Call ( Main )");
+    // Reverse Category
+    M.BuyCall.category = C.main;
+    M.BuyPut.category = C.support;
+
+    if (
+      M.P_Addon.flag === true &&
+      M.BuyCall.addon === false &&
+      M.BuyAddon.flag === false
+    ) {
+      if (
+        M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
+        M.BuyCapture?.callPer >= 0
+      ) {
+        buyAddonFlag = true;
+      }
     }
-    Helper.addMessage(C.success, "Buy => Call ( Main )", C.P2);
+
+    // Check Call
+    if (M.BuyCall.flag == true) {
+      initMainWindow(M.CallWindow, M.CallCandle.close);
+
+      if (buyAddonFlag === true) {
+        // Buy Addon
+        await buyAddon(M.BuyCall);
+      } else if (
+        M.BuyAddon.flag === true &&
+        M.BuyAddon.symbol === M.BuyCall.symbol
+      ) {
+        // Reverse Category
+        M.BuyAddon.category = C.mainAddon;
+      }
+
+      // Reverse Trn
+      reverseTrn();
+    } else {
+      order = await buyMain(M.BuyCall, buyAddonFlag);
+      if (order == undefined) {
+        throw new Error("Buy => Call (Main)");
+      }
+      Helper.addMessage(C.success, "Buy => Call (Main)", C.P2);
+    }
+
+    // Update Buy Info
+    M.Buy.reverse = M.Buy.reverse + 1;
+    M.Buy.supportFlag = false;
+    M.Buy.direction = C.up;
+    M.Buy.type = C.call;
+
+    // Update Buy Para
+    M.P_Buy.type = C.call;
+
+    // Update Para Flag
+    M.paraFlag = true;
+
+    // Capture Buy
+    Helper.captureBuy();
+
+    // Update Buy Log
+    Helper.updateLog(C.buy);
+  } catch (error) {
+    Helper.addMessage(C.error, "Put reversal ==> " + error);
+    Helper.notifyMe(C.error + "Put reversal ==> " + error);
   }
-
-  // Update Buy Info
-  M.Buy.reverse = M.Buy.reverse + 1;
-  M.Buy.supportFlag = false;
-  M.Buy.direction = C.up;
-  M.Buy.type = C.call;
-
-  // Update Buy Para
-  M.P_Buy.type = C.call;
-
-  // Update Para Flag
-  M.paraFlag = true;
-
-  // Capture Buy
-  Helper.captureBuy();
-
-  // Update Buy Log
-  Helper.updateLog(C.buy);
 }
 
 async function reverseWithSupport() {
@@ -1850,17 +1818,13 @@ async function reverseWithSupport() {
 }
 
 async function reverseCallWithSupport() {
-  var order;
-  let buyAddon = false;
+  let order;
 
   try {
-    // Support Call
+    // Convert Call to Support
     if (M.BuyCall.flag == true) {
       // Init Support Window
       initSupportWindow(M.CallWindow, M.CallCandle.close);
-
-      // Update Buy Log
-      Helper.updateLog(C.buy);
 
       // Update Category
       M.BuyCall.category = C.support;
@@ -1868,8 +1832,8 @@ async function reverseCallWithSupport() {
       // Reverse Trn Record
       updateTrn(C.update, M.BuyCall);
 
-      // Sell Addon
-      if (M.BuyCall.addon === true) {
+      // Sell Call Addon
+      if (M.BuyAddon.flag === true && M.BuyAddon.symbol === M.BuyCall.symbol) {
         await sellAddon(M.BuyCall);
       }
     } else {
@@ -1881,51 +1845,33 @@ async function reverseCallWithSupport() {
       // Init Main Window
       initMainWindow(M.PutWindow, M.PutCandle.close);
 
-      // Update Buy Log
-      Helper.updateLog(C.buy);
-
-      // Reverse Trn Record
-      updateTrn(C.reverse, M.BuyPut);
-
       // Update Category
       M.BuyPut.category = C.main;
-    } else {
-      // Buy Main Without Support, to Keep Support Alive
-      let addonFlag = M.P_Addon.flag;
-      M.P_Addon.flag = false;
 
-      // Buy Addon
-      if (M.P_Addon.flag === true && M.BuyAddon.flag === false) {
-        let callPer = Helper.getPercentage(
-          M.BuyCapture.call,
-          M.CallCandle.close,
-        );
-        let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-        if (putPer > callPer && putPer > 0) {
-          buyAddon = true;
-        }
+      // Reverse Trn Record
+      updateTrn(C.update, M.BuyPut);
+
+      // Sell Put Addon
+      if (M.BuyAddon.flag === true && M.BuyAddon.symbol === M.BuyPut.symbol) {
+        await sellAddon(M.BuyPut);
       }
-
+    } else {
       // Buy Put Main
-      order = await buyMain(M.BuyPut, buyAddon);
-
-      // // Resume Addon flag
-      // M.P_Addon.flag = addonFlag;
+      order = await buyMain(M.BuyPut, false);
 
       if (order == undefined) {
-        throw new Error("Buy Put ( Main )");
+        throw new Error("Buy Put (Main)");
       }
-      Helper.addMessage(C.success, "Buy Put ( Main )", C.P2);
+      Helper.addMessage(C.success, "Buy Put (Main)", C.P2);
     }
 
-    // Move Main Orange Up
+    // Move Put Main Orange Up
     moveOrangeUp(M.BuyPut);
 
     // Update Buy Info
     M.Buy.reverse = M.Buy.reverse + 1;
-    M.Buy.support = M.Buy.support + 1;
     M.Buy.supportFlag = true;
-    M.Buy.direction = C.down;
+    M.Buy.direction = C.up;
     M.Buy.type = C.put;
 
     // Update Buy Para
@@ -1933,6 +1879,9 @@ async function reverseCallWithSupport() {
 
     // Capture Buy
     Helper.captureBuy();
+
+    // Update Buy Log
+    Helper.updateLog(C.buy);
 
     // Update Para Flag
     M.paraFlag = true;
@@ -1943,16 +1892,13 @@ async function reverseCallWithSupport() {
 }
 
 async function reversePutWithSupport() {
-  var order;
-  let buyAddon = false;
+  let order;
 
   try {
-    // Support Put
+    // Convert Put to Support
     if (M.BuyPut.flag == true) {
+      // Init Support Window
       initSupportWindow(M.PutWindow, M.PutCandle.close);
-
-      // Update Buy Log
-      Helper.updateLog(C.buy);
 
       // Update Category
       M.BuyPut.category = C.support;
@@ -1960,8 +1906,8 @@ async function reversePutWithSupport() {
       // Reverse Trn Record
       updateTrn(C.update, M.BuyPut);
 
-      // Sell Addon
-      if (M.BuyAddon.flag === true) {
+      // Sell Put Addon
+      if (M.BuyAddon.flag === true && M.BuyAddon.flag === true) {
         await sellAddon(M.BuyPut);
       }
     } else {
@@ -1973,40 +1919,24 @@ async function reversePutWithSupport() {
       // Init Main Window
       initMainWindow(M.CallWindow, M.CallCandle.close);
 
-      // Update Buy Log
-      Helper.updateLog(C.buy);
-
-      // Reverse Trn Record
-      updateTrn(C.reverse, M.BuyCall);
-
       // Update Category
       M.BuyCall.category = C.main;
-    } else {
-      // Buy Main Without Support, to Keep Support Alive
-      let addonFlag = M.P_Addon.flag;
-      M.P_Addon.flag = false;
 
-      // Buy Addon
-      if (M.P_Addon.flag === true && M.BuyAddon.flag === false) {
-        let callPer = Helper.getPercentage(
-          M.BuyCapture.call,
-          M.CallCandle.close,
-        );
-        let putPer = Helper.getPercentage(M.BuyCapture.put, M.PutCandle.close);
-        if (callPer > putPer && callPer > 0) {
-          buyAddon = true;
-        }
+      // Reverse Trn Record
+      updateTrn(C.update, M.BuyCall);
+
+      // Sell Put Addon
+      if (M.BuyAddon.flag === true && M.BuyAddon.symbol === M.BuyCall.symbol) {
+        await sellAddon(M.BuyCall);
       }
-
-      order = await buyMain(M.BuyCall, buyAddon);
-
-      // // Resume Addon flag
-      // M.P_Addon.flag = addonFlag;
+    } else {
+      // Buy Call Main
+      order = await buyMain(M.BuyCall, false);
 
       if (order == undefined) {
-        throw new Error("Buy Call ( Main )");
+        throw new Error("Buy Call (Main)");
       }
-      Helper.addMessage(C.success, "Buy Call ( Main )", C.P2);
+      Helper.addMessage(C.success, "Buy Call (Main)", C.P2);
     }
 
     // Move Main Orange Up
@@ -2014,9 +1944,8 @@ async function reversePutWithSupport() {
 
     // Update Buy Info
     M.Buy.reverse = M.Buy.reverse + 1;
-    M.Buy.support = M.Buy.support + 1;
     M.Buy.supportFlag = true;
-    M.Buy.direction = C.down;
+    M.Buy.direction = C.up;
     M.Buy.type = C.call;
 
     // Update Buy Para
@@ -2024,6 +1953,9 @@ async function reversePutWithSupport() {
 
     // Capture Buy
     Helper.captureBuy();
+
+    // Update Buy Log
+    Helper.updateLog(C.buy);
 
     // Update Para Flag
     M.paraFlag = true;
@@ -2212,6 +2144,11 @@ function trailAddonWindow() {
   }
 }
 
+async function sellAll() {
+  const order = await M.oDelta.closeAllPositions();
+  return order;
+}
+
 async function sellBoth() {
   var order;
 
@@ -2220,12 +2157,12 @@ async function sellBoth() {
     if (M.BuyCall.category === C.main) {
       var order = await sellMain(M.BuyCall);
       if (order == undefined) {
-        throw new Error("Sell => Call ( Main )");
+        throw new Error("Sell => Call (Main)");
       }
     } else {
       var order = await sellSupport(M.BuyCall);
       if (order == undefined) {
-        throw new Error("Sell => Call ( Support )");
+        throw new Error("Sell => Call (Support)");
       }
     }
   }
@@ -2235,12 +2172,12 @@ async function sellBoth() {
     if (M.BuyPut.category === C.main) {
       var order = await sellMain(M.BuyPut);
       if (order == undefined) {
-        throw new Error("Sell => Put ( Main )");
+        throw new Error("Sell => Put (Main)");
       }
     } else {
       var order = await sellSupport(M.BuyPut);
       if (order == undefined) {
-        throw new Error("Sell => Put ( Support )");
+        throw new Error("Sell => Put (Support)");
       }
     }
   }
@@ -2359,12 +2296,19 @@ async function buyCallSupport() {
     Helper.addMessage(C.error, "Cannot Buy Call Support, Exists");
     return;
   }
+
+  // Sell Put Addon
+  if (M.BuyAddon.flag === true && M.BuyAddon.symbol === M.BuyPut.symbol) {
+    await sellAddon(M.BuyPut);
+  }
+
   var order = await buySupport(M.BuyCall);
   if (order == undefined) {
-    Helper.addMessage(C.error, "Buy => Call ( Support )", C.P2);
+    Helper.addMessage(C.error, "Buy => Call (Support)", C.P2);
     return;
   }
 
+  // Move Put Orange Up
   moveOrangeUp(M.BuyPut);
 
   // Update Buy Log
@@ -2378,27 +2322,35 @@ async function buySupport(Ticker) {
   }
 
   // Validate Sell Condition
-  if (M.P_SellSupport.flag === true && M.Buy.support == M.P_SellSupport.count) {
+  if (
+    M.P_SellSupport.flag === true &&
+    M.Buy.support === M.P_SellSupport.count - 1
+  ) {
     Helper.performAction(
       C.support,
       M.P_SellSupport.action,
       M.Buy.index,
       Ticker.type,
     );
-    if (M.P_SellSupport.action === C.sell) {
-      await sellBoth();
-    }
+    // if (M.P_SellSupport.action === C.sell) {
+    //   await sellBoth();
+    // }
     M.P_SellSupport.flag = false;
     M.paraFlag = true;
     return order;
   }
 
-  order = await buyOrder(Ticker);
+  // Buy Support with addon always
+  order = await buyOrder(Ticker, M.P_Addon.flag);
 
   if (order == undefined) {
     Helper.notifyMe("Error in Buy Support Order");
     throw new Error("Error in Buy Support Order");
   }
+
+  // Message
+  Helper.addMessage(C.success, "Buy => " + Ticker.type + " (Support)", C.P2);
+  Helper.notifyMe(C.success + " : Buy => " + Ticker.type + " (Support)");
 
   // Ticker
   Ticker.flag = true;
@@ -2408,24 +2360,23 @@ async function buySupport(Ticker) {
   M.Buy.support = M.Buy.support + 1;
   M.Buy.direction = C.down;
 
-  let slippagePer = Helper.getPercentage(Ticker.candle.close, order.average);
-  if (slippagePer < 0) {
-    M.Buy.slippage = M.Buy.slippage + 1;
-    M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
-  }
-
   // Init Support
   initBuySupport(order);
-
-  // Message
-  Helper.addMessage(C.success, "Buy => " + Ticker.type + " ( Support )", C.P2);
-  Helper.notifyMe(C.success + " : Buy => " + Ticker.type + " ( Support )");
 
   // Trn
   updateTrn(C.buy, Ticker);
 
-  // Init Addon, Addon Trn after Parent
-  initAddon(Ticker, order);
+  // Init Addon
+  if (M.P_Addon.flag === true) {
+    initAddon(Ticker, order);
+  }
+
+  // Slippage
+  let slippagePer = Ticker.pnl.buySlp + M.AddonPnl.buySlp;
+  if (slippagePer != 0) {
+    M.Buy.slippage = M.Buy.slippage + 1;
+    M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
+  }
 
   return order;
 }
@@ -2462,14 +2413,6 @@ async function sellSupport(Ticker) {
   M.Buy.supportFlag = false;
   M.Buy.direction = C.up;
 
-  M.Buy.supportPer = Helper.formatDecimal(M.Buy.supportPer + Ticker.pnl.per);
-
-  let slippagePer = Helper.getPercentage(Ticker.candle.close, order.average);
-  if (slippagePer < 0) {
-    M.Buy.slippage = M.Buy.slippage + 1;
-    M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
-  }
-
   // Ticker
   Ticker.flag = false;
   Ticker.addon = false;
@@ -2477,23 +2420,34 @@ async function sellSupport(Ticker) {
   // Pnl
   updatePnl(Ticker, order);
 
-  // Reset Window
-  resetWindow(Ticker.window);
-
   // Trn
   updateTrn(C.sell, Ticker);
 
-  // Message
-  Helper.addMessage(C.success, "Sell => " + Ticker.type + " ( Support )", C.P2);
-  Helper.notifyMe(C.success + " : Sell => " + Ticker.type + " ( Support )");
-
-  // Reset Addon
-  if (M.BuyAddon.flag === true && Ticker.type === M.BuyAddon.type) {
-    settleAddon(order, false);
-  }
+  // Reset Window
+  resetWindow(Ticker.window);
 
   // Set Delta Window
   Helper.updateDeltaWindow();
+
+  // Support %
+  M.Buy.supportPer = Helper.formatDecimal(M.Buy.supportPer + Ticker.pnl.per);
+
+  // // Slippage
+  // let slippagePer = Ticker.pnl.sellSlp + M.AddonPnl.sellSlp;
+  // if (slippagePer < 0) {
+  //   M.Buy.slippage = M.Buy.slippage + 1;
+  //   M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
+  // }
+
+  // Reset Addon
+  if (M.BuyAddon.flag === true && Ticker.type === M.BuyAddon.type) {
+    Ticker.addon = false;
+    settleAddon(Ticker, order);
+  }
+
+  // Message
+  Helper.addMessage(C.success, "Sell => " + Ticker.type + " (Support)", C.P2);
+  Helper.notifyMe(C.success + " : Sell => " + Ticker.type + " (Support)");
 
   return order;
 }
@@ -2503,10 +2457,12 @@ async function sellCallSupport() {
     Helper.addMessage(C.error, "Cannot Sell Call Support, Dont Exists");
     return;
   }
-  var order = await sellSupport(M.BuyCall, false);
+
+  // Sell Call Support
+  var order = await sellSupport(M.BuyCall);
 
   if (order == undefined) {
-    throw new Error("Sell => Call ( Support )");
+    throw new Error("Sell => Call (Support)");
   }
 
   // Move Put Orange Down
@@ -2522,12 +2478,19 @@ async function buyPutSupport() {
     return;
   }
 
+  // Sell Call Addon
+  if (M.BuyAddon.flag === true && M.BuyAddon.symbol === M.BuyCall.symbol) {
+    await sellAddon(M.BuyCall);
+  }
+
+  // Buy Support
   var order = await buySupport(M.BuyPut);
   if (order == undefined) {
-    Helper.addMessage(C.error, "Buy => Put ( Support )");
+    Helper.addMessage(C.error, "Buy => Put (Support)");
     return;
   }
 
+  // Move Call Orange Up
   moveOrangeUp(M.BuyCall);
 
   // Update Buy Log
@@ -2543,7 +2506,7 @@ function moveOrangeUp(Ticker) {
     Helper.captureBuy();
   }
   // Extend Green, If required
-  Ticker.window.orange = Helper.addPercentage(Ticker.pnl.ltp, gap);
+  Ticker.window.orange = Helper.addPercentage(Ticker.window.orange, gap);
   if (Ticker.window.orange > Ticker.window.green) {
     Ticker.window.green = Ticker.window.orange;
   }
@@ -2551,7 +2514,10 @@ function moveOrangeUp(Ticker) {
 
 function moveOrangeDown(Ticker) {
   // Donot Extend Red, if Required
-  Ticker.window.orange = Helper.addPercentage(Ticker.pnl.ltp, -M.Para.hold);
+  Ticker.window.orange = Helper.addPercentage(
+    Ticker.window.green,
+    -M.Para.hold,
+  );
   if (Ticker.window.orange < Ticker.window.red) {
     Ticker.window.orange = Ticker.window.red;
   }
@@ -2560,13 +2526,13 @@ function moveOrangeDown(Ticker) {
 
 async function sellPutSupport() {
   if (M.BuyPut.flag === false) {
-    Helper.addMessage(C.error, "Cannot Sell Put Support, Dont Exists");
-    return;
+    throw new Error("Cannot Sell Put Support, Dont Exists");
   }
 
+  // Sell Put Support
   var order = await sellSupport(M.BuyPut);
   if (order == undefined) {
-    throw new Error("Sell => Put ( Support )");
+    throw new Error("Sell => Put (Support), Order Not Found");
   }
 
   // Move Call Orange Down
@@ -2579,22 +2545,6 @@ async function sellPutSupport() {
 async function buyAddon(Ticker) {
   let order = false;
   if (Ticker.addon === true) {
-    return order;
-  }
-
-  // Validate Sell Condition
-  if (M.P_SellAddon.flag === true && M.Para.addonCount == M.P_SellAddon.count) {
-    Helper.performAction(
-      C.addon,
-      M.P_SellAddon.action,
-      M.Buy.index,
-      Ticker.type,
-    );
-    if (M.P_SellAddon.action === C.sell) {
-      await sellBoth();
-    }
-    M.P_SellAddon.flag = false;
-    M.paraFlag = true;
     return order;
   }
 
@@ -2615,11 +2565,11 @@ async function buyAddon(Ticker) {
     M.BuyAddon.symbol = Ticker.symbol;
     M.AddonPnl.ltp = Ticker.candle.close;
 
-    order = await buyAddonOrder(M.Buy.addon);
+    order = await buyAddonOrder();
 
     if (order == undefined) {
-      Helper.notifyMe("Error : Sell => " + Ticker.type + " ( Addon )");
-      throw new Error("Buy ==> " + Ticker.type + "  ( Addon ) ");
+      Helper.notifyMe("Error : Sell => " + Ticker.type + " (Addon)");
+      throw new Error("Buy ==> " + Ticker.type + "  (Addon) ");
     }
 
     Ticker.addon = true;
@@ -2629,14 +2579,13 @@ async function buyAddon(Ticker) {
     M.BuyAddon.parent = Ticker.flag;
     M.BuyAddon.type = Ticker.type;
     M.BuyAddon.category = Ticker.category + "Addon";
-
     M.AddonPnl.buy = order.average;
 
     // Init Addon Pnl
     initPnl(M.BuyAddon, order);
 
-    // Parent
-    let slippagePer = Helper.getPercentage(M.AddonPnl.ltp, order.average);
+    // Slippage
+    let slippagePer = Ticker.pnl.buySlp;
     if (slippagePer < 0) {
       M.Buy.slippage = M.Buy.slippage + 1;
       M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
@@ -2646,8 +2595,8 @@ async function buyAddon(Ticker) {
     updateTrn(C.buy, M.Buy.addon);
 
     // Message
-    Helper.addMessage(C.success, "Buy ==> " + Ticker.type + " ( Addon )", C.P2);
-    Helper.notifyMe(C.success + " : Buy => " + Ticker.type + " ( Addon )");
+    Helper.addMessage(C.success, "Buy ==> " + Ticker.type + " (Addon)", C.P2);
+    Helper.notifyMe(C.success + " : Buy => " + Ticker.type + " (Addon)");
 
     return order;
   } catch (error) {
@@ -2663,36 +2612,39 @@ function initAddonCandle() {
   }
 }
 
-async function buyAddonOrder(Ticker) {
+async function buyAddonOrder() {
   let order = {};
 
   // Validation
-  if (Ticker.flag == true) {
+  if (M.P_Addon.flag === false) {
+    throw new Error("Cannot Buy Addon, Flag Inactive");
+  }
+
+  if (M.BuyAddon.flag == true) {
     throw new Error("Cannot Buy, Already Exists");
   }
 
   // Get Qty
   let data = M.aData.find(
-    (item) => item.category === C.option && item.symbol === Ticker.symbol,
+    (item) => item.category === C.option && item.symbol === M.BuyAddon.symbol,
   );
 
   if (data?.close == undefined || data?.close == 0) {
     throw new Error("Invalid Ticker LTP");
   }
 
-  Ticker.pnl.ltp = data.close;
-  Ticker.pnl.qty = getBuyQty(Ticker);
-
-  Ticker.pnl.qty = Ticker.pnl.qty * M.P_Addon.value;
+  M.BuyAddon.pnl.ltp = data.close;
+  M.BuyAddon.pnl.qty = getBuyQty(M.BuyAddon) * M.P_Addon.value;
+  M.BuyAddon.pnl.usd = M.Buy.amount;
 
   if (M.Para.switch == C.active) {
     if (M.Para.orderType == C.market) {
-      order = await buyMarketOrder(Ticker, Ticker.pnl.qty);
+      order = await buyMarketOrder(M.BuyAddon, M.BuyAddon.pnl.qty);
     } else {
-      order = await buyLimitOrder(Ticker, Ticker.pnl.qty);
+      order = await buyLimitOrder(M.BuyAddon, M.BuyAddon.pnl.qty);
     }
   } else if (M.Para.switch == C.test) {
-    order = await buyTestOrder(Ticker);
+    order = await buyTestOrder(M.BuyAddon, M.BuyAddon.pnl.qty);
   } else {
     throw new Error("Inactive Switch");
   }
@@ -2702,19 +2654,11 @@ async function buyAddonOrder(Ticker) {
 
 async function sellAddon(Ticker) {
   if (M.BuyAddon.flag === false) {
-    Helper.addMessage(
-      C.error,
-      "Cannot Sell " + Ticker.type + " ==> Addon Not Found",
-    );
-    return;
+    throw new Error("Sell Addon ==> " + Ticker.type + "  Not Found");
   }
 
   if (Ticker.symbol !== M.BuyAddon.symbol) {
-    Helper.addMessage(
-      C.error,
-      "Cannot Sell " + Ticker.type + " ==> Invalid Addon Symbol",
-    );
-    return;
+    throw new Error("Sell Addon ==> " + Ticker.type + "  Invalid Symbol");
   }
 
   try {
@@ -2722,20 +2666,59 @@ async function sellAddon(Ticker) {
     var order = await sellOrder(M.BuyAddon);
 
     if (order == undefined) {
-      Helper.notifyMe("Error ==> Sell Addon ( " + Ticker.type + " )");
-      throw new Error("Error ==> Sell Addon ( " + Ticker.type + " )");
+      // Helper.notifyMe("Error ==> Sell Addon (" + Ticker.type + " )");
+      throw new Error("Sell Addon ==> (" + Ticker.type + " ) Order Not Found");
     }
 
     // Parent
     Ticker.addon = false;
 
-    // Settle Addon
-    settleAddon(order, true);
-
-    // Allign Main Window
+    // Adjust Main % -> Trn
     if (Ticker.category === C.main) {
+      // Settle Main
+      M.Buy.supportPer = Helper.formatDecimal(
+        M.Buy.supportPer + Helper.getPercentage(Ticker.pnl.buy, order.average),
+      );
+      // Adjust Main Till here
+      Ticker.pnl.ltp = Helper.formatDecimal(order.average);
+      updateTrn(C.adjust, Ticker);
+
+      // Continue Main from here
+      Ticker.pnl.buy = order.average;
+
+      // Allign Main Window
       moveOrangeUp(Ticker);
     }
+
+    // // Slippage
+    // let slippagePer = M.AddonPnl.sellSlp;
+    // if (slippagePer < 0) {
+    //   M.Buy.slippage = M.Buy.slippage + 1;
+    //   M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
+    // }
+
+    // Settle Addon
+    settleAddon(M.BuyAddon, order);
+
+    // Validate Sell Addon Condition
+    if (
+      M.P_SellAddon.flag === true &&
+      M.P_SellAddon.count === M.P_SellAddon.count
+    ) {
+      Helper.performAction(
+        C.addon,
+        M.P_SellAddon.action,
+        M.Buy.index,
+        Ticker.type,
+      );
+      M.P_SellAddon.flag = false;
+      M.paraFlag = true;
+      return order;
+    }
+
+    // Message
+    // Helper.addMessage(C.success, "Sell => " + Ticker.type + " (Addon)", C.P2);
+    // Helper.notifyMe(C.success + " : Sell => " + Ticker.type + " (Addon)");
 
     return order;
   } catch (error) {
@@ -2743,14 +2726,28 @@ async function sellAddon(Ticker) {
   }
 }
 
-function settleAddon(order, parentFlag) {
-  // Pnl
+function settleAddon(Ticker, order) {
+  let slippagePer = 0;
 
-  if (parentFlag === true) {
-    closeAddonPnl(order);
-  } else {
-    updatePnl(M.BuyAddon, order);
+  if (Ticker.category === C.main || Ticker.category === C.support) {
+    // Parent Slippage
+    slippagePer = Ticker.pnl.sellSlp;
+    // Parent Pnl
+    updateParentPnl(Ticker, order);
   }
+
+  // Flag
+  M.BuyAddon.flag = false;
+
+  // Slippage
+  slippagePer = slippagePer + M.AddonPnl.sellSlp;
+  if (slippagePer < 0) {
+    M.Buy.slippage = M.Buy.slippage + 1;
+    M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
+  }
+
+  // Addon Pnl
+  updatePnl(M.BuyAddon, order);
 
   // Trn
   updateTrn(C.sell, M.BuyAddon);
@@ -2758,72 +2755,47 @@ function settleAddon(order, parentFlag) {
   // Update Buy -> Addon Per
   M.Buy.addonPer = Helper.formatDecimal(M.Buy.addonPer + M.AddonPnl.per);
 
-  // Slippage
-  let slippagePer = Helper.getPercentage(M.AddonPnl.ltp, order.average);
-  if (slippagePer < 0) {
-    M.Buy.slippage = M.Buy.slippage + 1;
-    M.Buy.slippagePer = Helper.formatDecimal(M.Buy.slippagePer + slippagePer);
-  }
-
   // Message
-  Helper.addMessage(
-    C.success,
-    "Sell ==> " + M.BuyAddon.type + " ( Addon )",
-    C.P2,
-  );
-  Helper.notifyMe(C.success + " + Sell ==> " + M.BuyAddon.type + " ( Addon )");
-
-  // Header
-  M.BuyAddon.flag = false;
-  M.BuyAddon.parent = false;
-  M.BuyAddon.symbol = C.none;
-  M.BuyAddon.type = C.none;
-  M.BuyAddon.category = C.none;
+  Helper.addMessage(C.success, "Sell => " + M.BuyAddon.type + " (Addon)", C.P2);
+  Helper.notifyMe(C.success + " + Sell => " + M.BuyAddon.type + " (Addon)");
 
   Helper.updateDeltaWindow();
+
+  Helper.resetWithRef(M.BuyAddon, M.I_Buy.addon);
 }
 
 function updatePnl(Ticker, Order) {
-  Ticker.pnl.ltp = Order.average;
+  Ticker.pnl.sellSlp = Helper.formatDecimal(
+    (Helper.getPercentage(Order.average, Ticker.pnl.ltp) * Ticker.pnl.qty) /
+      Order.amount,
+  );
+  Ticker.pnl.ltp = Helper.formatDecimal(Order.average);
   Ticker.pnl.per = Helper.getPercentage(Ticker.pnl.buy, Ticker.pnl.ltp);
-
-  // Update Addon Per / Count
-  if (
-    M.P_Addon.value > 1 &&
-    (Ticker.category === C.mainAddon || Ticker.category === C.supportAddon)
-  ) {
-    Ticker.pnl.per = Helper.formatDecimal(Ticker.pnl.per * M.P_Addon.value);
-  }
 }
 
-function closeAddonPnl(Order) {
-  let Parent;
-  if (M.Buy.type === C.call) {
-    Parent = M.BuyCall;
+function updateParentPnl(Ticker, Order) {
+  let addonQty = 0;
+  if (M.BuyAddon.flag === true && M.BuyAddon.symbol === Ticker.symbol) {
+    addonQty = M.AddonPnl.qty;
+  }
+  let leftQty = Order.amount - Ticker.pnl.qty - addonQty;
+  if (leftQty === 0) {
+    Ticker.pnl.qty = 0;
+    Ticker.pnl.usd = 0;
   } else {
-    Parent = M.BuyPut;
+    Ticker.pnl.qty = leftQty;
+    Ticker.pnl.usd = Helper.formatDecimal(
+      leftQty * Ticker.pnl.ltp * M.Buy.lotsize,
+    );
+    Helper.addMessage(
+      "Error Sell ==> " + Ticker.type + " (" + Ticker.category + ")",
+    );
   }
 
-  // Set the Loss to Support %
-  M.Buy.supportPer = Helper.formatDecimal(
-    M.Buy.supportPer + Helper.getPercentage(Parent.pnl.buy, Order.average),
-  );
-
-  // Add Trn Record
-  updateTrn(C.adjust, Parent);
-
-  // Set Main to 100 %, Adjusted in Addon
-  Parent.pnl.ltp = Order.average;
-  Parent.pnl.buy = Order.average;
-  Parent.pnl.per = 0;
-  Parent.pnl.usd = Helper.formatDecimal(
-    Parent.pnl.qty * Parent.pnl.ltp * M.Buy.lotsize,
-  );
-
-  // Update Trn Parent Record
-  updateTrn(C.update, Parent);
-
-  updatePnl(M.BuyAddon, Order);
+  // Update Addon Per / Count
+  if (M.P_Addon.value > 1) {
+    Ticker.pnl.per = Helper.formatDecimal(Ticker.pnl.per * M.P_Addon.value);
+  }
 }
 
 module.exports = {
@@ -2835,6 +2807,7 @@ module.exports = {
   refreshBuyInfo,
   resetBuy,
   sellBoth,
+  sellAll,
   reverseWithSupport,
   reverseWithoutSupport,
   manageBuy,
@@ -2845,4 +2818,6 @@ module.exports = {
   sellCallSupport,
   sellPutSupport,
   updateTrn,
+  processBuyCallAddon,
+  processBuyPutAddon,
 };

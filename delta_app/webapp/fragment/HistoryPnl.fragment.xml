@@ -115,6 +115,7 @@
                     text="Slippage :"
                     type="Transparent"
                     icon="sap-icon://decision"
+                    press="onShowItemSlippage"
                 />
 
                 <Title

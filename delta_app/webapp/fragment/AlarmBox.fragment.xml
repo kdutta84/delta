@@ -20,17 +20,6 @@
                     type="{ path: 'ParaModel>/alarm/flag', formatter: '.formatter.flagType' }"
                     press="onAlarmFlag"
                 />
-
-                <!-- <TimePicker
-                id="idTimeAlarmTimePicker"
-                value="{ path: 'ParaModel>/alarm/time', formatter: '.formatter.formatTime' }"
-                change="onAlarm"
-                displayFormat="hh:mm a"
-                valueFormat="hh:mm a"
-                editable="{ParaModel>/alarm/flag}"
-                width="130px"
-                textAlign="Center"
-                /> -->
                 <!-- minutesStep="15" -->
                 <DateTimePicker
                     id="idTimeAlarmTimePicker"
@@ -38,6 +27,7 @@
                     change="onAlarm"
                     placeholder="Set Alarm"
                     secondsStep="0"
+                    minutesStep="15"
                     displayFormat="dd MMM,  hh:mm a"
                     width="180px"
                     textAlign="Center"

@@ -372,6 +372,15 @@ sap.ui.define(function () {
         return "Indication20";
       }
     },
+    slpStatus: function (Value) {
+      if (Value > 0) {
+        return "Success";
+      } else if (Value < 0) {
+        return "Error";
+      } else {
+        return "None";
+      }
+    },
     alertTypeStatus: function (Type) {
       if (Type == this.call || Type === this.buy) {
         return "Indication14";
@@ -992,18 +1001,10 @@ sap.ui.define(function () {
         type = this.attention;
       }
       if (buyFlag === true && this.para?.buy?.callSymbol === symbol) {
-        type = this.emphasized;
+        type = this.success;
+        // type = this.emphasized;
       }
       return type;
-      ///////////////////////////////
-      // let type = this.transparent;
-      // if (this.para?.track?.flag == true) {
-      //   type = this.attention;
-      // }
-      // if (this.para?.buy?.callSymbol === symbol) {
-      //   type = this.emphasized;
-      // }
-      // return type;
     },
     buyPutSymbol: function (trackFlag, buyFlag, symbol) {
       let type = this.transparent;
@@ -1011,18 +1012,10 @@ sap.ui.define(function () {
         type = this.attention;
       }
       if (buyFlag === true && this.para?.buy?.putSymbol === symbol) {
-        type = this.emphasized;
+        type = this.success;
+        // type = this.emphasized;
       }
       return type;
-      ///////////////////
-      // let type = this.transparent;
-      // if (this.para?.track?.flag == true) {
-      //   type = this.attention;
-      // }
-      // if (this.para?.buy?.putSymbol === symbol) {
-      //   type = this.emphasized;
-      // }
-      // return type;
     },
     pnlTagPer: function (value) {
       if (value == undefined) {
@@ -1095,16 +1088,6 @@ sap.ui.define(function () {
       }
 
       return display;
-
-      // if (flag === false) {
-      //   return false;
-      // }
-      // debugger;
-      // if (category === this.supportAddon) {
-      //   return true;
-      // } else {
-      //   return false;
-      // }
     },
     addonActive: function (flag) {
       if (flag === undefined || flag === false) {
@@ -1423,12 +1406,18 @@ sap.ui.define(function () {
       } else {
         return value + " %";
       }
-
-      // if (value === undefined || value === null) {
-      //   return "0 %";
-      // } else {
-      //   return value + " %";
-      // }
+    },
+    addSlpPercentage: function (value) {
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        Number.isNaN(value)
+      ) {
+        return " ";
+      } else {
+        return value + " %";
+      }
     },
     statusColorFormatter: function (value) {
       if (value !== undefined && value !== null) {
@@ -1496,6 +1485,12 @@ sap.ui.define(function () {
       } else {
         return "BeginBottom";
       }
+    },
+    showSlippage: function (status) {
+      return status;
+    },
+    hideSlippage: function (status) {
+      return !status;
     },
     // alarmActionIcon: function (alarmAction) {
     //   switch (alarmAction) {

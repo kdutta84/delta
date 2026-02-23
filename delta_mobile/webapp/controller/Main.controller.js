@@ -10,7 +10,8 @@ sap.ui.define(
     "sap/ui/core/InvisibleMessage",
     "sap/m/library",
     "sap/ui/core/Theming",
-    "highcharts/highstock",
+    // "highcharts/highstock",
+    "highcharts",
     "ns/deltamobilehost/model/formatter",
   ],
   function (
@@ -73,50 +74,60 @@ sap.ui.define(
         // return;
 
         // Get Dependent Modules
-        var that = this;
-        sap.ui.require(
-          [
-            "highcharts/modules/exporting",
-            "highcharts/modules/price-indicator",
-            "highcharts/modules/drag-panes",
-            "highcharts/highcharts-more",
-            "highcharts/indicators/indicators-all",
-            "highcharts/modules/annotations-advanced",
-            "highcharts/modules/full-screen",
-            "highcharts/modules/stock-tools",
-            "highcharts/themes/adaptive",
-          ],
-          function (
-            // @ts-ignore
-            exporting,
-            // @ts-ignore
-            priceInd,
-            // @ts-ignore
-            dragPanes,
-            // @ts-ignore
-            more,
-            // @ts-ignore
-            indicators,
-            // @ts-ignore
-            annotations,
-            // @ts-ignore
-            fullscreen,
-            // @ts-ignore
-            stockTools,
-            // @ts-ignore
-            theme,
-          ) {
-            // // Init Charts
-            that.initCharts();
+        // var that = this;
+        // sap.ui.require(
+        //   [
+        //     "highcharts/modules/exporting",
+        //     "highcharts/modules/price-indicator",
+        //     "highcharts/modules/drag-panes",
+        //     "highcharts/highcharts-more",
+        //     "highcharts/indicators/indicators-all",
+        //     "highcharts/modules/annotations-advanced",
+        //     "highcharts/modules/full-screen",
+        //     "highcharts/modules/stock-tools",
+        //     "highcharts/themes/adaptive",
+        //   ],
+        //   function (
+        //     // @ts-ignore
+        //     exporting,
+        //     // @ts-ignore
+        //     priceInd,
+        //     // @ts-ignore
+        //     dragPanes,
+        //     // @ts-ignore
+        //     more,
+        //     // @ts-ignore
+        //     indicators,
+        //     // @ts-ignore
+        //     annotations,
+        //     // @ts-ignore
+        //     fullscreen,
+        //     // @ts-ignore
+        //     stockTools,
+        //     // @ts-ignore
+        //     theme,
+        //   ) {
+        //     // // Init Charts
+        //     that.initCharts();
 
-            // Init Body Container
-            that.screen.mBody = that.chart;
-            that.updateModel("ScreenModel", that.screen);
+        //     // Init Body Container
+        //     that.screen.mBody = that.chart;
+        //     that.updateModel("ScreenModel", that.screen);
 
-            // // Start Process
-            that.startProcess();
-          },
-        );
+        //     // // Start Process
+        //     that.startProcess();
+        //   },
+        // );
+      },
+      onAfterRendering: function () {
+        this.initCharts();
+
+        // Init Body Container
+        this.screen.mBody = this.chart;
+        this.updateModel("ScreenModel", this.screen);
+
+        // // Start Process
+        this.startProcess();
       },
       setTheme: function () {
         sap.ui.getCore().applyTheme("sap_horizon");
@@ -7155,7 +7166,7 @@ sap.ui.define(
           ],
         };
 
-        highcharts.stockChart("StockChart", options);
+        Highcharts.stockChart("StockChart", options);
       },
       initBarChart: function () {
         var that = this;
@@ -7294,19 +7305,20 @@ sap.ui.define(
           ],
         };
 
-        highcharts.chart("BarChart", options);
+        Highcharts.chart("BarChart", options);
       },
       hideNavBar: function () {
-        // @ts-ignore
-        if (sap.ushell.Container.getRenderer("fiori2")) {
+        if (sap.ushell !== undefined) {
           // @ts-ignore
-          sap.ushell.Container.getRenderer("fiori2").setHeaderVisibility(
-            false,
-            true,
-          );
+          if (sap.ushell.Container.getRenderer("fiori2")) {
+            // @ts-ignore
+            sap.ushell.Container.getRenderer("fiori2").setHeaderVisibility(
+              false,
+              true,
+            );
+          }
         }
       },
-
       initConstants: function () {
         this.display = "Display";
         this.edit = "Edit";
