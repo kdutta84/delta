@@ -1,0 +1,416 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <!-- Action Buttons -->
+    <HBox
+        id="idActionButtonsHBox"
+        alignItems="Start"
+        alignContent="Start"
+        width="500px"
+        height="30px"
+        class="sapUiTinyMarginBottom"
+    >
+        <Button
+            id="idSettingButton"
+            tooltip="Setting"
+            icon="sap-icon://customize"
+            press="onSetting"
+            width="30px"
+        />
+
+        <Button
+            id="idFullscreenButton"
+            tooltip="Fullscreen"
+            icon="sap-icon://full-screen"
+            class="sapUiSmallMarginBegin"
+            press="onFullscreen"
+            width="30px"
+        />
+        <Button
+            id="idTooltipButton"
+            tooltip="Tooltip"
+            icon="sap-icon://add"
+            press="onTooltip"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+        />
+        <Button
+            id="idSiteButton"
+            tooltip="Open Site"
+            icon="sap-icon://chevron-phase"
+            press="onExternalWindow"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+        />
+
+        <Button
+            id="idActionButton"
+            tooltip="Records"
+            icon="sap-icon://contacts"
+            press="onBuyHistory"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+        />
+
+        <Button
+            id="idAddOnChartsButton"
+            icon="sap-icon://business-objects-experience"
+            press="onAddonCharts"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+        />
+
+        <Button
+            id="idRefreshButton"
+            tooltip="Refresh"
+            icon="sap-icon://refresh"
+            press="onRefreshBuyInfo"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+        />
+
+        <Button
+            id="idDataLabelButton"
+            tooltip="Data Label"
+            icon="sap-icon://horizontal-grip"
+            press="onDataLabel"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+        />
+        <Button
+            id="idOpenServer"
+            tooltip="Server"
+            icon="sap-icon://database"
+            press="onOpenServer"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+            visible="true"
+        />
+
+        <Button
+            id="idChartLayoutButton"
+            tooltip="Chart Layout"
+            icon="sap-icon://it-system"
+            press="onChartLayout"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+            visible="true"
+        />
+
+        <!-- <Button
+            id="idMarketWindow"
+            tooltip="Market"
+            icon="sap-icon://it-system"
+            press="onMarketTab"
+            class="sapUiSmallMarginBegin"
+            width="30px"
+            visible="true"
+        /> -->
+
+        <!-- Header Action  -->
+        <MenuButton
+            id="idHeaderActionMenuButton"
+            useDefaultActionOnly="true"
+            menuPosition="EndBottom"
+            enabled="true"
+            type="Transparent"
+            visible="false"
+        >
+            <menu>
+                <Menu id="idHeaderActionMenu">
+                    <MenuItem
+                        id="idActionHeaderActionMenuItem"
+                        text="Action"
+                        icon="sap-icon://locate-me-2"
+                    >
+                        <items>
+                            <MenuItem
+                                id="idLastPriceMenuItem"
+                                key="lastprice"
+                                text="Last Price"
+                                icon="sap-icon://lead"
+                                press="displayChartLtp"
+                            />
+                            <MenuItem
+                                id="idBuyLineMenuItem"
+                                key="buyline"
+                                text="Buy Line"
+                                icon="sap-icon://less"
+                                press="displayBuyLine"
+                            />
+                            <MenuItem
+                                id="idChartGuiMenuItem"
+                                key="chartgui"
+                                text="Chart Gui"
+                                icon="sap-icon://chart-axis"
+                                press="onDisplayStockTools"
+                            />
+                            <MenuItem
+                                id="idRefreshMenuItem"
+                                key="chartrefresh"
+                                text="Refresh"
+                                icon="sap-icon://refresh"
+                                press="onChartRefresh"
+                            />
+                        </items>
+                    </MenuItem>
+                    <MenuItem
+                        id="idVolumeTypeMenuItem"
+                        text="Volume"
+                        icon="sap-icon://measuring-point"
+                    >
+                        <items>
+                            <MenuItem
+                                id="idVolumeTypeMarketMenuItem"
+                                key="Market"
+                                icon="sap-icon://customer-and-supplier"
+                                text="Market"
+                                press="onVolumeTypeMarket"
+                            />
+                            <MenuItem
+                                id="idVolumeTypeOptionMenuItem"
+                                key="Option"
+                                icon="sap-icon://multiselect-none"
+                                text="Option"
+                                press="onVolumeTypeOption"
+                            />
+                        </items>
+                    </MenuItem>
+                    <MenuItem
+                        id="idHeaderMenuItem"
+                        text="Header"
+                        startsSection="true"
+                        icon="sap-icon://open-command-field"
+                    >
+                        <items>
+                            <MenuItem
+                                id="idTitleMenuItem"
+                                text="Title"
+                                icon="sap-icon://zoom-in"
+                                press="onHeaderTitle"
+                            />
+                            <MenuItem
+                                id="idMsgMenuItem"
+                                text="Message"
+                                icon="sap-icon://zoom-in"
+                                press="onHeaderMsg"
+                            />
+
+                            <MenuItem
+                                id="idmZoomMenuItem"
+                                text="Zoom"
+                                icon="sap-icon://zoom-in"
+                                press="onHeaderZoom"
+                            />
+
+                            <MenuItem
+                                id="idmUpdateMenuItem"
+                                text="Title"
+                                icon="sap-icon://zoom-in"
+                                press="onHeaderUpdate"
+                            />
+
+                            <MenuItem
+                                id="idmAskGapMenuItem"
+                                text="Ask Gap"
+                                icon="sap-icon://zoom-in"
+                                press="onHeaderAskGap"
+                            />
+                        </items>
+                    </MenuItem>
+                </Menu>
+            </menu>
+        </MenuButton>
+
+        <!-- Chart Action  -->
+        <!-- <MenuButton
+            id="idChartActionMenuButton"
+            useDefaultActionOnly="true"
+            menuPosition="EndBottom"
+            enabled="true"
+            type="Transparent"
+            visible="false"
+        >
+            <menu>
+                <Menu id="idChartActionMenu">
+                    <MenuItem
+                        id="idActionHeaderActionMenuItem"
+                        text="Action"
+                        icon="sap-icon://locate-me-2"
+                    >
+                        <items>
+                            <MenuItem
+                                id="idLastPriceMenuItem"
+                                key="lastprice"
+                                text="Last Price"
+                                icon="sap-icon://lead"
+                                press="displayChartLtp"
+                            />
+                            <MenuItem
+                                id="idBuyLineMenuItem"
+                                key="buyline"
+                                text="Buy Line"
+                                icon="sap-icon://less"
+                                press="displayBuyLine"
+                            />
+                            <MenuItem
+                                id="idChartGuiMenuItem"
+                                key="chartgui"
+                                text="Chart Gui"
+                                icon="sap-icon://chart-axis"
+                                press="onDisplayStockTools"
+                            />
+                            <MenuItem
+                                id="idRefreshMenuItem"
+                                key="chartrefresh"
+                                text="Refresh"
+                                icon="sap-icon://refresh"
+                                press="onChartRefresh"
+                            />
+                        </items>
+                    </MenuItem>
+                    <MenuItem
+                        id="idThemeMenuItem"
+                        text="Theme"
+                        icon="sap-icon://palette"
+                    >
+                        <items>
+                            <MenuItem
+                                id="idLightMenuItem"
+                                key="lighttheme"
+                                icon="sap-icon://light-mode"
+                                text="Light"
+                                press="setLightTheme"
+                            />
+                            <MenuItem
+                                id="idDarkMenuItem"
+                                key="darktheme"
+                                icon="sap-icon://dark-mode"
+                                text="Dark"
+                                press="setDarkTheme"
+                            />
+                        </items>
+                    </MenuItem>
+                    <MenuItem
+                        id="idLayoutMenuItem"
+                        text="Layout"
+                        icon="sap-icon://vr-glasses"
+                    >
+                        <items>
+                            <MenuItem
+                                id="idHorizontalMenuItem"
+                                key="horizontal"
+                                icon="sap-icon://iphone-2"
+                                text="Horizontal"
+                                press="onHorizontalLayout"
+                            />
+                            <MenuItem
+                                id="idVerticalMenuItem"
+                                key="vertical"
+                                icon="sap-icon://iphone"
+                                text="Vertical"
+                                press="onVerticalLayout"
+                            />
+                        </items>
+                    </MenuItem>
+                </Menu>
+            </menu>
+        </MenuButton> -->
+
+        <!-- Buy Action  -->
+        <!-- <MenuButton
+            id="idActionMenuButton"
+            text="Action"
+            icon="sap-icon://locate-me-2"
+            class="sapUiLargeMarginBegin"
+            width="130px"
+            visible="false"
+        >
+            <Menu id="idActionMenu">
+                <MenuItem
+                    id="idAddonMenuItem"
+                    text="Addon"
+                    icon="sap-icon://add-product"
+                    press="onAddon"
+                >
+                    <items>
+                        <MenuItem
+                            id="idBuyAddonMenuItem"
+                            key="buyAddon"
+                            icon="sap-icon://cart"
+                            text="Buy"
+                            press="onBuyAddon"
+                        />
+                        <MenuItem
+                            id="idSellAddonMenuItem"
+                            key="sellAddon"
+                            icon="sap-icon://shipping-status"
+                            text="Sell"
+                            press="onSellAddon"
+                        />
+                    </items>
+                </MenuItem>
+
+                <MenuItem
+                    id="idSupportMenuItem"
+                    text="Support"
+                    icon="sap-icon://compare"
+                    press="onSupport"
+                >
+                    <items>
+                        <MenuItem
+                            id="idBuySupportMenuItem"
+                            key="supportBuy"
+                            icon="sap-icon://cart"
+                            text="Buy"
+                            press="onBuySupport"
+                        />
+                        <MenuItem
+                            id="idSellSupportMenuItem"
+                            key="supportSell"
+                            icon="sap-icon://shipping-status"
+                            text="Sell"
+                            press="onSellSupport"
+                        />
+                    </items>
+                </MenuItem>
+                <MenuItem
+                    id="idReverseMenuItem"
+                    text="Reverse"
+                    icon="sap-icon://sort"
+                    press="onReverse"
+                >
+                    <items>
+                        <MenuItem
+                            id="idWithSupportReverseMenuItem"
+                            key="reverseWithSupport"
+                            icon="sap-icon://accept"
+                            text="With Support"
+                            press="onReverseWithSupport"
+                        />
+                        <MenuItem
+                            id="idWithoutSupportReverseMenuItem"
+                            key="reverseWithoutSupport"
+                            icon="sap-icon://decline"
+                            text="Without Support"
+                            press="onReverseWithoutSupport"
+                        />
+                    </items>
+                </MenuItem>
+                <MenuItem
+                    id="idPositionMenuItem"
+                    text="Position"
+                    icon="sap-icon://cart-approval"
+                    press="onOpenPosition"
+                />
+                <MenuItem
+                    id="idSellAllMenuItem"
+                    text="Sell All"
+                    icon="sap-icon://collections-insight"
+                    press="onSellAll"
+                />
+            </Menu>
+        </MenuButton> -->
+    </HBox>
+</c:FragmentDefinition>

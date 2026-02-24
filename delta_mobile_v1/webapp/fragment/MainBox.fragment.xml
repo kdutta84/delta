@@ -1,0 +1,93 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <VBox
+        id="idStockChartVBox"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayChart' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.StockChart"
+            type="XML"
+        />
+    </VBox>
+    <VBox
+        id="idhOptionHBox"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayOption' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.Bar"
+            type="XML"
+        />
+    </VBox>
+    <VBox
+        id="idPnlBox"
+        class="sapUiTinyMarginBegin"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayPnl' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.PnlBox"
+            type="XML"
+        />
+    </VBox>
+    <VBox
+        id="idInputBox"
+        class="sapUiSmallMarginBegin"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayInput' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.InputBox"
+            type="XML"
+        />
+    </VBox>
+    <VBox
+        id="idSettingBox"
+        class="sapUiTinyMarginBegin"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplaySetting' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.SettingBox"
+            type="XML"
+        />
+    </VBox>
+
+    <!-- Bar Chart Options -->
+    <HBox
+        id="idTrnHBox"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayHistory' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.Trn"
+            type="XML"
+        />
+    </HBox>
+    <HBox
+        id="idBookHBox"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayBook' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.Book"
+            type="XML"
+        />
+    </HBox>
+
+    <HBox
+        id="idAlertHBox"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayAlert' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.Alert"
+            type="XML"
+        />
+    </HBox>
+
+    <HBox
+        id="idMessageHBox"
+        visible="{ path: 'ScreenModel>/mBody', formatter: '.formatter.mobileDisplayMessage' }"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.BarMessage"
+            type="XML"
+        />
+    </HBox>
+</core:FragmentDefinition>

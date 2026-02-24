@@ -1,0 +1,195 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <VBox
+        id="idInputVBox"
+        justifyContent="Center"
+        class="sapUiSmallMarginTop"
+    >
+        <!-- Logs -->
+        <Panel
+            id="idLogsPanel"
+            width="560px"
+            class="sapUiTinyMarginTop"
+        >
+            <content>
+                <HBox id="idInput1Options">
+                    <Button
+                        id="idInputBuyButton"
+                        text="Buy"
+                        icon="sap-icon://cart"
+                        width="90px"
+                        press="onSelectInputOption"
+                        class="sapUiSmallMarginBegin sapUiMediumMarginEnd"
+                    />
+                    <Button
+                        id="idInputSupportButton"
+                        text="Support"
+                        width="90px"
+                        icon="sap-icon://compare"
+                        press="onSelectInputOption"
+                        class="sapUiSmallMarginBegin sapUiMediumMarginEnd"
+                    />
+                    <Button
+                        id="idInputWalletButton"
+                        text="Wallet"
+                        icon="sap-icon://wallet"
+                        press="onSelectInputOption"
+                        width="90px"
+                        class="sapUiSmallMarginBegin sapUiMediumMarginEnd"
+                    />
+                    <Button
+                        id="idInputAlarmButton"
+                        text="Alarm"
+                        icon="sap-icon://away"
+                        press="onSelectInputOption"
+                        width="90px"
+                        class="sapUiSmallMarginBegin"
+                    />
+                </HBox>
+                <HBox
+                    id="idInput2Options"
+                    justifyContent="Center"
+                    class="sapUiSmallMarginTop"
+                >
+                    <Button
+                        id="idInputWindowButton"
+                        text="Window"
+                        icon="sap-icon://draw-rectangle"
+                        width="90px"
+                        press="onSelectInputOption"
+                        class="sapUiTinyMarginBegin sapUiMediumMarginEnd"
+                    />
+                    <Button
+                        id="idInputActionButton"
+                        text="Action"
+                        width="90px"
+                        icon="sap-icon://activate"
+                        press="onSelectInputOption"
+                        class="sapUiSmallMarginBegin sapUiMediumMarginEnd"
+                    />
+                    <Button
+                        id="idInputSellButton"
+                        text="Sell"
+                        icon="sap-icon://shipping-status"
+                        press="onSelectInputOption"
+                        width="90px"
+                        class="sapUiSmallMarginBegin sapUiMediumMarginEnd"
+                    />
+                    <Button
+                        id="idInputTrackButton"
+                        text="Track"
+                        icon="sap-icon://journey-change"
+                        press="onSelectInputOption"
+                        width="90px"
+                        class="sapUiSmallMarginBegin"
+                    />
+                </HBox>
+            </content>
+        </Panel>
+        <!-- Refresh -->
+        <Panel
+            id="idInputPanel"
+            width="560px"
+            class="sapUiSmallMarginTop"
+        >
+            <headerToolbar>
+                <OverflowToolbar
+                    id="idRefreshOverflowToolbar"
+                    class="sapUiTinyMarginTop"
+                >
+                    <Title
+                        id="idRefreshTitle"
+                        text="{ScreenModel>/mInput}"
+                    />
+                </OverflowToolbar>
+            </headerToolbar>
+            <content>
+                <!-- Input 1 -->
+                <VBox
+                    id="idhBuyBoxVBox"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.buyBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.BuyBox"
+                        type="XML"
+                    />
+                </VBox>
+
+                <VBox
+                    id="idhSupportBoxVBox"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.supportBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.SupportBox"
+                        type="XML"
+                    />
+                </VBox>
+
+                <VBox
+                    id="idhWalletBoxVBox"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.walletBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.WalletBox"
+                        type="XML"
+                    />
+                </VBox>
+
+                <VBox
+                    id="idhAlarmBoxVBox"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.alarmBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.AlarmBox"
+                        type="XML"
+                    />
+                </VBox>
+                <!-- Input 2 -->
+                <VBox
+                    id="idhWindowBoxVBox"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.windowBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.WindowBox"
+                        type="XML"
+                    />
+                </VBox>
+
+                <VBox
+                    id="idhSellBoxVBox"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.sellBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.SellBox"
+                        type="XML"
+                    />
+                </VBox>
+
+                <VBox
+                    id="idhTrackBoxVBox"
+                    class="sapUiTinyMarginTop"
+                    height="90px"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.trackBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.TrackBox"
+                        type="XML"
+                    />
+                </VBox>
+
+                <VBox
+                    id="idhButtonVBox"
+                    height="90px"
+                    visible="{ path: 'ScreenModel>/mInput', formatter: '.formatter.actionBoxVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltamobilehost.fragment.ActionBox"
+                        type="XML"
+                    />
+                </VBox>
+            </content>
+        </Panel>
+    </VBox>
+</core:FragmentDefinition>

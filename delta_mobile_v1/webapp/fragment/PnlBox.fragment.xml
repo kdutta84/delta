@@ -1,0 +1,100 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Toolbar
+        id="idhSep_4_Toolbar"
+        class="sapUiSmallMarginTop appBackground"
+        width="560px"
+    >
+        <Title
+            id="idPnLTitle"
+            level="H1"
+            text="PnL"
+            width="30px"
+        />
+        <!-- <ToolbarSpacer id="idPnlToolbarSpacer1" /> -->
+        <HBox
+            id="idBuyMaxBoxHBox"
+            width="240px"
+            justifyContent="Center"
+            visible="{PnlModel>/display}"
+        >
+            <GenericTag
+                id="idMaxBuyGenericTag"
+                status="Success"
+                design="StatusIconHidden"
+                text="Max :"
+            >
+                <ObjectNumber
+                    id="idMaxbuyObjectNumber"
+                    state="Error"
+                    emphasized="true"
+                    number="{PnlModel>/max}"
+                    unit="%"
+                />
+            </GenericTag>
+            <Button
+                id="idFromMaxButton"
+                text="{ path: 'PnlModel>/fromMax', formatter: '.formatter.addPercentage' }"
+                icon="sap-icon://arrow-bottom"
+                type="Reject"
+                class="sapUiTinyMarginBegin"
+            />
+        </HBox>
+
+        <ToolbarSeparator
+            id="idToolbarSeparator"
+            visible="{PnlModel>/display}"
+            class="sapUiTinyMarginEnd"
+        />
+        <HBox
+            id="idBuyMinBoxHBox"
+            width="240px"
+            justifyContent="Center"
+            visible="{PnlModel>/display}"
+        >
+            <GenericTag
+                id="idMinBuyGenericTag"
+                status="Error"
+                design="StatusIconHidden"
+                text="Min :"
+            >
+                <ObjectNumber
+                    id="idMinBuyObjectNumber"
+                    state="Error"
+                    emphasized="true"
+                    number="{PnlModel>/min}"
+                    unit="%"
+                />
+            </GenericTag>
+            <Button
+                id="idFromMinButton"
+                text="{ path: 'PnlModel>/fromMin', formatter: '.formatter.addPercentage' }"
+                icon="sap-icon://arrow-top"
+                type="Accept"
+                class="sapUiTinyMarginBegin"
+            />
+        </HBox>
+        <!-- <ToolbarSpacer id="idPnlToolbarSpacer2" /> -->
+
+        <!-- <Button
+                            id="idPnLSegmentedButtonItem"
+                            icon="sap-icon://lead"
+                        />
+                        <Button
+                            id="idChartSegmentedButtonItem"
+                            icon="sap-icon://business-objects-experience"
+                        /> -->
+    </Toolbar>
+    <VBox
+        id="idhPnlVBox"
+        width="560px"
+        class="sapUiTinyMarginTop"
+    >
+        <core:Fragment
+            fragmentName="ns.deltamobilehost.fragment.Pnl"
+            type="XML"
+        />
+    </VBox>
+</core:FragmentDefinition>

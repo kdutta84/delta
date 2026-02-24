@@ -57,14 +57,14 @@
                 <HBox
                     id="idStopwatchHBox"
                     justifyContent="Center"
-                    width="90px"
+                    width="100px"
                     class="sapUiTinyMarginBegin"
                 >
                     <Button
                         id="idStopwatchButton"
                         text="0.00"
                         type="Transparent"
-                        width="90px"
+                        width="100px"
                         icon="sap-icon://fob-watch"
                         press="onClockSettingPopup"
                     >

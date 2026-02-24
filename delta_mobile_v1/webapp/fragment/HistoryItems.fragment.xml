@@ -1,0 +1,146 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    xmlns:table="sap.ui.table"
+>
+    <HBox
+        id="idHistoryItemsHBox"
+        height="510px"
+    >
+        <table:Table
+            id="idHistoryItemTable"
+            rows="{ItemModel>/items/}"
+            width="520px"
+            rowMode="Auto"
+            ariaLabelledBy="title"
+            selectionMode="None"
+            alternateRowColors="true"
+            class="sapUiTinyMarginTop"
+        >
+            <!-- <table:extension>
+            <OverflowToolbar
+                id="idHistoryItemOverflowToolbar"
+                style="Standard"
+            >
+                <HBox
+                    id="idHistoryItemTitleHBox"
+                    justifyContent="Center"
+                    width="1170px"
+                >
+                    <Title
+                        id="idHistoryItemTableTitle"
+                        text="Items"
+                        textAlign="Center"
+                    />
+                </HBox>
+            </OverflowToolbar>
+        </table:extension> -->
+            <table:columns>
+                <table:Column
+                    id="idHistoryItemPriceColumn"
+                    width="70px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryItemPriceLabel"
+                        text="Type"
+                    />
+                    <table:template>
+                        <c:Icon
+                            id="idHistoryItemPrice"
+                            src="{ItemModel>icon}"
+                            color="{ parts:['ItemModel>category', 'ItemModel>type'], formatter: '.formatter.trnIconColor' }"
+                            class="sapUiTinyMarginTop sapUiSmallMarginEnd"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryItemSrnoColumn"
+                    width="85px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryItemSrnoLabel"
+                        text="Buy"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryItemSrno"
+                            text="{ path: 'ItemModel>buyTime', formatter: '.formatter.secondsToText' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryItemTypeColumn"
+                    width="85px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryItemTypeLabel"
+                        text="Sell"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryItemType"
+                            text="{ path: 'ItemModel>sellTime', formatter: '.formatter.secondsToText' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryItemBuyColumn"
+                    width="85px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryItemBuyLabel"
+                        text="Price"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryItemBuy"
+                            text="{ItemModel>buy}"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryItemSellColumn"
+                    width="80px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryItemSellLabel"
+                        text="Ltp"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryItemSell"
+                            text="{ItemModel>ltp}"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryItemPerColumn"
+                    width="85px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryItemPerLabel"
+                        text="%"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idHistoryItemPer"
+                            text="{ path: 'ItemModel>per', formatter: '.formatter.addPercentage' }"
+                            state="{= ${ItemModel>per} > 0 ? 'Success' : 'Error' }"
+                        />
+                    </table:template>
+                </table:Column>
+            </table:columns>
+        </table:Table>
+    </HBox>
+</c:FragmentDefinition>

@@ -1,0 +1,32 @@
+<ActionSheet
+    xmlns:launchpad="sap.ushell.ui.launchpad"
+    id="buyDeltaDirection"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    core:require="{ MessageToast: 'sap/m/MessageToast' }"
+    title="Choose Your Action"
+    showCancelButton="true"
+    placement="Auto"
+>
+    <Button
+        id="idUpbuyDeltaDirectionButton"
+        text="Up"
+        type="{ path: 'ParaModel>/buyDelta/type', formatter: '.formatter.buyDeltaDirUp' }"
+        icon="sap-icon://back-to-top"
+        press="onBuyDeltaDirection"
+    />
+    <Button
+        id="idDownbuyDeltaDirectionButton"
+        text="Down"
+        type="{ path: 'ParaModel>/buyDelta/type', formatter: '.formatter.buyDeltaDirDown' }"
+        icon="sap-icon://download"
+        press="onBuyDeltaDirection"
+    />
+    <Button
+        id="idNonebuyDeltaDirectionButton"
+        text="None"
+        type="{ path: 'ParaModel>/buyDelta/type', formatter: '.formatter.buyDeltaDirNone' }"
+        icon="sap-icon://less"
+        press="onBuyDeltaDirection"
+    />    
+</ActionSheet>

@@ -1,0 +1,206 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <HBox
+        id="idDropDownLine1HBox"
+        class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiTinyMarginBegin"
+    >
+        <MenuButton
+            id="idActionMenuButton"
+            text="Action"
+            menuPosition="{ path: 'ParaModel>/layout', formatter: '.formatter.actionMenuPosition' }"
+            icon="sap-icon://activate"
+            class="sapUiSmallMarginEnd"
+            width="125px"
+        >
+            <Menu id="idActionMenu">
+                <MenuItem
+                    id="idAddonMenuItem"
+                    text="Addon"
+                    icon="sap-icon://split"
+                    press="onAddon"
+                >
+                    <items>
+                        <MenuItem
+                            id="idBuyAddonMenuItem"
+                            key="buyAddon"
+                            icon="sap-icon://cart"
+                            text="Buy"
+                            press="onBuyAddon"
+                        />
+                        <MenuItem
+                            id="idSellAddonMenuItem"
+                            key="sellAddon"
+                            icon="sap-icon://shipping-status"
+                            text="Sell"
+                            press="onSellAddon"
+                        />
+                    </items>
+                </MenuItem>
+
+                <MenuItem
+                    id="idSupportMenuItem"
+                    text="Support"
+                    icon="sap-icon://compare"
+                    press="onSupport"
+                >
+                    <items>
+                        <MenuItem
+                            id="idBuySupportMenuItem"
+                            key="supportBuy"
+                            icon="sap-icon://cart"
+                            text="Buy"
+                            press="onBuySupport"
+                        />
+                        <MenuItem
+                            id="idSellSupportMenuItem"
+                            key="supportSell"
+                            icon="sap-icon://shipping-status"
+                            text="Sell"
+                            press="onSellSupport"
+                        />
+                    </items>
+                </MenuItem>
+                <MenuItem
+                    id="idReverseMenuItem"
+                    text="Reverse"
+                    icon="sap-icon://sort"
+                    press="onReverse"
+                >
+                    <items>
+                        <MenuItem
+                            id="idWithSupportReverseMenuItem"
+                            key="reverseWithSupport"
+                            icon="sap-icon://accept"
+                            text="With Support"
+                            press="onReverseWithSupport"
+                        />
+                        <MenuItem
+                            id="idWithoutSupportReverseMenuItem"
+                            key="reverseWithoutSupport"
+                            icon="sap-icon://decline"
+                            text="Without Support"
+                            press="onReverseWithoutSupport"
+                        />
+                    </items>
+                </MenuItem>
+                <MenuItem
+                    id="idPositionMenuItem"
+                    text="Position"
+                    startsSection="true"
+                    icon="sap-icon://cart-approval"
+                    press="onOpenPosition"
+                />
+                <MenuItem
+                    id="idSellAllMenuItem"
+                    text="Sell All"
+                    icon="sap-icon://collections-insight"
+                    press="onSellAll"
+                />
+            </Menu>
+        </MenuButton>
+        <MenuButton
+            id="idScaleMenuButton"
+            text="{ParaModel>/scale}"
+            icon="sap-icon://measure"
+            menuPosition="{ path: 'ParaModel>/layout', formatter: '.formatter.actionMenuPosition' }"
+            class="sapUiLargeMarginBegin sapUiSmallMarginEnd"
+            width="125px"
+        >
+            <Menu
+                id="idScaleMenu"
+                itemSelected="onScale"
+            >
+                <MenuItem
+                    id="idSmallMenuItem"
+                    key="S"
+                    text="Small"
+                    icon="sap-icon://iphone"
+                />
+                <MenuItem
+                    id="idMediumMenuItem"
+                    key="M"
+                    text="Medium"
+                    icon="sap-icon://screen-split-two"
+                />
+                <MenuItem
+                    id="idLargeMenuItem"
+                    key="L"
+                    text="Large"
+                    icon="sap-icon://screen-split-three"
+                />
+            </Menu>
+        </MenuButton>
+        <!-- Switch  -->
+        <MenuButton
+            id="idSwitchMenuButton"
+            text="{ParaModel>/switch}"
+            icon="sap-icon://log"
+            menuPosition="{ path: 'ParaModel>/layout', formatter: '.formatter.actionMenuPosition' }"
+            class="sapUiLargeMarginBegin"
+            width="125px"
+            type="{ path: 'ParaModel>/switch', formatter: '.formatter.switchType' }"
+        >
+            <Menu
+                id="idSwitchMenu"
+                itemSelected="onSwitch"
+            >
+                <MenuItem
+                    id="idActiveMenuItem"
+                    text="Active"
+                    icon="sap-icon://verified"
+                />
+                <MenuItem
+                    id="idTestMenuItem"
+                    icon="sap-icon://overlay"
+                    text="Test"
+                />
+                <MenuItem
+                    id="idNoneSwitchMenuItem"
+                    text="None"
+                    icon="sap-icon://sys-cancel"
+                />
+            </Menu>
+        </MenuButton>
+    </HBox>
+
+    <!-- Dropdown Line 2 -->
+    <HBox
+        id="idDropdownLine2HBox"
+        class="sapUiTinyMarginTop sapUiTinyMarginBottom sapUiTinyMarginBegin"
+    >
+        <!-- Buy/Sell Buttons -->
+        <HBox id="buySellContainer">
+            <Button
+                id="buyCall"
+                text="CALL"
+                width="125px"
+                type="Accept"
+                icon="sap-icon://cart"
+                class="sapUiSmallMarginEnd"
+                press="onBuyChartCallWithSupport"
+            />
+
+            <Button
+                id="sellBoth"
+                type="Neutral"
+                text="SELL"
+                icon="sap-icon://shipping-status"
+                press="onSellBoth"
+                class="sapUiLargeMarginBegin sapUiSmallMarginEnd"
+                width="125px"
+            />
+
+            <Button
+                id="buyPut"
+                text="PUT"
+                width="125px"
+                type="Reject"
+                icon="sap-icon://cart"
+                class="sapUiLargeMarginBegin"
+                press="onBuyChartPutWithSupport"
+            />
+        </HBox>
+    </HBox>
+</core:FragmentDefinition>
