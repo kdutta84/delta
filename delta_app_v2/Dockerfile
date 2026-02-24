@@ -1,21 +1,22 @@
-# Stage 1: Build the UI5 application
-FROM node:24-alpine AS build-stage
-WORKDIR /app
+# Use the official Node.js image as the base image
+FROM node:24-alpine AS production
 
-# Install dependencies
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json (if available) to the working directory
 COPY package*.json ./
-RUN npm install
 
-# Copy source code and build
+# Install application dependencies
+RUN npm install --only=production
+
+# Copy the rest of the application code to the container
 COPY . .
-RUN npm run build
 
-# Stage 2: Serve the app with Nginx
-FROM nginx:stable-alpine
-# Copy the built 'dist' folder to Nginx's default public directory
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# Expose the port your app runs on
+EXPOSE 3000
 
-# Expose port 80
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Define the command to run your application
+CMD ["npm", "start"]
+
 
