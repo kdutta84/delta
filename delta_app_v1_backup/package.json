@@ -20,7 +20,7 @@
     "@sap/eslint-plugin-ui5-jsdocs": "2.0.5",
     "@sap/ux-ui5-tooling": "^1.20.2",
     "@sapui5/ts-types": "~1.139.0",
-    "@ui5/cli": "^4.0.38",
+    "@ui5/cli": "^4.0.45",
     "eslint": "8.57.0",
     "eslint-plugin-fiori-custom": "2.6.7",
     "highcharts": "^12.3.0",
