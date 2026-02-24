@@ -32,7 +32,7 @@ sap.ui.define(
     Moment,
   ) {
     "use strict";
-    debugger;
+
     return BaseController.extend("ns.deltaapphost.controller.History", {
       formatter: formatter,
 

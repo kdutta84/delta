@@ -1,0 +1,49 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <Popover
+        id="idProfitTrailPopover"
+        class="sapUiResponsivePadding--header sapUiResponsivePadding--footer"
+        placement="Bottom"
+        initialFocus="email"
+        showHeader="false"
+    >
+        <VBox
+            id="idProfitTrailHBox"
+            width="150px"
+            justifyContent="Center"
+        >
+            <HBox
+                id="idProfitTrailStepInputHBox"
+                width="150px"
+                justifyContent="Center"
+            >
+                <StepInput
+                    id="idProfitTrailStepInput"
+                    width="120px"
+                    min="0"
+                    step="10"
+                    value="{ParaModel>/profitTrail/per}"
+                    textAlign="Center"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+                    change="onProfitTrail"
+                />
+            </HBox>
+            <HBox
+                id="idProfitTrailFlagHBox"
+                width="150px"
+                justifyContent="Center"
+            >
+                <Button
+                    id="idProfitTrailFlag"
+                    text="Profit Trail"
+                    width="120px"
+                    type="{ path: 'ParaModel>/profitTrail/flag', formatter: '.formatter.profitTrailFlagType' }"
+                    icon="sap-icon://download"
+                    press="onProfitTrailFlag"
+                />
+            </HBox>
+        </VBox>
+    </Popover>
+</c:FragmentDefinition>

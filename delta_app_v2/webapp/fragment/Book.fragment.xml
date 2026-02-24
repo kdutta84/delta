@@ -1,0 +1,337 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    xmlns:table="sap.ui.table"
+>
+    <VBox id="idBookVBox">
+        <Toolbar
+            id="idvSepBookToolbar"
+            width="405px"
+            height="0.1px"
+            class="sapUiTinyMarginBegin sapUiTinyMarginTop sapUiTinyMarginBottom"
+        />
+        <HBox
+            id="bookToolbar"
+            width="500px"
+            visible="{ parts:['ParaModel>/barType'], formatter: '.formatter.bookToolbar' }"
+        >
+            <HBox
+                id="idBookLeftToolbarHBox"
+                justifyContent="Center"
+                width="150px"
+            >
+                <Button
+                    id="idCallBookButton"
+                    text="Call"
+                    width="120px"
+                    type="Transparent"
+                    press="onCallBook"
+                    icon="sap-icon://trend-up"
+                />
+            </HBox>
+            <HBox
+                id="idToolabrBookGap"
+                justifyContent="Center"
+                width="120px"
+            >
+                <GenericTag
+                    id="idGapBookGapGenericTag"
+                    text="Gap :"
+                    design="StatusIconHidden"
+                    status="{ path: 'BookModel>/gap', formatter: '.formatter.pnlTagStatus' }"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginBottom"
+                >
+                    <ObjectNumber
+                        id="idBookGapObjectNumber"
+                        state="{ path: 'BookModel>/gap', formatter: '.formatter.pnlTagStatus' }"
+                        emphasized="false"
+                        number="{ path: 'BookModel>/gap', formatter: '.formatter.pnlTagPer' }"
+                        unit="%"
+                    />
+                </GenericTag>
+            </HBox>
+            <HBox
+                id="idBookRightHBox"
+                justifyContent="Center"
+                width="150px"
+            >
+                <Button
+                    id="idPutBookButton"
+                    text="Put"
+                    width="120px"
+                    press="onPutBook"
+                    type="Transparent"
+                    icon="sap-icon://trend-down"
+                />
+            </HBox>
+        </HBox>
+
+        <HBox
+            id="idBookTableHBox"
+            class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+        >
+            <!-- Buy Table -->
+            <table:Table
+                id="idBookTable"
+                rows="{BookModel>/buyBook}"
+                ariaLabelledBy="title"
+                selectionMode="None"
+                alternateRowColors="true"
+                width="200px"
+            >
+                <table:extension>
+                    <OverflowToolbar id="idBuyOverflowToolbar">
+                        <HBox
+                            id="idBookToolbarLeftHBox"
+                            justifyContent="Center"
+                            width="200px"
+                        >
+                            <Title
+                                id="idBuyTitle"
+                                text="Buy"
+                                textAlign="Center"
+                            />
+                        </HBox>
+                    </OverflowToolbar>
+                </table:extension>
+                <table:columns>
+                    <table:Column
+                        id="idBookColumn"
+                        width="60px"
+                    >
+                        <Label
+                            id="idPriceBookLabel"
+                            text="Price"
+                        />
+                        <table:template>
+                            <Text
+                                id="idPriceBookText"
+                                text="{BookModel>price}"
+                                wrapping="false"
+                                textAlign="Center"
+                            />
+                        </table:template>
+                    </table:Column>
+                    <table:Column
+                        id="idSizeColumn"
+                        width="60px"
+                    >
+                        <Label
+                            id="idSizeLabel"
+                            text="Size"
+                        />
+                        <table:template>
+                            <Text
+                                id="idSizeText"
+                                text="{BookModel>size}"
+                                textAlign="Center"
+                            />
+                        </table:template>
+                    </table:Column>
+                    <table:Column
+                        id="idAmountColumn"
+                        width="70px"
+                        hAlign="Center"
+                    >
+                        <Label
+                            id="idAmountLabel"
+                            text="Amount"
+                        />
+                        <table:template>
+                            <ObjectNumber
+                                id="idAmtTextObjectNumber"
+                                textAlign="Center"
+                                number="{
+                            path: 'BookModel>amtText',
+                            formatter: 'sap.ui.model.odata.type.Currency.prototype.formatValue'
+                                    }"
+                                unit="{Currency}"
+                            />
+                        </table:template>
+                    </table:Column>
+                </table:columns>
+            </table:Table>
+            <!-- Sell Table -->
+            <table:Table
+                id="idSellBookTable"
+                rows="{BookModel>/sellBook}"
+                ariaLabelledBy="title"
+                selectionMode="None"
+                class="sapUiSmallMarginBegin"
+                alternateRowColors="true"
+                width="200px"
+            >
+                <table:extension>
+                    <OverflowToolbar id="idSellOverflowToolbar">
+                        <HBox
+                            id="idBookToolbarRightHBox"
+                            justifyContent="Center"
+                            width="190px"
+                        >
+                            <Title
+                                id="idSellTitle"
+                                text="Sell"
+                                textAlign="Center"
+                            />
+                        </HBox>
+                    </OverflowToolbar>
+                </table:extension>
+                <table:columns>
+                    <table:Column
+                        id="idPriceSellColumn"
+                        width="60px"
+                    >
+                        <Label
+                            id="idPriceSellLabel"
+                            text="Price"
+                        />
+                        <table:template>
+                            <Text
+                                id="idPriceSellText"
+                                text="{BookModel>price}"
+                                wrapping="false"
+                            />
+                        </table:template>
+                    </table:Column>
+                    <table:Column
+                        id="idSellSizeColumn"
+                        width="60px"
+                    >
+                        <Label
+                            id="idSizeSellLabel"
+                            text="Size"
+                        />
+                        <table:template>
+                            <Text
+                                id="idSizeSellText"
+                                text="{BookModel>size}"
+                            />
+                        </table:template>
+                    </table:Column>
+                    <table:Column
+                        id="idAmountSellColumn"
+                        width="70px"
+                        hAlign="End"
+                    >
+                        <Label
+                            id="idAmountSellLabel"
+                            text="Amount"
+                        />
+                        <table:template>
+                            <ObjectNumber
+                                id="idAmtTextSellObjectNumber"
+                                textAlign="Center"
+                                number="{
+                            path: 'BookModel>amtText',
+                            formatter: 'sap.ui.model.odata.type.Currency.prototype.formatValue'
+                            }"
+                                unit="{Currency}"
+                            />
+                        </table:template>
+                    </table:Column>
+                </table:columns>
+            </table:Table>
+        </HBox>
+
+        <HBox
+            id="idBookFooterHBox"
+            class="sapUiTinyMarginBegin"
+        >
+            <!-- Buy Footer -->
+            <HBox id="idBookToolbarHBox">
+                <ToolbarSeparator id="idBookToolbarSeparator" />
+                <HBox
+                    id="idBookCallPriceHBox"
+                    width="65px"
+                    justifyContent="Center"
+                >
+                    <ObjectStatus
+                        id="idCallPriceObjectStatus"
+                        text="{BookModel>/callPrice}"
+                        state="Success"
+                        class="sapMObjectStatusLarge"
+                        inverted="false"
+                    />
+                </HBox>
+                <ToolbarSeparator id="idSep4ToolbarSeparator" />
+                <HBox
+                    id="idCallSizeBoxHBox"
+                    width="60px"
+                    justifyContent="Center"
+                >
+                    <ObjectStatus
+                        id="idCallSizeObjectStatus"
+                        text="{BookModel>/callSize}"
+                        state="Success"
+                        class="sapMObjectStatusLarge"
+                        inverted="false"
+                    />
+                </HBox>
+                <ToolbarSeparator id="idSep5ToolbarSeparator" />
+                <HBox
+                    id="idCallAmtHBox"
+                    width="70px"
+                    justifyContent="Center"
+                >
+                    <ObjectStatus
+                        id="idCallAmtObjectStatus"
+                        text="{BookModel>/callAmt}"
+                        state="Success"
+                        class="sapMObjectStatusLarge"
+                        inverted="false"
+                    />
+                </HBox>
+                <ToolbarSeparator id="idSep6ToolbarSeparator" />
+            </HBox>
+            <!-- Sell Footer  -->
+            <HBox id="idSellFooterHBox">
+                <ToolbarSeparator
+                    id="idSep7ToolbarSeparator"
+                    class="sapUiSmallMarginBegin"
+                />
+                <HBox
+                    id="idPutPriceHBox"
+                    width="65px"
+                    justifyContent="Center"
+                >
+                    <ObjectStatus
+                        id="idPutPriceObjectStatus"
+                        text="{BookModel>/putPrice}"
+                        state="Indication03"
+                        class="sapMObjectStatusLarge"
+                        inverted="false"
+                    />
+                </HBox>
+                <ToolbarSeparator id="idSep8ToolbarSeparator" />
+                <HBox
+                    id="idPutSizeHBox"
+                    width="60px"
+                    justifyContent="Center"
+                >
+                    <ObjectStatus
+                        id="idPutSizeObjectStatus"
+                        text="{BookModel>/putSize}"
+                        state="Indication03"
+                        class="sapMObjectStatusLarge"
+                        inverted="false"
+                    />
+                </HBox>
+                <ToolbarSeparator id="idSep9ToolbarSeparator" />
+                <HBox
+                    id="idPutAmtHBox"
+                    width="70px"
+                    justifyContent="Center"
+                >
+                    <ObjectStatus
+                        id="idPutAmtObjectStatus"
+                        text="{BookModel>/putAmt}"
+                        state="Indication03"
+                        class="sapMObjectStatusLarge"
+                        inverted="false"
+                    />
+                </HBox>
+                <ToolbarSeparator id="idSep10ToolbarSeparator" />
+            </HBox>
+        </HBox>
+    </VBox>
+</c:FragmentDefinition>

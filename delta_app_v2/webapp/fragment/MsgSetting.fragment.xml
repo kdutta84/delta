@@ -1,0 +1,32 @@
+<ActionSheet
+    xmlns:launchpad="sap.ushell.ui.launchpad"
+    id="msgSetting"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    core:require="{ MessageToast: 'sap/m/MessageToast' }"
+    title="Choose Your Action"
+    showCancelButton="true"
+    placement="Bottom"
+>
+    <Button
+        id="idFixedButton"
+        text="Fixed"
+        type="{ path: 'ScreenModel>/msgSetting', formatter: '.formatter.headerMsgFixed' }"
+        icon="sap-icon://pushpin-off"
+        press="onHeaderMsgSetting"
+    />
+    <Button
+        id="idExpandButton"
+        text="Expand"
+        type="{ path: 'ScreenModel>/msgSetting', formatter: '.formatter.headerMsgExpand' }"
+        icon="sap-icon://pull-down"
+        press="onHeaderMsgSetting"
+    />
+    <Button
+        id="idAutoButton"
+        text="Auto"
+        type="{ path: 'ScreenModel>/msgSetting', formatter: '.formatter.headerMsgAuto' }"
+        icon="sap-icon://drop-down-list"
+        press="onHeaderMsgSetting"
+    />
+</ActionSheet>

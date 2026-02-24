@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <HBox id="idStockHBox">
+        <core:HTML
+            id="idStockChartHTML"
+            content="&lt;div id=&quot;StockChart&quot; class=&quot;highcharts-dark&quot; &gt;&lt;/div&gt;"
+        />
+    </HBox>
+
+    <!-- <HBox id="idStockHBox">
+    <core:HTML
+        id="idStockChartHTML"
+        content="&lt;div id=&quot;StockChart&quot; class=&quot;highcharts-dark&quot; style=&quot;width:1380px; height:1040px;&quot;&gt;&lt;/div&gt;"
+    />
+</HBox> -->
+</core:FragmentDefinition>

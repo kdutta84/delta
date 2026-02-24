@@ -1,0 +1,148 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <HBox
+        id="idSupportDeltaOuterBox"
+        height="50px"
+    >
+        <VBox
+            id="idSupportLeftHBox"
+            class="sapUiTinyMarginTop"
+            width="270px"
+        >
+            <HBox
+                id="idTrailHBox"
+                height="50px"
+                class="sapUiSmallMarginBottom"
+            >
+                <Button
+                    id="idTrailButton"
+                    press="onSupportFlag"
+                    type="{ path: 'ParaModel>/support/flag', formatter: '.formatter.flagType' }"
+                    width="80px"
+                    text="Support :"
+                />
+                <StepInput
+                    id="idPerTrailStepInput"
+                    step="5"
+                    min="5"
+                    max="130px"
+                    value="{ParaModel>/support/per}"
+                    change="onSupport"
+                    textAlign="Center"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                />
+                <HBox
+                    id="idSupportTypeHBox"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idSupportIconButton"
+                        type="Transparent"
+                        press="onSupportType"
+                        icon="{ path: 'ParaModel>/support/type', formatter: '.formatter.supportIcon' }"
+                    />
+                </HBox>
+            </HBox>
+
+            <HBox
+                id="idSupportDeltaHBox"
+                height="50px"
+            >
+                <Button
+                    id="idSupportDeltaButton"
+                    width="80px"
+                    press="onSupportDeltaFlag"
+                    type="{ path: 'ParaModel>/supportDelta/flag', formatter: '.formatter.flagType' }"
+                    text="Delta :"
+                />
+                <StepInput
+                    id="idValueSupportDeltaStepInput"
+                    step="1"
+                    value="{ParaModel>/supportDelta/value}"
+                    change="onSupportDelta"
+                    textAlign="Center"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                />
+                <HBox
+                    id="idSupportDeltaTypeHBox"
+                    justifyContent="Center"
+                >
+                    <Button
+                        id="idDeltaGapPerIconButton"
+                        press="onDeltaGapPer"
+                        type="Transparent"
+                        text="{ path: 'PnlModel>/addon/gap', formatter: '.formatter.deltaWindowGapPer' }"
+                    />
+                    <!-- <Button
+                        id="idSupportDeltaIconButton"
+                        press="onSupportDeltaType"
+                        type="Transparent"
+                        icon="{ path: 'ParaModel>/supportDelta/type', formatter: '.formatter.supportDeltaIcon' }"
+                    /> -->
+                </HBox>
+            </HBox>
+        </VBox>
+
+        <VBox
+            id="idSupportRightHBox"
+            class="sapUiTinyMarginTop sapUiTinyMarginBegin"
+        >
+            <HBox
+                id="idAddonCountHBox"
+                height="50px"
+            >
+                <Button
+                    id="idSupportCountFlagButton"
+                    press="onAddonFlag"
+                    type="{ path: 'ParaModel>/addon/flag', formatter: '.formatter.flagType' }"
+                    width="77px"
+                    text="Addon :"
+                />
+                <StepInput
+                    id="idPerAddonStepInput"
+                    step="1"
+                    min="1"
+                    value="{ParaModel>/addon/value}"
+                    change="onAddon"
+                    textAlign="Center"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+            <HBox
+                id="idAddonPerHBox"
+                height="50px"
+                class="sapUiSmallMarginTop sapUiSmallMarginBottom"
+            >
+                <!-- <Button
+                    id="idAddonPerButton"
+                    press="onAddonPerFlag"
+                    width="80px"
+                    type="{ path: 'ParaModel>/addon/per', formatter: '.formatter.redFlagType' }"
+                    text="Addon % :"
+                /> -->
+                <Text
+                    id="idAddonPerButton"
+                    width="70px"
+                    text="Addon % :"
+                    class="sapUiTinyMarginTop sapUiTinyMarginBegin"
+                />
+                <StepInput
+                    id="idValueAddonPerStepInput"
+                    step="5"
+                    min="0"
+                    max="100"
+                    value="{ParaModel>/addon/per}"
+                    change="onAddonPer"
+                    textAlign="Center"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+        </VBox>
+    </HBox>
+</c:FragmentDefinition>
