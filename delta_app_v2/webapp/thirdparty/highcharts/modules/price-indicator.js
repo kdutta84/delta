@@ -1,0 +1,17 @@
+sap.ui.define(["ns/deltaapphost/thirdparty/_commonjsHelpers"],function(e){"use strict";function s(e,s){s.forEach(function(s){s&&typeof s!=="string"&&!Array.isArray(s)&&Object.keys(s).forEach(function(r){if(r!=="default"&&!(r in e)){var t=Object.getOwnPropertyDescriptor(s,r);Object.defineProperty(e,r,t.get?t:{enumerable:true,get:function(){return s[r]}})}})});return Object.freeze(e)}var r={exports:{}};var t=r.exports;var i;function o(){if(i)return r.exports;i=1;(function(e,s){!
+/**
+			 * Highstock JS v12.5.0 (2026-01-12)
+			 * @module highcharts/modules/price-indicator
+			 * @requires highcharts
+			 * @requires highcharts/modules/stock
+			 *
+			 * Advanced Highcharts Stock tools
+			 *
+			 * (c) 2010-2026 Highsoft AS
+			 * Author: Torstein Honsi
+			 *
+			 * A commercial license may be required depending on use.
+			 * See www.highcharts.com/license
+			 */
+function(s,r){e.exports=r(s._Highcharts)}("u"<typeof window?t:window,e=>(()=>{var s={944:s=>{s.exports=e}},r={};function t(e){var i=r[e];if(void 0!==i)return i.exports;var o=r[e]={exports:{}};return s[e](o,o.exports,t),o.exports}t.n=e=>{var s=e&&e.__esModule?()=>e.default:()=>e;return t.d(s,{a:s}),s},t.d=(e,s)=>{for(var r in s)t.o(s,r)&&!t.o(e,r)&&Object.defineProperty(e,r,{enumerable:true,get:s[r]})},t.o=(e,s)=>Object.prototype.hasOwnProperty.call(e,s);var i={};t.d(i,{default:()=>b});var o=t(944),a=t.n(o);let{composed:l}=a(),{addEvent:c,merge:n,pushUnique:h}=a();function u(){let e=this;["lastPrice","lastPriceLabel","lastVisiblePrice","lastVisiblePriceLabel"].forEach(s=>{e[s]?.hide()})}function d(){let e=this.options,s=e.lastVisiblePrice,r=e.lastPrice;if((s||r)&&"highcharts-navigator-series"!==e.id&&this.visible){let t=this.xAxis,i=this.yAxis,o=i.crosshair,a=i.cross,l=i.crossLabel,c=this.points,h=c.length,u=this.dataTable.rowCount,d=this.getColumn("x")[u-1],b=this.getColumn("y")[u-1]??this.getColumn("close")[u-1];if(r&&r.enabled&&(i.crosshair=i.options.crosshair=e.lastPrice,!this.chart.styledMode&&i.crosshair&&i.options.crosshair&&e.lastPrice&&(i.crosshair.color=i.options.crosshair.color=e.lastPrice.color||this.color),i.cross=this.lastPrice,this.lastPriceLabel&&this.lastPriceLabel.destroy(),delete i.crossLabel,i.drawCrosshair(null,{x:d,y:b,plotX:t.toPixels(d,true),plotY:i.toPixels(b,true)}),this.yAxis.cross&&(this.lastPrice=this.yAxis.cross,this.lastPrice.addClass("highcharts-color-"+this.colorIndex),this.lastPrice.y=b),this.lastPriceLabel=i.crossLabel),s&&s.enabled&&h>0){i.crosshair=i.options.crosshair=n({color:"transparent"},e.lastVisiblePrice),i.cross=this.lastVisiblePrice;let s=c[h-1].isInside?c[h-1]:c[h-2];this.lastVisiblePriceLabel&&this.lastVisiblePriceLabel.destroy(),delete i.crossLabel,i.drawCrosshair(null,s),i.cross&&(this.lastVisiblePrice=i.cross,s&&"number"==typeof s.y&&(this.lastVisiblePrice.y=s.y)),this.lastVisiblePriceLabel=i.crossLabel}i.crosshair=i.options.crosshair=o,i.cross=a,i.crossLabel=l}}({compose:function(e){h(l,"PriceIndication")&&(c(e,"afterRender",d),c(e,"hide",u))}}).compose(a().Series);let b=a();return i.default})())})(r);return r.exports}var a=o();var l=e.getDefaultExportFromCjs(a);var c=s({__proto__:null,default:l},[a]);const n=Object.isFrozen(l)?Object.assign({},l?.default||l||{__emptyModule:true}):l;Object.keys(c||{}).filter(e=>!n[e]).forEach(e=>n[e]=c[e]);Object.defineProperty(n,"__"+"esModule",{value:true});var h=Object.isFrozen(l)?Object.freeze(n):n;return h});
+//# sourceMappingURL=price-indicator.js.map

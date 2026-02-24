@@ -13,7 +13,8 @@ sap.ui.define(
     "ns/deltaapphost/model/formatter",
     "ns/deltaapphost/controller/BaseController",
     "sap/ui/core/routing/History",
-    "moment",
+    // "moment",
+    "ns/deltaapphost/thirdparty/moment",
   ],
   function (
     Controller,

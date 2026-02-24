@@ -10,7 +10,8 @@ sap.ui.define(
     "sap/ui/core/InvisibleMessage",
     "sap/m/library",
     "sap/ui/core/Theming",
-    "highcharts/highstock",
+    // "highcharts/highstock",
+    "ns/deltaapphost/thirdparty/highcharts/highstock",
     "ns/deltaapphost/model/formatter",
   ],
   function (
@@ -27,6 +28,7 @@ sap.ui.define(
     highcharts,
     formatter,
   ) {
+    debugger;
     // Popup Message
     var oMessagePopover = new MessagePopover({
       items: {
@@ -73,19 +75,25 @@ sap.ui.define(
         // this.onBuyHistory();
         // return;
 
+        // // Init Charts
+        // this.initCharts();
+
+        // // Start Process
+        // this.startProcess();
+
         // Get Dependent Modules
         var that = this;
         sap.ui.require(
           [
-            "highcharts/modules/exporting",
-            "highcharts/modules/price-indicator",
-            "highcharts/modules/drag-panes",
-            "highcharts/highcharts-more",
-            "highcharts/indicators/indicators-all",
-            "highcharts/modules/annotations-advanced",
-            "highcharts/modules/full-screen",
-            "highcharts/modules/stock-tools",
-            "highcharts/themes/adaptive",
+            "ns/deltaapphost/thirdparty/highcharts/modules/exporting",
+            "ns/deltaapphost/thirdparty/highcharts/modules/price-indicator",
+            "ns/deltaapphost/thirdparty/highcharts/modules/drag-panes",
+            "ns/deltaapphost/thirdparty/highcharts/highcharts-more",
+            "ns/deltaapphost/thirdparty/highcharts/indicators/indicators-all",
+            "ns/deltaapphost/thirdparty/highcharts/modules/annotations-advanced",
+            "ns/deltaapphost/thirdparty/highcharts/modules/full-screen",
+            "ns/deltaapphost/thirdparty/highcharts/modules/stock-tools",
+            "ns/deltaapphost/thirdparty/highcharts/themes/adaptive",
           ],
           function (
             // @ts-ignore
@@ -115,6 +123,12 @@ sap.ui.define(
           },
         );
       },
+      // onAfterRendering: function () {
+      //   this.initCharts();
+
+      //   // // Start Process
+      //   this.startProcess();
+      // },
       setTheme: function () {
         sap.ui.getCore().applyTheme("sap_horizon");
       },
@@ -7103,13 +7117,15 @@ sap.ui.define(
         }
       },
       hideNavBar: function () {
-        // @ts-ignore
-        if (sap.ushell.Container.getRenderer("fiori2")) {
+        if (sap.ushell !== undefined) {
           // @ts-ignore
-          sap.ushell.Container.getRenderer("fiori2").setHeaderVisibility(
-            false,
-            true,
-          );
+          if (sap.ushell.Container.getRenderer("fiori2")) {
+            // @ts-ignore
+            sap.ushell.Container.getRenderer("fiori2").setHeaderVisibility(
+              false,
+              true,
+            );
+          }
         }
       },
 

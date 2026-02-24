@@ -3,9 +3,8 @@ sap.ui.define(
     "sap/ui/core/UIComponent",
     "ns/deltaapphost/model/models",
     "sap/m/MessageBox",
-    "dotenv",
   ],
-  (UIComponent, models, MessageBox, Env) => {
+  (UIComponent, models, MessageBox) => {
     "use strict";
 
     return UIComponent.extend("ns.deltaapphost.Component", {
