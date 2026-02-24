@@ -1,11 +1,21 @@
-# Stage 1: Run Nginx to serve the app
-FROM nginx:alpine
+# Stage 1: Build the UI5 application
+FROM node:18-alpine AS build-stage
+WORKDIR /app
 
-# Copy the static build files from your dist folder to Nginx
-COPY ./dist /usr/share/nginx/html
+# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy source code and build
+COPY . .
+RUN npm run build
+
+# Stage 2: Serve the app with Nginx
+FROM nginx:stable-alpine
+# Copy the built 'dist' folder to Nginx's default public directory
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
-
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
