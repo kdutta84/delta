@@ -1,0 +1,400 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    xmlns:table="sap.ui.table"
+>
+    <HBox id="idHistoryTableOuterBox">
+        <table:Table
+            id="idHistoryTable"
+            rows="{HistoryModel>/}"
+            width="1330px"
+            rowMode="Auto"
+            ariaLabelledBy="title"
+            selectionMode="Single"
+            rowSelectionChange="onItemSelected"
+            selectionBehavior="Row"
+            alternateRowColors="true"
+            class="sapUiSmallMarginBegin"
+        >
+            <table:extension>
+                <OverflowToolbar
+                    id="idHistoryOverflowToolbar"
+                    style="Standard"
+                >
+                    <HBox
+                        id="idHistoryTitleHBox"
+                        justifyContent="Center"
+                        width="1170px"
+                    >
+                        <Title
+                            id="idHistoryTableTitle"
+                            text="History"
+                            textAlign="Center"
+                        />
+                    </HBox>
+
+                    <Button
+                        id="idBackHistoryButton"
+                        text="Back"
+                        icon="sap-icon://nav-back"
+                        press="onNavBack"
+                    />
+                    <Button
+                        id="idFullscreenHistoryButton"
+                        icon="sap-icon://full-screen"
+                        class="sapUiSmallMarginBegin"
+                        press="onFullscreen"
+                        width="30px"
+                    />
+                </OverflowToolbar>
+            </table:extension>
+            <table:columns>
+                <table:Column
+                    id="idHistoryDateColumn"
+                    width="100px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryDateLabel"
+                        text="Date"
+                    />
+
+                    <table:template>
+                        <Text
+                            id="idHistoryDate"
+                            text="{ path: 'HistoryModel>timestamp', formatter: '.formatter.historyDate' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryTimeColumn"
+                    width="100px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryTimeLabel"
+                        text="Time"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryTime"
+                            text="{ path: 'HistoryModel>timestamp', formatter: '.formatter.historicalTime' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryIndexColumn"
+                    width="100px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryIndexLabel"
+                        text="Index"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryIndex"
+                            text="{ path: 'HistoryModel>index', formatter: '.formatter.historyCoinName' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryTypeColumn"
+                    width="70px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryTypeLabel"
+                        text="Type"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryType"
+                            text="{HistoryModel>type}"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryStrikeCallColumn"
+                    width="80px"
+                    hAlign="Center"
+                    headerSpan="2"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idHistoryStrikeCallLabel"
+                            text="Strike"
+                        />
+                        <Label
+                            id="idHsitroryStrikeCallLabel"
+                            text="Call"
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <Text
+                            id="idHistoryStrikeCall"
+                            text="{ path: 'HistoryModel>call', formatter: '.formatter.historyStrike' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryStrikePutColumn"
+                    width="80px"
+                    hAlign="Center"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idHistoryStrikePutLabel"
+                            text="Strike"
+                        />
+                        <Label
+                            id="idHsitroryStrikePutLabel"
+                            text="Put"
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <Text
+                            id="idHistoryStrikePut"
+                            text="{ path: 'HistoryModel>put', formatter: '.formatter.historyStrike' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryExpiryColumn"
+                    width="80px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryExpiryLabel"
+                        text="Expiry"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryExpiry"
+                            text="{ path: 'HistoryModel>call', formatter: '.formatter.historyExpiry' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryAmountColumn"
+                    width="80px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryAmountLabel"
+                        text="Amount"
+                    />
+                    <table:template>
+                        <Text
+                            id="idHistoryAmount"
+                            text="{ path: 'HistoryModel>amount', formatter: '.formatter.addDollar' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistorySupportColumn"
+                    width="50px"
+                    hAlign="Center"
+                    headerSpan="2"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idSupportLabel1"
+                            text="Support"
+                        />
+                        <Label
+                            id="idSupportLabel"
+                            text=" # "
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <Text
+                            id="idHistorySupport"
+                            text="{HistoryModel>support}"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistorySupportPerColumn"
+                    width="80px"
+                    hAlign="Center"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idSupportLabel2"
+                            text="Support"
+                        />
+                        <Label
+                            id="idSupportPerLabel"
+                            text=" %"
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <ObjectStatus
+                            id="idHistorySupportPer"
+                            text="{HistoryModel>supportPer}"
+                            state="{= ${HistoryModel>supportPer} > 0 ? 'Success' : 'Error' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idAddonSupportColumn"
+                    width="50px"
+                    hAlign="Center"
+                    headerSpan="2"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idAddonLabel1"
+                            text="Addon"
+                        />
+                        <Label
+                            id="idAddonLabel"
+                            text=" # "
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <Text
+                            id="idHistoryAddon"
+                            text="{HistoryModel>addonCount}"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryAddonPerColumn"
+                    width="80px"
+                    hAlign="Center"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idAddonLabel2"
+                            text="Addon"
+                        />
+                        <Label
+                            id="idAddonPerLabel"
+                            text=" %"
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <ObjectStatus
+                            id="idHistoryAddonPer"
+                            text="{HistoryModel>addonPer}"
+                            state="{= ${HistoryModel>addonPer} > 0 ? 'Success' : 'Error' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistorySlippageColumn"
+                    width="50px"
+                    hAlign="Center"
+                    headerSpan="2"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idHistorySlippageLabel"
+                            text="Slippage"
+                        />
+                        <Label
+                            id="idHistorySlippageCount"
+                            text="#"
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <Text
+                            id="idHistorySlippage"
+                            text="{HistoryModel>slippage}"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistorySlippagePerColumn"
+                    width="80px"
+                    hAlign="Center"
+                >
+                    <table:multiLabels>
+                        <Label
+                            id="idHistorySlippagePerLabel"
+                            text="Slippage"
+                        />
+                        <Label
+                            id="idHistorySlippagePer"
+                            text=" %"
+                            textAlign="Center"
+                            width="100%"
+                        />
+                    </table:multiLabels>
+                    <table:template>
+                        <ObjectStatus
+                            id="idHistorySlippagePerObjectStatus"
+                            text="{HistoryModel>slippagePer}"
+                            state="{= ${HistoryModel>slippagePer} > 0 ? 'Success' : 'Error' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryPnlColumn"
+                    width="100px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryPnlLabel"
+                        text="Pnl"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idHistoryPnlObjectStatus"
+                            text="{ path: 'HistoryModel>pnl', formatter: '.formatter.addPercentage' }"
+                            state="{= ${HistoryModel>pnl} > 0 ? 'Success' : 'Error' }"
+                        />
+                    </table:template>
+                </table:Column>
+
+                <table:Column
+                    id="idHistoryPnlAmtColumn"
+                    width="100px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idHistoryPnlAmtLabel"
+                        text="Amount"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idHistoryPnlAmt1ObjectStatus"
+                            text="{ parts:[ 'HistoryModel>amount', 'HistoryModel>pnl'], formatter: '.formatter.historyPnlAmount' }"
+                            state="{= ${HistoryModel>pnl} > 0 ? 'Success' : 'Error' }"
+                        />
+                    </table:template>
+                </table:Column>
+            </table:columns>
+        </table:Table>
+    </HBox>
+</c:FragmentDefinition>

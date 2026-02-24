@@ -1,0 +1,149 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <HBox
+        id="idHeaderMiddleHBox"
+        width="500px"
+    >
+        <!-- Message Box -->
+        <HBox
+            id="idHeaderMsgHBox"
+            visible="{ path: 'ScreenModel>/headerMiddle', formatter: '.formatter.headerMessage' }"
+        >
+            <HBox
+                id="idMsgSettingBox"
+                width="80px"
+            >
+                <Button
+                    id="idHeaderMsgSettingButton"
+                    icon="{ path: 'ScreenModel>/msgSetting', formatter: '.formatter.msgSettingIcon' }"
+                    type="Transparent"
+                    press="onHeaderMsgSettingPopup"
+                    ariaHasPopup="Menu"
+                >
+                    <dependents>
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.MsgSetting"
+                            type="XML"
+                        />
+                    </dependents>
+                </Button>
+
+                <Button
+                    id="idHeaderMsgCancelButton"
+                    icon="sap-icon://decline"
+                    type="Transparent"
+                    press="onHeaderMsgCancel"
+                />
+            </HBox>
+            <Button
+                id="idMessageButton"
+                text="No Message"
+                type="Transparent"
+                width="410px"
+                press="openHeaderMsgPopup"
+                ariaHasPopup="Menu"
+            >
+                <dependents>
+                    <core:Fragment
+                        fragmentName="ns.deltaexcapp.fragment.HeaderMsg"
+                        type="XML"
+                    />
+                </dependents>
+            </Button>
+        </HBox>
+        <!-- Backtest Box -->
+        <HBox
+            id="idBacktestHBox"
+            visible="{ path: 'ScreenModel>/headerMiddle', formatter: '.formatter.headerBacktest' }"
+        >
+            <HBox
+                id="idBacktestPutHBox"
+                width="190px"
+            >
+                <Title
+                    id="idPutBacktestTitle"
+                    level="H3"
+                    text="Put :"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idBacktestPutStepInput"
+                    step="{ parts:['BacktestModel>/inc','BacktestModel>/putLtp'], formatter: '.formatter.backtestInc' }"
+                    value="{BacktestModel>/putLtp}"
+                    width="120px"
+                    textAlign="Center"
+                    change="onBackTestPut"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+            <HBox
+                id="idBacktestIncHBox"
+                width="130px"
+            >
+                <Title
+                    id="idIncBacktestTitle"
+                    level="H3"
+                    text="Gap :"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+                />
+                <MenuButton
+                    id="idBacktestMenuButton"
+                    enabled="true"
+                    text="{BacktestModel>/inc}"
+                    width="60px"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Menu
+                        id="idBacktestMenu"
+                        itemSelected="onBackTestInc"
+                    >
+                        <MenuItem
+                            id="idInc10MenuItem"
+                            key="10"
+                            text="10"
+                        />
+                        <MenuItem
+                            id="idInc20MenuItem"
+                            key="20"
+                            text="20"
+                        />
+                        <MenuItem
+                            id="idInc30MenuItem"
+                            key="30"
+                            text="30"
+                        />
+                        <MenuItem
+                            id="idInc40MenuItem"
+                            key="40"
+                            text="40"
+                        />
+                        <MenuItem
+                            id="idInc50MenuItem"
+                            key="50"
+                            text="50"
+                        />
+                    </Menu>
+                </MenuButton>
+            </HBox>
+            <HBox id="idBacktestCallHBox">
+                <Title
+                    id="idCallBacktestCallTitle"
+                    level="H3"
+                    text="Call :"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idBacktestCallStepInput"
+                    step="{ parts:['BacktestModel>/inc','BacktestModel>/callLtp'], formatter: '.formatter.backtestInc' }"
+                    value="{BacktestModel>/callLtp}"
+                    width="120px"
+                    textAlign="Center"
+                    change="onBackTestCall"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+        </HBox>
+    </HBox>
+</core:FragmentDefinition>

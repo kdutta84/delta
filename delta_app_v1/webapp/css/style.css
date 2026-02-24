@@ -1,0 +1,9 @@
+.appBackground {
+  background-color: #edeff0 !important;
+}
+.myCustomRed {
+  background-color: #ff0000 !important; /* Use !important to ensure the style is applied */
+}
+.myCustomGreen {
+  background-color: #00ff00 !important;
+}

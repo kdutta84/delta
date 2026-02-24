@@ -1,0 +1,32 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <!-- Header Toolbar-->
+    <Toolbar
+        id="idHeaderToolbar"
+        design="Transparent"
+        style="Clear"
+    >
+        <core:Fragment
+            fragmentName="ns.deltaapphost.fragment.HeaderLeft"
+            type="XML"
+        />
+        <ToolbarSeparator
+            id="idSep1ToolbarSeparator"
+            class="sapUiSmallMarginBegin"
+        />
+        <core:Fragment
+            fragmentName="ns.deltaapphost.fragment.HeaderMiddle"
+            type="XML"
+        />
+        <ToolbarSeparator
+            id="idSep2ToolbarSeparator"
+            class="sapUiTinyMarginBegin"
+        />
+        <core:Fragment
+            fragmentName="ns.deltaapphost.fragment.HeaderRight"
+            type="XML"
+        />
+    </Toolbar>
+</core:FragmentDefinition>

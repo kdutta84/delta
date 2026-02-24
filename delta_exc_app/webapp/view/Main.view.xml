@@ -1,0 +1,33 @@
+<mvc:View
+    controllerName="ns.deltaexcapp.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <Page
+        id="idMainPage"
+        showHeader="false"
+        floatingFooter="true"
+    >
+        <content>
+            <!-- <VBox id="idStockMainVBox">
+                <core:Fragment
+                    fragmentName="ns.deltaexcapp.fragment.StockChart"
+                    type="XML"
+                />
+            </VBox> -->
+            <!-- <core:Fragment
+                fragmentName="ns.deltaexcapp.fragment.Horizontal"
+                type="XML"
+            /> -->
+            <!-- <core:Fragment
+                fragmentName="ns.deltaexcapp.fragment.Vertical"
+                type="XML"
+            /> -->
+            <!-- <core:HTML
+                id="idStockChartHTML"
+                content="&lt;div id=&quot;StockChart&quot; class=&quot;highcharts-dark&quot; &gt;&lt;/div&gt;"
+            /> -->
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,137 @@
+<mvc:View
+    controllerName="ns.deltaexcapp.controller.Horizontal"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%"
+    busyIndicatorDelay="0"
+>
+    <Page
+        id="idHorizontalPage"
+        showHeader="false"
+        floatingFooter="true"
+        class="appBackground"
+    >
+        <VBox id="idHorizontalBox">
+            <HBox
+                id="idToolbarVBox"
+                class="sapUiTinyMarginTop"
+            >
+                <HBox id="idhHeaderVBox">
+                    <HBox
+                        id="idhHeaderLeftBox"
+                        justifyContent="Center"
+                        class="sapUiTinyMarginBegin"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.HeaderLeft"
+                            type="XML"
+                        />
+                    </HBox>
+                    <ToolbarSeparator
+                        id="idsep1ToolbarSeparator"
+                        class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+                    />
+                    <HBox
+                        id="idhHeaderMiddleBox"
+                        justifyContent="Center"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.HeaderMiddle"
+                            type="XML"
+                        />
+                    </HBox>
+                    <ToolbarSeparator
+                        id="idsep2ToolbarSeparator"
+                        class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+                    />
+                    <HBox
+                        id="idhHeaderRightBox"
+                        justifyContent="Center"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.HeaderRight"
+                            type="XML"
+                        />
+                    </HBox>
+                </HBox>
+                <ToolbarSeparator
+                    id="idsep3ToolbarSeparator"
+                    class="sapUiTinyMarginEnd"
+                />
+                <HBox id="idhButtonBoxHBox">
+                    <core:Fragment
+                        fragmentName="ns.deltaexcapp.fragment.ButtonBox"
+                        type="XML"
+                    />
+                </HBox>
+            </HBox>
+
+            <HBox id="idContentHBox">
+                <VBox id="idhOptionChart">
+                    <core:Fragment
+                        fragmentName="ns.deltaexcapp.fragment.StockChart"
+                        type="XML"
+                    />
+                </VBox>
+
+                <VBox
+                    id="idhRightVBox"
+                    class="sapUiSmallMarginBegin"
+                    visible="{ path: 'ScreenModel>/chartLayout', formatter: '.formatter.horizontalRightVisible' }"
+                >
+                    <VBox
+                        id="idPnlBoxVBox"
+                        height="213px"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.PnlBox"
+                            type="XML"
+                        />
+                    </VBox>
+
+                    <VBox
+                        id="idInput1BoxVBox"
+                        height="130px"
+                        class="sapUiTinyMarginTop "
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.Input1Box"
+                            type="XML"
+                        />
+                    </VBox>
+
+                    <VBox
+                        id="idInput2BoxVBox"
+                        height="130px"
+                        class="sapUiTinyMarginTop "
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.Input2Box"
+                            type="XML"
+                        />
+                    </VBox>
+
+                    <Toolbar
+                        id="idhSep_3_Toolbar"
+                        width="500px"
+                        height="1px"
+                        class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+                    />
+
+                    <VBox
+                        id="idhControlRightVBox"
+                        class="sapUiTinyMarginBegin"
+                        width="550px"
+                    >
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.Bar"
+                            type="XML"
+                        />
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

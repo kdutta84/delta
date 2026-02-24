@@ -1,0 +1,168 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <HBox
+        id="idSellBoxOuterBox"
+        height="50px"
+    >
+        <VBox
+            id="idSellBoxLeftHBox"
+            class="sapUiTinyMarginTop"
+            width="250px"
+        >
+            <HBox
+                id="idReversalHBox"
+                height="50px"
+                class="sapUiSmallMarginBottom"
+            >
+                <Button
+                    id="idReversalButton"
+                    press="onSellReversalFlag"
+                    width="80px"
+                    type="{ path: 'ParaModel>/sell/reversal/flag', formatter: '.formatter.redFlagType' }"
+                    text="Reversal :"
+                />
+                <StepInput
+                    id="idCountReversalStepInput"
+                    step="1"
+                    min="1"
+                    max="10"
+                    value="{ParaModel>/sell/reversal/count}"
+                    change="onSellReversalCount"
+                    textAlign="Center"
+                    width="110px"
+                    class="sapUiTinyMarginBegin"
+                />
+
+                <HBox
+                    id="idReversalActionTypeHBox"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idReversalActionButton"
+                        type="{ parts: ['ParaModel>/sell/reversal/flag','ParaModel>/sell/reversal/action'], formatter: '.formatter.sellActionType' }"
+                        press="onSellReversalAction"
+                        icon="{ path: 'ParaModel>/sell/reversal/action', formatter: '.formatter.sellActionIcon' }"
+                    />
+                </HBox>
+            </HBox>
+
+            <HBox
+                id="idSellDeltaHBox"
+                height="50px"
+                class="sapUiSmallMarginBottom"
+            >
+                <Button
+                    id="idSellDeltaButton"
+                    press="onSellDeltaFlag"
+                    width="80px"
+                    type="{ path: 'ParaModel>/sell/delta/flag', formatter: '.formatter.redFlagType' }"
+                    text="Delta :"
+                />
+                <StepInput
+                    id="idCountSellDeltaStepInput"
+                    step="5"
+                    value="{ParaModel>/sell/delta/count}"
+                    change="onSellDeltaCount"
+                    textAlign="Center"
+                    width="110px"
+                    class="sapUiTinyMarginBegin"
+                />
+
+                <HBox
+                    id="idSellDeltaActionTypeHBox"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idSellDeltaActionButton"
+                        type="{ parts: ['ParaModel>/sell/delta/flag','ParaModel>/sell/delta/action'], formatter: '.formatter.sellActionType' }"
+                        press="onSellDeltaAction"
+                        icon="{ path: 'ParaModel>/sell/delta/action', formatter: '.formatter.sellActionIcon' }"
+                    />
+                </HBox>
+            </HBox>
+        </VBox>
+
+        <VBox
+            id="idSellSupportRightHBox"
+            width="260px"
+            class="sapUiTinyMarginTop"
+        >
+            <HBox id="idSellSupportBox">
+                <HBox
+                    id="idSellSupportHBox"
+                    height="50px"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idSellSupportButton"
+                        press="onSellSupportFlag"
+                        type="{ path: 'ParaModel>/sell/support/flag', formatter: '.formatter.redFlagType' }"
+                        width="80px"
+                        text="Support :"
+                    />
+                    <StepInput
+                        id="idSellSupportStepInput"
+                        step="5"
+                        max="110px"
+                        value="{ParaModel>/sell/support/count}"
+                        change="onSellSupportCount"
+                        textAlign="Center"
+                        width="110px"
+                        class="sapUiTinyMarginBegin"
+                    />
+                </HBox>
+
+                <HBox
+                    id="idSellSupportActionTypeHBox"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idSellSupportActionButton"
+                        type="{ parts: ['ParaModel>/sell/support/flag','ParaModel>/sell/support/action'], formatter: '.formatter.sellActionType' }"
+                        press="onSellSupportAction"
+                        icon="{ path: 'ParaModel>/sell/support/action', formatter: '.formatter.sellActionIcon' }"
+                    />
+                </HBox>
+            </HBox>
+
+            <HBox id="idSellAddonBox">
+                <HBox
+                    id="idSellAddonFlagHBox"
+                    height="50px"
+                    class="sapUiSmallMarginBottom sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idAddonFlagButton"
+                        press="onSellAddonFlag"
+                        type="{ path: 'ParaModel>/sell/addon/flag', formatter: '.formatter.redFlagType' }"
+                        width="80px"
+                        text="AddOn :"
+                    />
+                    <StepInput
+                        id="idsellAddonStepInput"
+                        step="1"
+                        value="{ParaModel>/sell/addon/count}"
+                        change="onSellAddonCount"
+                        textAlign="Center"
+                        width="110px"
+                        class="sapUiTinyMarginBegin"
+                    />
+                </HBox>
+
+                <HBox
+                    id="idSellAddonActionTypeHBox"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idSellAddonActionButton"
+                        type="{ parts: ['ParaModel>/sell/addon/flag','ParaModel>/sell/addon/action'], formatter: '.formatter.sellActionType' }"
+                        press="onSellAddonAction"
+                        icon="{ path: 'ParaModel>/sell/addon/action', formatter: '.formatter.sellActionIcon' }"
+                    />
+                </HBox>
+            </HBox>
+        </VBox>
+    </HBox>
+</c:FragmentDefinition>

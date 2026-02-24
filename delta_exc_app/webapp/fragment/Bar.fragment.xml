@@ -1,0 +1,281 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <VBox id="idBarOuterContBox">
+        <HBox
+            id="idBarToolbarHBox"
+            height="30px"
+        >
+            <HBox
+                id="idCurrentDeltaHBox"
+                justifyContent="Center"
+                width="80px"
+            >
+                <ObjectStatus
+                    id="idCurrDeltaObjectStatus"
+                    visible="true"
+                    class="sapMObjectStatusLarge"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idStopwatchHBox"
+                justifyContent="Center"
+                width="150px"
+            >
+                <Button
+                    id="idStopwatchButton"
+                    visible="true"
+                    text="0.00"
+                    width="120px"
+                    icon="sap-icon://fob-watch"
+                    press="onClockSettingPopup"
+                >
+                    <dependents>
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.ClockSetting"
+                            type="XML"
+                        />
+                    </dependents>
+                </Button>
+            </HBox>
+
+            <HBox
+                id="idBarClockHBox"
+                justifyContent="Center"
+                width="120px"
+            >
+                <ObjectStatus
+                    id="idBarClockObjectStatus"
+                    state="Indication20"
+                    class="sapMObjectStatusLarge"
+                    inverted="true"
+                />
+            </HBox>
+
+            <HBox
+                id="idBarMenuHBox"
+                justifyContent="Center"
+                width="150px"
+            >
+                <MenuButton
+                    id="idBarTypeMenuButton"
+                    text="{ParaModel>/barType}"
+                    icon="{ path: 'ParaModel>/barType', formatter: '.formatter.barTypeIcon' }"
+                    width="120px"
+                >
+                    <Menu
+                        id="idBarTypeMenu"
+                        itemSelected="onBarType"
+                    >
+                        <MenuItem
+                            id="idMarketBarMenuItem"
+                            text="Market"
+                            icon="sap-icon://customer-and-supplier"
+                            press="onMarketBar"
+                        />
+                        <MenuItem
+                            id="idOptionMenuItem"
+                            text="Option"
+                            icon="sap-icon://multiselect-none"
+                            press="onOptionBar"
+                        />
+                        <MenuItem
+                            id="idTrackMenuItem"
+                            text="Track"
+                            icon="sap-icon://journey-change"
+                            press="onTrackBar"
+                        />
+                        <MenuItem
+                            id="idBuyMenuItem"
+                            text="Buy"
+                            icon="sap-icon://cart"
+                            press="onBuyBar"
+                        />
+                        <MenuItem
+                            id="idBookMenuItem"
+                            text="Book"
+                            startsSection="true"
+                            icon="sap-icon://course-book"
+                            press="onOrderBookBar"
+                        />
+                        <MenuItem
+                            id="idHistoryBarMenuItem"
+                            text="History"
+                            icon="sap-icon://alphabetical-order"
+                            press="onTrnHistory"
+                        />
+                        <MenuItem
+                            id="idAlertMessageMenuItem"
+                            text="Message"
+                            icon="sap-icon://email"
+                            press="onBarMessage"
+                        />
+                        <MenuItem
+                            id="idAlertBarMenuItem"
+                            text="Alert"
+                            icon="sap-icon://bell"
+                            press="onBarAlert"
+                        />
+                    </Menu>
+                </MenuButton>
+            </HBox>
+        </HBox>
+        <!-- Bar Chart Toolbar-->
+
+        <!-- Bar  Container  -->
+        <HBox
+            id="idBarHBox"
+            alignItems="Start"
+            alignContent="Start"
+        >
+            <!-- Bar Strikes  -->
+            <!-- visible="{ path: 'ParaModel>/barType', formatter: '.formatter.barStrikesDisplay' }" -->
+            <VBox id="idBarStrikeVBox">
+                <!-- Btc Box  -->
+                <VBox
+                    id="idBarBtcVBox"
+                    alignItems="Start"
+                    justifyContent="Center"
+                    height="200px"
+                >
+                    <Button
+                        id="idBitcoinButton"
+                        text="Bitcoin"
+                        width="80px"
+                        press="onBtcMarket"
+                        type="Transparent"
+                        class="sapUiMediumMarginTop"
+                    />
+                    <Button
+                        id="idBtcCallStrikeButton"
+                        width="80px"
+                        text="{BarModel>/strike/btcCall}"
+                        press="onBtcStrike"
+                        type="{ parts: ['ParaModel>/track/flag', 'ParaModel>/buy/flag','BarModel>/symbol/btcCall'], formatter: '.formatter.buyCallSymbol' }"
+                        class="sapUiSmallMarginTop"
+                    />
+                    <Button
+                        id="idBtcPutStrikeButton"
+                        text="{BarModel>/strike/btcPut}"
+                        width="80px"
+                        press="onBtcStrike"
+                        type="{ parts: ['ParaModel>/track/flag', 'ParaModel>/buy/flag', 'BarModel>/symbol/btcPut'], formatter: '.formatter.buyPutSymbol' }"
+                        class="sapUiSmallMarginTop"
+                    />
+                </VBox>
+                <!-- Space 1  -->
+                <VBox
+                    id="idSpaceVBox"
+                    height="60px"
+                />
+                <!-- Eth Box  -->
+                <VBox
+                    id="idEthVBox"
+                    alignItems="Start"
+                    alignContent="Center"
+                    height="200px"
+                >
+                    <Button
+                        id="idEthereumButton"
+                        text="Ethereum"
+                        press="onEthMarket"
+                        width="80px"
+                        type="Transparent"
+                        class="sapUiSmallMarginTop"
+                    />
+                    <Button
+                        id="idEthCallStrikeButton"
+                        text="{BarModel>/strike/ethCall}"
+                        width="80px"
+                        press="onEthStrike"
+                        type="{ parts: ['ParaModel>/track/flag', 'ParaModel>/buy/flag', 'BarModel>/symbol/ethCall'], formatter: '.formatter.buyCallSymbol' }"
+                        class="sapUiSmallMarginTop"
+                    />
+                    <Button
+                        id="idEthPutStrikeButton"
+                        text="{BarModel>/strike/ethPut}"
+                        width="80px"
+                        press="onEthStrike"
+                        type="{ parts: ['ParaModel>/track/flag', 'ParaModel>/buy/flag', 'BarModel>/symbol/ethPut'], formatter: '.formatter.buyPutSymbol' }"
+                        class="sapUiSmallMarginTop"
+                    />
+                </VBox>
+                <!-- Message Popover  -->
+                <VBox
+                    id="messagePopoverContainer"
+                    alignItems="Start"
+                    alignContent="Start"
+                    width="60px"
+                >
+                    <Button
+                        id="idMessagePopoverButton"
+                        text="0"
+                        width="80px"
+                        type="Transparent"
+                        icon="sap-icon://email"
+                        ariaHasPopup="Dialog"
+                        press="onMessagePopover"
+                    />
+                </VBox>
+            </VBox>
+            <!-- Bar Chart  -->
+            <VBox
+                id="idBarChartVBox"
+                visible="{ path: 'ParaModel>/barType', formatter: '.formatter.barChartDisplay' }"
+            >
+                <core:HTML
+                    id="idBarChart"
+                    visible="{ path: 'ParaModel>/layout', formatter: '.formatter.barHorizontalLayout' }"
+                    content="&lt;div id=&quot;BarChart&quot; style=&quot;width:420px; height:498px;&quot;&gt;&lt;/div&gt;"
+                />
+
+                <core:HTML
+                    id="idBarChartV"
+                    visible="{ path: 'ParaModel>/layout', formatter: '.formatter.barVerticalLayout' }"
+                    content="&lt;div id=&quot;BarChartV&quot; style=&quot;width:420px; height:498px;&quot;&gt;&lt;/div&gt;"
+                />
+            </VBox>
+
+            <HBox
+                id="idTrnHBox"
+                visible="{ path: 'ParaModel>/barType', formatter: '.formatter.barHistoryDisplay' }"
+            >
+                <core:Fragment
+                    fragmentName="ns.deltaexcapp.fragment.Trn"
+                    type="XML"
+                />
+            </HBox>
+            <HBox
+                id="idBookHBox"
+                visible="{ path: 'ParaModel>/barType', formatter: '.formatter.barBookDisplay' }"
+            >
+                <core:Fragment
+                    fragmentName="ns.deltaexcapp.fragment.Book"
+                    type="XML"
+                />
+            </HBox>
+
+            <HBox
+                id="idAlertHBox"
+                visible="{ path: 'ParaModel>/barType', formatter: '.formatter.barAlertDisplay' }"
+            >
+                <core:Fragment
+                    fragmentName="ns.deltaexcapp.fragment.Alert"
+                    type="XML"
+                />
+            </HBox>
+
+            <HBox
+                id="idMessageHBox"
+                visible="{ path: 'ParaModel>/barType', formatter: '.formatter.barMessageDisplay' }"
+            >
+                <core:Fragment
+                    fragmentName="ns.deltaexcapp.fragment.BarMessage"
+                    type="XML"
+                />
+            </HBox>
+        </HBox>
+    </VBox>
+</core:FragmentDefinition>

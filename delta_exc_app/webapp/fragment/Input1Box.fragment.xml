@@ -1,0 +1,91 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Toolbar
+        id="idhSep_2_Toolbar"
+        width="500px"
+        class="sapUiTinyMarginBottom appBackground"
+    >
+        <Title
+            id="idInput1Title"
+            level="H1"
+            text="{ path: 'ScreenModel>/input1', formatter: '.formatter.input1Title' }"
+        />
+        <!-- <ToolbarSpacer id="idInput1ToolbarSpacer1" />
+        <GenericTag
+            id="alarmText"
+            status="Success"
+            text="Alarm Time Left :"
+            valueState="{ path: 'ParaModel>/alarm/time', formatter: '.formatter.alarmText' }"
+        /> -->
+
+        <ToolbarSpacer id="idInput1ToolbarSpacer2" />
+
+        <Button
+            id="idBuyInputButton"
+            icon="sap-icon://cart"
+            press="onInput1Button"
+        />
+        <Button
+            id="idSupportInputButton"
+            icon="sap-icon://compare"
+            press="onInput1Button"
+        />
+        <Button
+            id="idWalletInputButton"
+            icon="sap-icon://wallet"
+            press="onInput1Button"
+        />
+        <Button
+            id="idAlarmInputButton"
+            icon="sap-icon://away"
+            press="onInput1Button"
+        />
+    </Toolbar>
+    <VBox
+        id="idhInput1BoxVBox"
+        height="90px"
+        class="sapUiTinyMarginBottom"
+    >
+        <VBox
+            id="idhBuyBoxVBox"
+            visible="{ path: 'ScreenModel>/input1', formatter: '.formatter.buyBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaexcapp.fragment.BuyBox"
+                type="XML"
+            />
+        </VBox>
+
+        <VBox
+            id="idhSupportBoxVBox"
+            visible="{ path: 'ScreenModel>/input1', formatter: '.formatter.supportBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaexcapp.fragment.SupportBox"
+                type="XML"
+            />
+        </VBox>
+
+        <VBox
+            id="idhWalletBoxVBox"
+            visible="{ path: 'ScreenModel>/input1', formatter: '.formatter.walletBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaexcapp.fragment.WalletBox"
+                type="XML"
+            />
+        </VBox>
+
+        <VBox
+            id="idhAlarmBoxVBox"
+            visible="{ path: 'ScreenModel>/input1', formatter: '.formatter.alarmBoxVisible' }"
+        >
+            <core:Fragment
+                fragmentName="ns.deltaexcapp.fragment.AlarmBox"
+                type="XML"
+            />
+        </VBox>
+    </VBox>
+</core:FragmentDefinition>

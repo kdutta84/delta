@@ -23,7 +23,7 @@ async function initServer() {
     await initDelta();
     await Helper.getOpenPosition();
     await initSocket();
-    // Helper.initMongoDb();
+    Helper.initMongoDb();
     Helper.initEmail();
   } catch (error) {
     Helper.addMessage(C.error, Helper.findMsg(error), C.P1);

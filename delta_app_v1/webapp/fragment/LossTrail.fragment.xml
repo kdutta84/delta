@@ -1,0 +1,66 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <Popover
+        id="idLossTrailPopover"
+        class="sapUiResponsivePadding--header sapUiResponsivePadding--footer"
+        placement="Bottom"
+        initialFocus="email"
+        showHeader="false"
+    >
+        <VBox
+            id="idLossTrailHBox"
+            width="150px"
+            justifyContent="Center"
+        >
+            <HBox
+                id="idLossTrailStepInputHBox"
+                width="150px"
+                justifyContent="Center"
+            >
+                <StepInput
+                    id="idLossTrailStepInput"
+                    width="120px"
+                    min="0"
+                    step="10"
+                    value="{ParaModel>/lossTrail/per}"
+                    textAlign="Center"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+                    change="onLossTrail"
+                />
+            </HBox>
+            <HBox
+                id="idLossTrailFlagHBox"
+                width="150px"
+                justifyContent="Center"
+            >
+                <Button
+                    id="idLossTrailFlag"
+                    text="Loss Trail"
+                    width="120px"
+                    type="{ path: 'ParaModel>/lossTrail/flag', formatter: '.formatter.lossTrailFlagType' }"
+                    icon="sap-icon://back-to-top"
+                    press="onLossTrailFlag"
+                />
+            </HBox>
+        </VBox>
+
+        <!-- <HBox
+            id="idLossTrailHBox"
+            width="150px"
+            justifyContent="Center"
+        >
+            <StepInput
+                id="idLossTrailStepInput"
+                width="110px"
+                min="0"
+                step="10"               
+                value="{ParaModel>/lossTrail}"
+                textAlign="Center"
+                class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+                change="onLossTrail"
+            />
+        </HBox> -->
+    </Popover>
+</c:FragmentDefinition>

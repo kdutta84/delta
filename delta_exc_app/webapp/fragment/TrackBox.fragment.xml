@@ -1,0 +1,137 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <VBox id="idTrackOuterHBox">
+        <HBox id="idTrackVolumeBox">
+            <HBox
+                id="idVolumeHBox"
+                width="220px"
+                height="50px"
+            >
+                <Button
+                    id="idVolumeTrackButton"
+                    press="onVolumeFlag"
+                    width="75px"
+                    type="{ path: 'ParaModel>/volume/flag', formatter: '.formatter.flagType' }"
+                    text="Volume :"
+                />
+
+                <Button
+                    id="idVolumeTrackType"
+                    press="onVolumeType"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                    text='{ParaModel>/volume/type}'
+                    icon="{ path: 'ParaModel>/volume/type', formatter: '.formatter.trackVolumeTypeIcon' }"
+                />
+            </HBox>
+            <HBox
+                id="idVolumeActionIconBox"
+                height="50px"
+                justifyContent="Center"
+                width="100px"
+            >
+                <Button
+                    id="idVolumeActionIcon"
+                    icon="{ path: 'ParaModel>/volume/action', formatter: '.formatter.trackIcon' }"
+                    type="{ parts: ['ParaModel>/volume/flag','ParaModel>/volume/action'], formatter: '.formatter.trackType' }"
+                    press="onVolumeTrackPopup"
+                >
+                    <dependents>
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.VolumeTrackAction"
+                            type="XML"
+                        />
+                    </dependents>
+                </Button>
+            </HBox>
+            <HBox
+                id="idVolumeTrackPerHBox"
+                width="100px"
+                height="50px"
+            >
+                <Label
+                    id="idPerVolumeLabel"
+                    width="40px"
+                    text="Per :"
+                    class="sapUiTinyMarginTop"
+                />
+                <StepInput
+                    id="idVolumeTrackPer"
+                    step="10"
+                    value="{ParaModel>/volume/per}"
+                    change="onVolumePer"
+                    textAlign="Center"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+        </HBox>
+        <!-- OI -->
+        <HBox id="idTrackOiHBox">
+            <HBox
+                id="idTrackOiBox"
+                width="220px"
+            >
+                <Button
+                    id="idOiTrackFlag"
+                    press="onOiFlag"
+                    width="75px"
+                    type="{ path: 'ParaModel>/oi/flag', formatter: '.formatter.flagType' }"
+                    text="OI :"
+                />
+
+                <Button
+                    id="idOiTrackType"
+                    press="onOiType"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                    text='{ParaModel>/oi/type}'
+                    icon="{ path: 'ParaModel>/oi/type', formatter: '.formatter.trackOiTypeIcon' }"
+                />
+            </HBox>
+            <HBox
+                id="idOiActionIconBox"
+                height="50px"
+                justifyContent="Center"
+                width="100px"
+            >
+                <Button
+                    id="idOiActionIcon"
+                    icon="{ path: 'ParaModel>/oi/action', formatter: '.formatter.trackIcon' }"
+                    type="{ parts: ['ParaModel>/oi/flag','ParaModel>/oi/action'], formatter: '.formatter.trackType' }"
+                    press="onOiTrackPopup"
+                >
+                    <dependents>
+                        <core:Fragment
+                            fragmentName="ns.deltaexcapp.fragment.OiTrackAction"
+                            type="XML"
+                        />
+                    </dependents>
+                </Button>
+            </HBox>
+            <HBox
+                id="idOiTrackPerHBox"
+                width="140px"
+            >
+                <Label
+                    id="idPerOiLabel"
+                    width="40px"
+                    text="Per :"
+                    class="sapUiTinyMarginTop"
+                />
+
+                <StepInput
+                    id="idOiTrackPer"
+                    value="{ParaModel>/oi/per}"
+                    min="0"
+                    change="onOiPer"
+                    textAlign="Center"
+                    width="130px"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+        </HBox>
+    </VBox>
+</core:FragmentDefinition>
