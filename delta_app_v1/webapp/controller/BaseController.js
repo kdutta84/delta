@@ -10,7 +10,9 @@ sap.ui.define(
     "sap/ui/core/InvisibleMessage",
     "sap/m/library",
     "sap/ui/core/Theming",
-    "highcharts/highstock",
+    // "highcharts/highstock",
+    "highcharts",
+    // "highstock",
     "ns/deltaapphost/model/formatter",
   ],
   function (
@@ -25,6 +27,7 @@ sap.ui.define(
     library,
     Theming,
     highcharts,
+    // highstock,
     formatter,
   ) {
     // Popup Message
@@ -73,48 +76,58 @@ sap.ui.define(
         // this.onBuyHistory();
         // return;
 
-        // Get Dependent Modules
-        var that = this;
-        sap.ui.require(
-          [
-            "highcharts/modules/exporting",
-            "highcharts/modules/price-indicator",
-            "highcharts/modules/drag-panes",
-            "highcharts/highcharts-more",
-            "highcharts/indicators/indicators-all",
-            "highcharts/modules/annotations-advanced",
-            "highcharts/modules/full-screen",
-            "highcharts/modules/stock-tools",
-            "highcharts/themes/adaptive",
-          ],
-          function (
-            // @ts-ignore
-            exporting,
-            // @ts-ignore
-            priceInd,
-            // @ts-ignore
-            dragPanes,
-            // @ts-ignore
-            more,
-            // @ts-ignore
-            indicators,
-            // @ts-ignore
-            annotations,
-            // @ts-ignore
-            fullscreen,
-            // @ts-ignore
-            stockTools,
-            // @ts-ignore
-            theme,
-          ) {
-            // Init Charts
-            that.initCharts();
+        this.initCharts();
 
-            // Start Process
-            that.startProcess();
-          },
-        );
+        // // Start Process
+        this.startProcess();
+        // Get Dependent Modules
+        // var that = this;
+        // sap.ui.require(
+        //   [
+        //     "highcharts/modules/exporting",
+        //     "highcharts/modules/price-indicator",
+        //     "highcharts/modules/drag-panes",
+        //     "highcharts/highcharts-more",
+        //     "highcharts/indicators/indicators-all",
+        //     "highcharts/modules/annotations-advanced",
+        //     "highcharts/modules/full-screen",
+        //     "highcharts/modules/stock-tools",
+        //     "highcharts/themes/adaptive",
+        //   ],
+        //   function (
+        //     // @ts-ignore
+        //     exporting,
+        //     // @ts-ignore
+        //     priceInd,
+        //     // @ts-ignore
+        //     dragPanes,
+        //     // @ts-ignore
+        //     more,
+        //     // @ts-ignore
+        //     indicators,
+        //     // @ts-ignore
+        //     annotations,
+        //     // @ts-ignore
+        //     fullscreen,
+        //     // @ts-ignore
+        //     stockTools,
+        //     // @ts-ignore
+        //     theme,
+        //   ) {
+        //     // Init Charts
+        //     that.initCharts();
+
+        //     // Start Process
+        //     that.startProcess();
+        //   },
+        // );
       },
+      // onAfterRendering: function () {
+      //   this.initCharts();
+
+      //   // // Start Process
+      //   this.startProcess();
+      // },
       setTheme: function () {
         sap.ui.getCore().applyTheme("sap_horizon");
       },
@@ -5777,6 +5790,9 @@ sap.ui.define(
                 color: "#000000",
               },
               formatter: function (label) {
+                if (label === undefined) {
+                  return;
+                }
                 var dataLabel = that.convertSecondsToDate(label.pos);
                 var Hours = that.formatHours(dataLabel.getHours());
                 var Minutes = that.addLeadingZero(dataLabel.getMinutes());
@@ -6299,6 +6315,9 @@ sap.ui.define(
                 color: "#000000",
               },
               formatter: function (label) {
+                if (label === undefined) {
+                  return;
+                }
                 var dataLabel = that.convertSecondsToDate(label.pos);
                 var Hours = that.formatHours(dataLabel.getHours());
                 var Minutes = that.addLeadingZero(dataLabel.getMinutes());
@@ -7096,6 +7115,7 @@ sap.ui.define(
             },
           ],
         };
+
         if (sap.ui.getCore().layout === "Horizontal") {
           highcharts.chart("BarChart", options);
         } else {
@@ -7103,13 +7123,14 @@ sap.ui.define(
         }
       },
       hideNavBar: function () {
-        // @ts-ignore
-        if (sap.ushell.Container.getRenderer("fiori2")) {
-          // @ts-ignore
-          sap.ushell.Container.getRenderer("fiori2").setHeaderVisibility(
-            false,
-            true,
-          );
+        if (sap.ushell !== undefined) {
+          if (sap.ushell.Container.getRenderer("fiori2")) {
+            // @ts-ignore
+            sap.ushell.Container.getRenderer("fiori2").setHeaderVisibility(
+              false,
+              true,
+            );
+          }
         }
       },
 

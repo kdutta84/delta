@@ -10,7 +10,7 @@ sap.ui.define(
     "sap/ui/core/InvisibleMessage",
     "sap/m/library",
     "sap/ui/core/Theming",
-
+    "highcharts",
     "ns/deltaapphost/model/formatter",
   ],
   function (
@@ -24,6 +24,7 @@ sap.ui.define(
     InvisibleMessage,
     library,
     Theming,
+    highcharts,
     formatter,
   ) {
     "use strict";

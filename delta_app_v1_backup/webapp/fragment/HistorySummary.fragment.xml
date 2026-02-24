@@ -1,0 +1,133 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <VBox
+        id="idSummaryVBox"
+        class="sapUiTinyMarginBegin"
+    >
+        <HBox
+            id="idSummaryHBox"
+            height="60px"
+        >
+            <HBox
+                id="idSummaryCountHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idSummaryCountLabel"
+                    text="Count :"
+                    class="sapUiTinyMarginTop"
+                />
+
+                <ObjectStatus
+                    id="idSummaryCountObjectStatus"
+                    text="{SummaryModel>/count}"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idSummaryHitHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idSummaryHitLabel"
+                    text="Hit :"
+                    class="sapUiTinyMarginTop"
+                />
+
+                <ObjectStatus
+                    id="idSummaryHitObjectStatus"
+                    text="{SummaryModel>/hit}"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    state="None"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idSummaryHitPerHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idSummaryHitPerLabel"
+                    text="Hit % :"
+                    class="sapUiTinyMarginTop"
+                />
+
+                <ObjectStatus
+                    id="idSummaryHitPerObjectStatus"
+                    text="{ path: 'SummaryModel>/hitPer', formatter: '.formatter.addPercentage' }"
+                    state="{ path: 'SummaryModel>/hitPer', formatter: '.formatter.hitState' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+
+        <HBox
+            id="idSummaryPnlOuterHBox"
+            height="40px"
+        >
+            <HBox
+                id="idSummaryAmtInHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idSummaryAmtInLabel"
+                    text="Avg In :"
+                    class="sapUiTinyMarginTop"
+                />
+
+                <ObjectStatus
+                    id="idSummaryAmtInObjectStatus"
+                    text="{ path: 'SummaryModel>/amtIn', formatter: '.formatter.addDollar' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idSummaryPnlPerHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idSummaryPnlPerLabel"
+                    text="Pnl :"
+                    class="sapUiTinyMarginTop"
+                />
+
+                <ObjectStatus
+                    id="idSummaryPnlPerObjectStatus"
+                    text="{ path: 'SummaryModel>/pnl', formatter: '.formatter.addPercentage' }"
+                    state="{ path: 'SummaryModel>/pnl', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+            <HBox
+                id="idSummaryAmtOutHBox"
+                justifyContent="Center"
+                width="175px"
+            >
+                <Title
+                    id="idSummaryAmtOutLabel"
+                    text="Out :"
+                    class="sapUiTinyMarginTop"
+                />
+
+                <ObjectStatus
+                    id="idSummaryAmtOutObjectStatus"
+                    text="{ path: 'SummaryModel>/amtOut', formatter: '.formatter.addDollar' }"
+                    state="{ path: 'SummaryModel>/amtOut', formatter: '.formatter.PercentageState' }"
+                    class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                    inverted="true"
+                />
+            </HBox>
+        </HBox>
+    </VBox>
+</c:FragmentDefinition>

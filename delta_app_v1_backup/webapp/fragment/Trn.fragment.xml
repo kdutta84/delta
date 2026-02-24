@@ -1,0 +1,305 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    xmlns:table="sap.ui.table"
+>
+    <VBox id="idTrnOuterHBox">
+        <Toolbar
+            id="idvSepTrnToolbar"
+            width="405px"
+            height="0.1px"
+            class="sapUiTinyMarginBegin sapUiTinyMarginTop sapUiTinyMarginBottom"
+        />
+        <HBox
+            id="historyToolbar"
+            height="40px"
+            visible="{ parts:['ParaModel>/barType'], formatter: '.formatter.historyToolbar' }"
+        >
+            <HBox
+                id="idHistoryLeftToolabrHBox"
+                justifyContent="Center"
+                width="150px"
+            >
+                <c:Icon
+                    id="idHistoryMainIcon"
+                    src="sap-icon://cart"
+                    color="{ path: 'TrnModel>/', formatter: '.formatter.historyMainIconColor' }"
+                    class="sapUiTinyMarginTop sapUiSmallMarginEnd"
+                />
+                <GenericTag
+                    id="idMainGenericTag"
+                    text="0 s"
+                />
+            </HBox>
+            <HBox
+                id="idHBox"
+                justifyContent="Center"
+                width="120px"
+            >
+                <c:Icon
+                    id="idMainAddonIcon"
+                    src="sap-icon://cart"
+                    visible="{ path: 'TrnModel>/', formatter: '.formatter.historyMainAddonVisible' }"
+                    color="{ path: 'TrnModel>/', formatter: '.formatter.historyMainAddonIconColor' }"
+                    class="sapUiTinyMarginTop sapUiSmallMarginEnd"
+                />
+                <c:Icon
+                    id="idSupportAddonIcon"
+                    src="sap-icon://compare"
+                    visible="{ path: 'TrnModel>/', formatter: '.formatter.historySupportAddonVisible' }"
+                    color="{ path: 'TrnModel>/', formatter: '.formatter.historySupportAddonIconColor' }"
+                    class="sapUiTinyMarginTop sapUiSmallMarginEnd"
+                />
+                <c:Icon
+                    id="idAddonIcon"
+                    src="sap-icon://split"
+                    visible="{ path: 'TrnModel>/', formatter: '.formatter.historyAddonVisible' }"
+                    color="black"
+                    class="sapUiTinyMarginTop sapUiSmallMarginEnd"
+                />
+                <GenericTag
+                    id="idAddonGenericTag"
+                    text="0 s"
+                />
+            </HBox>
+            <HBox
+                id="idHistoryRightToolabrHBox"
+                justifyContent="Center"
+                width="150px"
+            >
+                <c:Icon
+                    id="idSupportIcon"
+                    src="sap-icon://compare"
+                    color="{ path: 'TrnModel>/', formatter: '.formatter.historySupportIconColor' }"
+                    class="sapUiTinyMarginTop sapUiSmallMarginEnd"
+                />
+                <GenericTag
+                    id="idSupportGenericTag"
+                    text="0 s"
+                    press="onShowSlippage"
+                />
+            </HBox>
+        </HBox>
+
+        <!-- Buy Table -->
+        <table:Table
+            id="idTrnTable"
+            rows="{TrnModel>/}"
+            width="410px"
+            ariaLabelledBy="title"
+            selectionMode="None"
+            alternateRowColors="true"
+            class="sapUiSmallMarginBegin"
+        >
+            <table:rowSettingsTemplate>
+                <table:RowSettings
+                    id="idTrnRowSettings"
+                    highlight="{ path: 'TrnModel>flag', formatter: '.formatter.trnStatus' }"
+                />
+            </table:rowSettingsTemplate>
+            <!-- <table:title>
+                <Title
+                    id="trnTitle"
+                    text="Buy"
+                    textAlign="Center"
+                />
+            </table:title> -->
+            <table:columns>
+                <table:Column
+                    id="idTrnTypeColumn"
+                    width="50px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idTypeLabel"
+                        text="Type"
+                    />
+                    <table:template>
+                        <c:Icon
+                            id="idTrnTypeIcon"
+                            src="{TrnModel>icon}"
+                            color="{ parts:[ 'TrnModel>category','TrnModel>type'], formatter: '.formatter.trnIconColor' }"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnBuyTimeColumn"
+                    width="70px"
+                    hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.hideSlippage' }"
+                >
+                    <Label
+                        id="idBuyTimeLabel"
+                        text="Buy"
+                    />
+                    <table:template>
+                        <Text
+                            id="idBuyTimeTrnText"
+                            text="{ path: 'TrnModel>buyTimeText', formatter: '.formatter.historyTime' }"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnSellTimeColumn"
+                    width="70px"
+                    hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.hideSlippage' }"
+                >
+                    <Label
+                        id="idSellTimeLabel"
+                        text="Sell"
+                    />
+                    <table:template>
+                        <Text
+                            id="idSellTimeTrnText"
+                            text="{ path: 'TrnModel>sellTimeText', formatter: '.formatter.historyTime' }"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnBuySlpColumn"
+                    width="70px"
+                    hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.showSlippage' }"
+                >
+                    <Label
+                        id="idBuySlpLabel"
+                        text="Buy %"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idBuySlpTrnObjectStatus"
+                            text="{ path: 'TrnModel>buySlp', formatter: '.formatter.addSlpPercentage' }"
+                            state="{ path: 'TrnModel>buySlp', formatter: '.formatter.slpStatus' }"
+                            inverted="false"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnSellSlpColumn"
+                    width="70px"
+                    hAlign="Center"
+                    visible="{ path: 'ScreenModel>/dispSlp', formatter: '.formatter.showSlippage' }"
+                >
+                    <Label
+                        id="idSellSlpLabel"
+                        text="Sell %"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idSellSlpTrnObjectStatus"
+                            text="{ path: 'TrnModel>sellSlp', formatter: '.formatter.addSlpPercentage' }"
+                            state="{ path: 'TrnModel>sellSlp', formatter: '.formatter.slpStatus' }"
+                            inverted="false"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnBuyColumn"
+                    width="70px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idBuyTrnLabel"
+                        text="Price"
+                    />
+                    <table:template>
+                        <Text
+                            id="idBuyTrnText"
+                            text="{TrnModel>buy}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnLtpColumn"
+                    width="60px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idLtpTrnLabel"
+                        text="Ltp"
+                    />
+                    <table:template>
+                        <Text
+                            id="idLtpTrnText"
+                            text="{TrnModel>ltp}"
+                        />
+                    </table:template>
+                </table:Column>
+                <table:Column
+                    id="idTrnPerColumn"
+                    width="60px"
+                    hAlign="Center"
+                >
+                    <Label
+                        id="idPerLabel"
+                        text="%"
+                    />
+                    <table:template>
+                        <ObjectStatus
+                            id="idPerTrnObjectStatus"
+                            text="{TrnModel>per}"
+                            state="{ path: 'TrnModel>per', formatter: '.formatter.perStatus' }"
+                            inverted="true"
+                        />
+                    </table:template>
+                </table:Column>
+            </table:columns>
+            <table:footer>
+                <Toolbar
+                    id="idTrnToolbar"
+                    height="55px"
+                >
+                    <content>
+                        <HBox
+                            id="idTrnToolbarHBox"
+                            height="50px"
+                            width="50%"
+                            alignContent="Center"
+                            alignItems="Center"
+                            class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+                        >
+                            <Text
+                                id="idAvgPnlText"
+                                text="Avg :"
+                                class="sapUiTinyMarginEnd"
+                            />
+
+                            <ObjectStatus
+                                id="idTrnAvgObjectStatus"
+                                text="0 %"
+                                state="Indication20"
+                                class="sapMObjectStatusLarge"
+                                inverted="true"
+                                visible="{ReverseModel>/support}"
+                            />
+                        </HBox>
+
+                        <ToolbarSeparator id="idTotalToolbarSeparator" />
+                        <HBox
+                            id="idTotalHBox"
+                            height="50px"
+                            width="50%"
+                            alignContent="Center"
+                            alignItems="Center"
+                            class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+                        >
+                            <Text
+                                id="idPnlTrnFooterText"
+                                text="Pnl :"
+                                class="sapUiTinyMarginEnd"
+                            />
+                            <ObjectStatus
+                                id="idTrnTotalObjectStatus"
+                                text="0 %"
+                                state="Indication20"
+                                class="sapMObjectStatusLarge"
+                                inverted="true"
+                            />
+                        </HBox>
+                    </content>
+                </Toolbar>
+            </table:footer>
+        </table:Table>
+    </VBox>
+</c:FragmentDefinition>

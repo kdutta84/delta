@@ -3,9 +3,8 @@ sap.ui.define(
     "sap/ui/core/UIComponent",
     "ns/deltaapphost/model/models",
     "sap/m/MessageBox",
-    "dotenv",
   ],
-  (UIComponent, models, MessageBox, Env) => {
+  (UIComponent, models, MessageBox) => {
     "use strict";
 
     return UIComponent.extend("ns.deltaapphost.Component", {
@@ -24,6 +23,60 @@ sap.ui.define(
 
         // enable routing
         this.getRouter().initialize();
+
+        ////////////////////////////////
+        // Highcharts Local Folder
+        sap.ui.loader.config({
+          paths: {
+            highcharts: "highcharts/highstock",
+          },
+          shim: {
+            highcharts: {
+              amd: true,
+              exports: "Highcharts",
+              deps: [],
+            },
+          },
+        });
+
+        // sap.ui.loader.config({
+        //   paths: {
+        //     highcharts: "highcharts/highstock",
+        //   },
+        // });
+
+        /////////////////////
+        // Highcharts
+        // "https://code.highcharts.com/highcharts"
+        // "https://cdnjs.cloudflare.com/ajax/libs/highstock/6.0.3/highstock"
+        // sap.ui.loader.config({
+        //   paths: {
+        //     highcharts: "https://code.highcharts.com/highcharts",
+        //   },
+        //   shim: {
+        //     highcharts: {
+        //       amd: true,
+        //       exports: "Highcharts",
+        //       deps: [],
+        //     },
+        //   },
+        // });
+        // // // HighStocks
+        // sap.ui.loader.config({
+        //   paths: {
+        //     highstock:
+        //       "https://cdnjs.cloudflare.com/ajax/libs/highstock/6.0.3/highstock",
+        //   },
+        //   shim: {
+        //     highstock: {
+        //       amd: true,
+        //       exports: "highstock",
+        //       deps: [],
+        //     },
+        //   },
+        // });
+
+        ////////////////////////////////
 
         sap.ui.getCore().layout = "";
         sap.ui.getCore().apiPath = "https://deltaapi.coinpress.cloud"; // "http://localhost:4000"; //

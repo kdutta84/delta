@@ -1,0 +1,171 @@
+<mvc:View
+    controllerName="ns.deltaapphost.controller.History"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%"
+    busyIndicatorDelay="0"
+>
+    <Page
+        id="idHistoryPage"
+        showHeader="false"
+        floatingFooter="true"
+        class="appBackground"
+    >
+        <VBox
+            id="idHistoryBox"
+            class="sapUiTinyMarginTop"
+        >
+            <HBox id="idHistoryContentHBox">
+                <HBox
+                    id="idHistoryTableBox"
+                    height="1070px"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.HistoryTable"
+                        type="XML"
+                    />
+                </HBox>
+
+                <VBox
+                    id="idHistoryRightVBox"
+                    class="sapUiTinyMarginBegin"
+                    visible="{ path: 'ScreenModel>/chartLayout', formatter: '.formatter.horizontalRightVisible' }"
+                >
+                    <!-- Filter  -->
+                    <VBox
+                        id="idHistoryFilterVBox"
+                        height="170px"
+                        class="sapUiSmallMarginBegin"
+                    >
+                        <Toolbar
+                            id="idHistoryFilterToolbar"
+                            width="520px"
+                            class="sapUiTinyMarginBottom appBackground"
+                        >
+                            <Title
+                                id="idHistoryFilterTitle"
+                                level="H1"
+                                text="Filter"
+                            />
+                            <ToolbarSpacer id="idHistoryFilterToolbarSpacer1" />
+                        </Toolbar>
+
+                        <core:Fragment
+                            fragmentName="ns.deltaapphost.fragment.HistoryFilter"
+                            type="XML"
+                        />
+
+                        <!-- Summary -->
+                        <Toolbar
+                            id="idHistorySummaryToolbar"
+                            width="520px"
+                            class="sapUiTinyMarginBottom appBackground"
+                        >
+                            <Title
+                                id="idHistorySummaryTitle"
+                                level="H1"
+                                text="Summary"
+                            />
+                            <ToolbarSpacer id="idHistorySummaryToolbarSpacer" />
+                        </Toolbar>
+                        <VBox
+                            id="idHistorySummaryVBox"
+                            height="170px"
+                            class="sapUiTinyMarginTop "
+                        >
+                            <core:Fragment
+                                fragmentName="ns.deltaapphost.fragment.HistorySummary"
+                                type="XML"
+                            />
+                        </VBox>
+
+                        <!-- PnL -->
+                        <Toolbar
+                            id="idHistoryPnlToolbar"
+                            width="520px"
+                            class="sapUiTinyMarginBottom appBackground"
+                        >
+                            <Title
+                                id="idHistoryPnLTitle"
+                                level="H1"
+                                text="PnL"
+                            />
+                            <ToolbarSpacer id="idHistoryPnlToolbarSpacer2" />
+                        </Toolbar>
+                        <VBox
+                            id="idHistoryPnlVBox"
+                            height="170px"
+                            class="sapUiTinyMarginTop "
+                        >
+                            <core:Fragment
+                                fragmentName="ns.deltaapphost.fragment.HistoryPnl"
+                                type="XML"
+                            />
+                        </VBox>
+
+                        <Toolbar
+                            id="idHistoryItemToolbar"
+                            width="520px"
+                            class="appBackground"
+                        >
+                            <HBox
+                                id="idItemTitleHBox"
+                                width="120px"
+                            >
+                                <Title
+                                    id="idHistoryItemTitle"
+                                    level="H1"
+                                    text="Items"
+                                />
+                            </HBox>
+                            <HBox
+                                id="idItemTimeHBox"
+                                width="200px"
+                            >
+                                <GenericTag
+                                    id="idItemTimeGenericTag"
+                                    text="Time :"
+                                >
+                                    <ObjectNumber
+                                        id="idTimeTakenObjectNumber"
+                                        state="Information"
+                                        emphasized="true"
+                                        number="{ItemModel>/timeTaken}"
+                                    />
+                                </GenericTag>
+                            </HBox>
+
+                            <HBox
+                                id="idItemCountHBox"
+                                width="150px"
+                            >
+                                <GenericTag
+                                    id="idItemCountGenericTag"
+                                    text="Count :"
+                                >
+                                    <ObjectNumber
+                                        id="idMinBuyObjectNumber"
+                                        state="Information"
+                                        emphasized="true"
+                                        number="{ItemModel>/itemCount}"
+                                    />
+                                </GenericTag>
+                            </HBox>
+                        </Toolbar>
+                        <HBox
+                            id="idHistoryControlRightVBox"
+                            class="sapUiTinyMarginBegin"
+                        >
+                            <core:Fragment
+                                fragmentName="ns.deltaapphost.fragment.HistoryItems"
+                                type="XML"
+                            />
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

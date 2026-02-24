@@ -19,7 +19,7 @@ sap.ui.define(
 
         // enable routing
         this.getRouter().initialize();
-
+        debugger;
         ////////////////////////////////
         // Highcharts Local Folder
         sap.ui.loader.config({
