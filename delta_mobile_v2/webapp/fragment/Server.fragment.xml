@@ -1,0 +1,308 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="idServerDialog1"
+        title="Server"
+    >
+        <customHeader>
+            <Bar id="idServerBar">
+                <contentLeft>
+                    <!-- <Button /> -->
+                    <Title
+                        id="idServerText"
+                        text="Server"
+                    />
+                </contentLeft>
+                <contentMiddle>
+                    <HBox
+                        id="idServerTimeHBox"
+                        width="450px"
+                        justifyContent="Center"
+                        class="sapUiTinyMarginTop"
+                    >
+                        <HBox
+                            id="idServerStartedHBox"
+                            justifyContent="Center"
+                            width="220px"
+                        >
+                            <Label
+                                id="idStartedLabel"
+                                text="Started :"
+                                design="Bold"
+                                width="100px"
+                            />
+                            <ObjectStatus
+                                id="idServerStartedObjectStatus"
+                                class="sapMObjectStatusLarge sapUiSmallMarginBegin"
+                                inverted="true"
+                            />
+                        </HBox>
+                        <HBox
+                            id="idServerOnTimeHBox"
+                            justifyContent="Center"
+                            width="150px"
+                        >
+                            <Label
+                                id="idUpTimeLabel"
+                                text="Up Time :"
+                                design="Bold"
+                                width="80px"
+                                class="sapUiTinyMarginTop"
+                            />
+                            <ObjectStatus
+                                id="idObjectStatus"
+                                class="sapMObjectStatusLarge sapUiSmallMarginBegin"
+                                inverted="true"
+                            />
+                        </HBox>
+                    </HBox>
+                </contentMiddle>
+            </Bar>
+        </customHeader>
+        <content>
+            <VBox id="idServerVBox">
+                <!-- <HBox
+                    id="idServerTimeHBox"
+                    width="500px"
+                    justifyContent="Center"
+                    class="sapUiTinyMarginTop"
+                >
+                    <HBox
+                        id="idServerStartedHBox"
+                        justifyContent="Center"
+                        width="400px"
+                    >
+                        <Label
+                            id="idStartedLabel"
+                            text="Started :"
+                            design="Bold"
+                            class="sapUiSmallMarginBegin sapUiTinyMarginTop"
+                            width="80px"
+                        />
+                        <ObjectStatus
+                            id="idServerStartedObjectStatus"
+                            class="sapMObjectStatusLarge"
+                            inverted="true"
+                        />
+                    </HBox>
+                    <HBox
+                        id="idServerOnTimeHBox"
+                        justifyContent="Center"
+                        width="250px"
+                    >
+                        <Label
+                            id="idUpTimeLabel"
+                            text="Up Time :"
+                            design="Bold"
+                            width="80px"
+                            class="sapUiSmallMarginBegin sapUiTinyMarginTop"
+                        />
+                        <ObjectStatus
+                            id="idObjectStatus"
+                            class="sapMObjectStatusLarge"
+                            inverted="true"
+                        />
+                    </HBox>
+                </HBox> -->
+
+                <!-- Logs -->
+                <Panel
+                    id="idLogs1Panel"
+                    width="auto"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar id="idLogsOverflowToolbar">
+                            <Title
+                                id="idLogsTitle"
+                                text="Log"
+                            />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <content>
+                        <HBox
+                            id="idLogsHBox"
+                            width="500px"
+                            justifyContent="Center"
+                        >
+                            <Button
+                                id="idResetParaButton"
+                                text="Reset Para"
+                                icon="sap-icon://form"
+                                width="130px"
+                                press="onResetParaLog"
+                                class="sapUiMediumMarginEnd"
+                            />
+                            <Button
+                                id="idResetTrackButton"
+                                text="Reset Track"
+                                width="130px"
+                                icon="sap-icon://compare"
+                                press="onResetTrackLog"
+                                class="sapUiMediumMarginEnd"
+                            />
+                            <Button
+                                id="idResetBuyButton"
+                                text="Reset Buy"
+                                icon="sap-icon://cart"
+                                press="onResetBuyLog"
+                                width="130px"
+                            />
+                        </HBox>
+                    </content>
+                </Panel>
+                <!-- Refresh -->
+                <Panel
+                    id="idRefreshPanel"
+                    width="auto"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar id="idRefresh1OverflowToolbar">
+                            <Title
+                                id="idRefresh1Title"
+                                text="Restart"
+                            />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <content>
+                        <HBox
+                            id="idRefreshHBox"
+                            width="500px"
+                            justifyContent="Center"
+                        >
+                            <Button
+                                id="idBusyFlagButton"
+                                text="Busy Flag"
+                                icon="sap-icon://overflow"
+                                press="onToogleBusyFlag"
+                                width="130px"
+                                class="sapUiMediumMarginEnd"
+                            />
+                            <Button
+                                id="idWithLogButton"
+                                text="Use Log"
+                                width="130px"
+                                press="onResetServerUsingLog"
+                                icon="sap-icon://folder"
+                                class="sapUiMediumMarginEnd"
+                            />
+                            <Button
+                                id="idWithParaButton"
+                                text="Use Para"
+                                press="onResetServerUsingPara"
+                                icon="sap-icon://multi-select"
+                                width="130px"
+                            />
+                        </HBox>
+                    </content>
+                </Panel>
+
+                <!-- Selection -->
+                <Panel
+                    id="idSelectionPanel"
+                    width="auto"
+                    visible="false"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar id="idSelectionOverflowToolbar">
+                            <Title
+                                id="idSelectionTitle"
+                                text="Selection"
+                            />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <content>
+                        <HBox
+                            id="idSelectionHBox"
+                            width="500px"
+                            justifyContent="Center"
+                        >
+                            <Button
+                                id="idSelectBitcoin"
+                                text="Bitcoin"
+                                width="130px"
+                                type="{ path: 'ParaModel>/select/bitcoin', formatter: '.formatter.selectCoin' }"
+                                class="sapUiMediumMarginEnd"
+                                press="onSelectBitcoin"
+                            />
+                            <Button
+                                id="idSelectEthereumButton"
+                                text="Ethereum"
+                                width="130px"
+                                type="{ path: 'ParaModel>/select/Ethereun', formatter: '.formatter.selectCoin' }"
+                                class="sapUiMediumMarginEnd"
+                                press="onSelectEthereum"
+                            />
+                            <Button
+                                id="idSelectSolana"
+                                text="Solana"
+                                width="130px"
+                                type="{ path: 'ParaModel>/select/solana', formatter: '.formatter.selectCoin' }"
+                                press="onSelectSolana"
+                            />
+                        </HBox>
+                    </content>
+                </Panel>
+
+                <!-- Notification -->
+                <Panel
+                    id="idNotifyPanel"
+                    width="auto"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar id="idNotifyOverflowToolbar">
+                            <Title
+                                id="idNotificationTitle"
+                                text="Notification"
+                            />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <content>
+                        <HBox
+                            id="idNotifyHBox"
+                            width="500px"
+                            justifyContent="Center"
+                        >
+                            <Button
+                                id="idEmailButton"
+                                text="Email"
+                                icon="sap-icon://email"
+                                width="130px"
+                                type="{ path: 'ParaModel>/notify/email', formatter: '.formatter.notifyDevice' }"
+                                class="sapUiMediumMarginEnd"
+                                press="onEmailNotification"
+                            />
+                            <Button
+                                id="idWhatsappButton"
+                                text="Whatsapp"
+                                width="130px"
+                                type="{ path: 'ParaModel>/notify/whatsapp', formatter: '.formatter.notifyDevice' }"
+                                icon="sap-icon://notification-2"
+                                class="sapUiMediumMarginEnd"
+                                press="onWhatsappNotification"
+                            />
+                            <Button
+                                id="idFirebaseButton"
+                                text="Firebase"
+                                icon="sap-icon://legend"
+                                width="130px"
+                                type="{ path: 'ParaModel>/notify/firebase', formatter: '.formatter.notifyDevice' }"
+                                press="onFirebaseNotification"
+                            />
+                        </HBox>
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+
+        <buttons>
+            <Button
+                id="amountSubmit"
+                text="Cancel"
+                press="onAmountConfirm"
+                type="Emphasized"
+            />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

@@ -34,6 +34,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "stop": "killall node",
     "start_old": "fiori run --open \"test/flp.html#app-preview\"",
     "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
     "build": "ui5 build --clean-dest",

@@ -7,7 +7,7 @@ const Helper = require("../utils/Helper");
 const Track = require("../utils/Track");
 const Buy = require("../utils/Buy");
 const env = require("dotenv").config();
-const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 
 // Objects
 const ccxt = require("ccxt");
@@ -25,7 +25,9 @@ async function initServer() {
     await initSocket();
     Helper.initMongoDb();
     Helper.initEmail();
+    Helper.notifyMe(C.notify_warning, "Server Started", C.notify_high);
   } catch (error) {
+    Helper.notifyMe(C.notify_error, "Error in Starting Server", C.notify_high);
     Helper.addMessage(C.error, Helper.findMsg(error), C.P1);
   }
 }
@@ -163,10 +165,12 @@ function handleConnection(req, res) {
 }
 
 ////////////////////////////////////////////////////
-//              Handle Connection                 //
+//                Handle Layout                   //
 ////////////////////////////////////////////////////
 function handleLayout(req, res) {
-  Helper.sendMessage(res, C.success, M.Para.layout);
+  let layout = { app: M.Para.layout, mobile: M.Para.mLayout };
+  Helper.sendData(res, layout);
+  // Helper.sendMessage(res, C.success, M.Para.layout);
 }
 
 ////////////////////////////////////////////////////
@@ -207,12 +211,12 @@ function handlePara(req, res) {
         Helper.initScalePara();
         break;
       case "expiry":
-        Helper.addMessage(C.info, "Manual Trigger ==> Change Expiry", C.P2);
+        Helper.addMessage(C.info, "Manual Trigger => Change Expiry", C.P2);
         Helper.setExpiryPara(new Date(Number(value.time)));
         Helper.restartProcess();
         break;
       case "timeframe":
-        Helper.addMessage(C.info, "Manual Trigger ==> Change Timeframe", C.P2);
+        Helper.addMessage(C.info, "Manual Trigger => Change Timeframe", C.P2);
         M.Para.channel = "candlestick_" + M.Para.timeframe;
         M.P_Chart.interval = Helper.getInterval();
         M.P_Chart.range = Helper.getRange();
@@ -223,7 +227,7 @@ function handlePara(req, res) {
         Helper.restartProcess();
         break;
       case "strikeGap":
-        Helper.addMessage(C.info, "Manual Trigger ==> Change Strike Gap", C.P2);
+        Helper.addMessage(C.info, "Manual Trigger => Change Strike Gap", C.P2);
         Helper.restartProcess();
         break;
       case "scale":
@@ -298,7 +302,7 @@ async function handleAction(req, res) {
       initProcess();
       Helper.addMessage(
         C.info,
-        "Manual Trigger ==> Restart Server Using Log",
+        "Manual Trigger => Restart Server Using Log",
         C.P1,
       );
       break;
@@ -308,7 +312,7 @@ async function handleAction(req, res) {
       initProcess();
       Helper.addMessage(
         C.info,
-        "Manual Trigger ==> Restart Server Using Para",
+        "Manual Trigger => Restart Server Using Para",
         C.P1,
       );
       break;
@@ -318,14 +322,14 @@ async function handleAction(req, res) {
       initProcess();
       Helper.addMessage(
         C.info,
-        "Manual Trigger ==> Restart Server Using Para",
+        "Manual Trigger => Restart Server Using Para",
         C.P1,
       );
       break;
 
     // case "RestartServer":
     // Helper.restartServer();
-    // Helper.addMessage(C.info, "Manual Trigger ==> Server Restart", C.P1);
+    // Helper.addMessage(C.info, "Manual Trigger => Server Restart", C.P1);
     // break;
 
     case "GetLayout":
@@ -357,8 +361,8 @@ async function handleAction(req, res) {
       // await Helper.sendEmail();
       // Helper.initExpiryPara();
       // await Helper.restartProcess();
-      // await Helper.checkNewCandle();
-      // return;
+      await Helper.checkNewCandle();
+      return;
       //////////////
       Buy.refreshBuyInfo();
       Helper.sendMessage(res, C.success, "Buy Refresh");
@@ -385,37 +389,33 @@ async function handleAction(req, res) {
       } else {
         Helper.resetWithRef(M.P_Buy, value);
         M.appAction = key;
-        Helper.sendMessage(res, C.info, "Manual Trigger ==>  Buy Chart");
+        Helper.sendMessage(res, C.info, "Manual Trigger =>  Buy Chart");
       }
       break;
 
     case "BuySupport":
       M.appAction = key;
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Buy Support");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Buy Support");
       break;
 
     case "SellSupport":
       M.appAction = key;
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Sell Support");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Sell Support");
       break;
 
     case "BuyAddon":
       M.appAction = key;
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Buy Addon");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Buy Addon");
       break;
 
     case "SellAddon":
       M.appAction = key;
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Sell Addon");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Sell Addon");
       break;
 
     case "ReverseWithSupport":
       M.appAction = key;
-      Helper.sendMessage(
-        res,
-        C.info,
-        "Manual Trigger ==> Reverse With Support",
-      );
+      Helper.sendMessage(res, C.info, "Manual Trigger => Reverse With Support");
       break;
 
     case "ReverseWithoutSupport":
@@ -423,18 +423,18 @@ async function handleAction(req, res) {
       Helper.sendMessage(
         res,
         C.info,
-        "Manual Trigger ==> Reverse Without Support",
+        "Manual Trigger => Reverse Without Support",
       );
       break;
 
     case "SellBoth":
       M.appAction = key;
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Both Sold");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Both Sold");
       break;
 
     case "SellAll":
       M.appAction = key;
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Sell All");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Sell All");
       break;
 
     case "Backtest":
@@ -485,18 +485,18 @@ async function handleAction(req, res) {
 
     case "ResetParaLog":
       Helper.deleteLog(C.para);
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Para Log Deleted");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Para Log Deleted");
       break;
 
     case "ResetTrackLog":
       Helper.deleteLog(C.track);
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Track Log Deleted");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Track Log Deleted");
       break;
 
     case "ResetBuyLog":
       Helper.deleteLog(C.buy);
       Helper.deleteLog(C.trn);
-      Helper.sendMessage(res, C.info, "Manual Trigger ==> Buy Log Deleted");
+      Helper.sendMessage(res, C.info, "Manual Trigger => Buy Log Deleted");
       break;
 
     case "Alerts":
@@ -515,15 +515,6 @@ async function handleAction(req, res) {
 
     case "Records":
       M.appAction = key;
-      // const database = mongoose.db("delta");
-      // const collection = database.collection("records");
-
-      // // Query for all documents in the collection
-      // const query = {};
-      // const cursor = collection.find(query).limit(10); // Limit to 10 for example
-
-      // let history = mongoose.records.find({});
-      // Helper.sendData(res, M.Para);
       Helper.sendMessage(res, C.info, "DB Data Fetched");
       break;
   }
@@ -575,6 +566,7 @@ async function processAppAction() {
         break;
 
       case "SellBoth":
+        Helper.addMessage(C.info, "Sell Both => Manual Exit", C.P2);
         await Buy.sellBoth();
         break;
 
@@ -653,15 +645,6 @@ async function processAppAction() {
         break;
 
       case "Records":
-
-      // // const database = mongoose.db("delta");
-      // const collection = mongoose.collection("records");
-
-      // // Query for all documents in the collection
-      // const query = {};
-      // const cursor = collection.find(query).limit(10); // Limit to 10 for example
-
-      // let history = mongoose.records.find({});
     }
     M.appAction = C.none;
     Helper.setBusy(false);
@@ -678,9 +661,11 @@ async function handleRecords(req, res) {
   let from = Object.values(req.body)[0];
   let to = Object.values(req.body)[1];
 
-  let records = await M.recordModel.find({
-    timestamp: { $gt: from, $lt: to },
-  });
+  let records = await M.recordModel
+    .find({
+      timestamp: { $gt: from, $lt: to },
+    })
+    .toArray();
   Helper.sendData(res, records);
 
   // Reset Busy Flag
@@ -689,7 +674,7 @@ async function handleRecords(req, res) {
 
 async function handleItem(req, res) {
   let timestamp = Object.values(req.body)[0];
-  let items = await M.historyModel.find({ parent: timestamp });
+  let items = await M.historyModel.find({ parent: timestamp }).toArray();
   Helper.sendData(res, items);
 }
 

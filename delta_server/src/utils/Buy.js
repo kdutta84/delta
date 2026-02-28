@@ -5,7 +5,7 @@ var Helper = require("../utils/Helper");
 async function initBuy() {
   // Validation
   if (M.Buy.flag) {
-    Helper.addMessage(C.error, "Buy ==> Already Exists", C.P2);
+    Helper.addMessage(C.error, "Buy => Already Exists", C.P2);
     return;
   }
 
@@ -24,10 +24,28 @@ async function initBuy() {
 
     // Init Options
     if (M.P_Buy.type == C.call) {
-      Helper.addMessage(C.info, "Init Buy ==> Call (Main)", C.P2);
+      Helper.addMessage(
+        C.info,
+        "Init Buy => " + M.P_Buy.index + " (Call)",
+        C.P2,
+      );
+      Helper.notifyMe(
+        C.notify_success,
+        "Init Buy => " + M.P_Buy.index + " (Call)",
+        C.notify_medium,
+      );
       await initBuyCall();
     } else if (M.P_Buy.type == C.put) {
-      Helper.addMessage(C.info, "Init Buy ==> Put (Main)", C.P2);
+      Helper.addMessage(
+        C.info,
+        "Init Buy => " + M.P_Buy.index + " (Put)",
+        C.P2,
+      );
+      Helper.notifyMe(
+        C.notify_success,
+        "Init Buy => " + M.P_Buy.index + " (Put)",
+        C.notify_medium,
+      );
       await initBuyPut();
     } else {
       resetBuy();
@@ -64,6 +82,11 @@ async function initBuy() {
     resetBuy();
     Helper.setBusy(false);
     Helper.addMessage(C.error, Helper.findMsg(error));
+    Helper.notifyMe(
+      C.notify_error,
+      "Init Buy => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -76,8 +99,7 @@ async function delay(ms) {
 async function initBuyCall() {
   ///////////////  Main --> Call  ///////////////
   if (M.BuyCall.flag === true) {
-    Helper.notifyMe(C.error + "Buy Error ==> Call (Main) Exists");
-    throw new Error("Buy Error ==> Call (Main) Exists");
+    throw new Error("Buy Error => Call (Main) Exists");
   }
 
   try {
@@ -93,15 +115,20 @@ async function initBuyCall() {
       throw new Error("No Order Processed");
     }
   } catch (error) {
-    Helper.addMessage(C.error, "Buy Call ==> " + error);
+    Helper.notifyMe(
+      C.notify_error,
+      "Buy Call => " + Helper.findMsg(error),
+      C.notify_high,
+    );
+    Helper.addMessage(C.error, "Buy Call => " + Helper.findMsg(error));
   }
 }
 
 async function initBuyPut() {
   ////////////// Main --> Put  //////////////
   if (M.BuyPut.flag === true) {
-    Helper.notifyMe(C.error + "Buy Error ==> Put (Main) Exists");
-    Helper.addMessage(C.error, "Buy Error ==> Put (Main) Exists");
+    Helper.notifyMe(C.notify_error, "Buy => Put (Main) Exists", C.notify_high);
+    Helper.addMessage(C.error, "Buy Error => Put (Main) Exists");
     return;
   }
   try {
@@ -116,7 +143,12 @@ async function initBuyPut() {
       throw new Error("Buy => Put (Main)");
     }
   } catch (error) {
-    throw new Error("Buy Put => " + error);
+    Helper.notifyMe(
+      C.notify_error,
+      "Buy Put => " + Helper.findMsg(error),
+      C.notify_high,
+    );
+    throw new Error("Buy Put => " + Helper.findMsg(error));
   }
 }
 
@@ -184,8 +216,7 @@ async function buyMain(Ticker, buyAddonFlag) {
   order = await buyOrder(Ticker, buyAddonFlag);
 
   if (order == undefined) {
-    Helper.notifyMe(C.error + " : Buy ==> " + Ticker.type + " (Main)");
-    throw new Error("Buy ==> " + Ticker.type + " (Main)");
+    throw new Error("Buy => " + Ticker.type + " (Main)");
   }
 
   // Init Main
@@ -220,7 +251,7 @@ async function sellMain(Ticker) {
   var order = await sellOrder(Ticker);
 
   if (order == undefined) {
-    throw new Error("Sell Main ==> " + Ticker.type + " Order Not Found");
+    throw new Error("Sell Main => " + Ticker.type + " Order Not Found");
   }
 
   // Update Ticker
@@ -304,7 +335,7 @@ function initMain(Ticker, order) {
 
   // Send Message
   Helper.addMessage(C.success, "Buy => " + Ticker.type + " (Main)", C.P2);
-  Helper.notifyMe(C.success, " : Buy ==> " + Ticker.type + " (Main)");
+  Helper.notifyMe(C.notify_buy, Ticker.type + " (Main)", C.notify_medium);
 }
 
 function initPnl(Ticker, order) {
@@ -595,7 +626,7 @@ async function sellOrder(Ticker) {
 
   // Validation
   if (Ticker.flag == false) {
-    throw new Error("Sell ==> " + Ticker.type + " Dont Exists");
+    throw new Error("Sell => " + Ticker.type + " Dont Exists");
   }
 
   if (M.Para.switch == C.active) {
@@ -622,6 +653,11 @@ async function buyMarketOrder(Ticker, Qty) {
     return order;
   } catch (error) {
     Helper.addMessage(C.error, Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_error,
+      "Buy Order => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -671,7 +707,12 @@ async function sellMarketOrder(Ticker) {
     );
     return order;
   } catch (error) {
-    Helper.addMessage(C.error, "Delta Exc :- " + error.message, C.P1);
+    Helper.addMessage(C.error, "Delta Exc :- " + Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_error,
+      "Sell Order => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -686,7 +727,12 @@ async function buyLimitOrder(Ticker, Qty) {
     );
     return order;
   } catch (error) {
-    Helper.addMessage(C.error, "Delta Exc :- " + error.message, C.P1);
+    Helper.addMessage(C.error, "Delta Exc :- " + Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_error,
+      "Buy Order => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -708,7 +754,12 @@ async function sellLimitOrder(Ticker) {
     );
     return order;
   } catch (error) {
-    Helper.addMessage(C.error, "Delta Exc :- " + error.message, C.P1);
+    Helper.addMessage(C.error, "Delta Exc :- " + Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_error,
+      "Sell Order => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -741,7 +792,6 @@ function getAddonQty(Ticker) {
     M.AddonPnl.qty = Ticker.pnl.qty * M.P_Addon.value;
     M.AddonPnl.usd = M.Buy.amount * M.P_Addon.value;
   }
-  // return M.AddonPnl.qty;
 }
 
 function preBuySetup() {
@@ -1090,7 +1140,7 @@ function updateAddonPnl() {
 
     // Consider the Addon Count
     if (M.P_Addon.value > 1) {
-      M.AddonPnl.per = M.AddonPnl.per * M.P_Addon.value;
+      M.AddonPnl.per = Helper.formatDecimal(M.AddonPnl.per * M.P_Addon.value);
     }
   }
 }
@@ -1141,7 +1191,7 @@ function updateTrnLtp() {
       M.P_Addon.value > 1 &&
       (row.category === C.mainAddon || row.category === C.supportAddon)
     ) {
-      row.per = row.per * M.P_Addon.value;
+      row.per = Helper.formatDecimal(row.per * M.P_Addon.value);
     }
   }
 }
@@ -1149,10 +1199,16 @@ function updateTrnLtp() {
 async function validateBuyPnl() {
   // Validate Profit & Loss
   if (M.Buy.pnl > M.Para.profit || M.Buy.pnl < M.Para.loss) {
-    // Trigger Message
-
-    Helper.addMessage(C.info, "Sell Both ==> Pnl Target Reached", C.P2);
+    // Sell Both
     await sellBoth();
+
+    // Trigger Message
+    Helper.addMessage(C.info, "Sell Both => Pnl Target Reached", C.P2);
+    if (M.Buy.pnl > M.Para.profit) {
+      Helper.notifyMe(C.notify_target, "Mission Accomplished", C.notify_high);
+    } else if (M.Buy.pnl < M.Para.loss) {
+      Helper.notifyMe(C.notify_loss, "Mission Failed", C.notify_high);
+    }
     return;
   }
 
@@ -1171,129 +1227,141 @@ async function validateBuyPnl() {
 
   // Profit Trail
   if (M.P_ProfitTrail.flag === true && M.Buy.fromMax < -M.P_ProfitTrail.per) {
-    Helper.addMessage(C.info, "Profit Trail Hit", C.P2);
+    // Sell Both
     await sellBoth();
+
+    // Message
+    Helper.addMessage(C.info, "Profit Trail Hit", C.P2);
+    Helper.notifyMe(C.notify_target, "Profit Trail Hit", C.notify_high);
     return;
   }
 
   // Loss Trail
   if (M.P_LossTrail.flag === true && M.Buy.fromMin > M.P_LossTrail.per) {
-    Helper.addMessage(C.info, "Loss Trail Hit", C.P2);
+    // Sell Both
     await sellBoth();
+
+    // Message
+    Helper.addMessage(C.info, "Loss Trail Hit", C.P2);
+    Helper.notifyMe(C.notify_loss, "Loss Trail Hit", C.notify_high);
     return;
   }
 }
 
 async function manageBuy() {
   let buyType = C.none;
+  try {
+    if (
+      M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
+      M.BuyCapture?.callPer >= 0
+    ) {
+      buyType = C.call;
+    }
 
-  if (
-    M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
-    M.BuyCapture?.callPer >= 0
-  ) {
-    buyType = C.call;
-  }
+    if (
+      M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
+      M.BuyCapture?.putPer >= 0
+    ) {
+      buyType = C.put;
+    }
 
-  if (
-    M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
-    M.BuyCapture?.putPer >= 0
-  ) {
-    buyType = C.put;
-  }
+    if (buyType === C.none) {
+      // Update Delta Window
+      Helper.updateDeltaWindow();
+      return;
+    }
 
-  if (buyType === C.none) {
-    // Update Delta Window
-    Helper.updateDeltaWindow();
-    return;
-  }
-
-  switch (buyType) {
-    case C.call:
-      switch (M.BuyCall.category) {
-        case C.main:
-          // Sell Put Support
-          if (M.BuyPut.flag === true) {
-            await sellPutSupport();
-          }
-
-          // Buy Call Addon
-          if (
-            M.P_Addon.flag === true &&
-            M.BuyCall.addon === false &&
-            M.BuyAddon.flag === false
-          ) {
-            Helper.addMessage(C.info, "Delta Trigger ==> Call (Main)", C.P2);
-            await buyAddon(M.BuyCall);
-          }
-          break;
-        case C.support:
-          // Sell Put (Main) Addon
-          if (M.BuyPut.addon === true && M.BuyAddon.type === C.put) {
-            await sellAddon(M.BuyPut);
-          }
-
-          // Trigger Message
-          Helper.addMessage(C.info, "Delta Trigger ==> Call (Support)", C.P2);
-
-          // Manage Call Support
-          if (M.Buy.supportFlag === true) {
-            // Buy Call Addon
-            if (M.BuyCall.addon === false && M.P_Addon.flag === true) {
-              await buyAddon(M.BuyCall);
-            } else {
-              // Reverse, if Already in Support with Addon
-              await reversePutWithoutSupport();
+    switch (buyType) {
+      case C.call:
+        switch (M.BuyCall.category) {
+          case C.main:
+            // Sell Put Support
+            if (M.BuyPut.flag === true) {
+              await sellPutSupport();
             }
-          } else {
-            // Buy Call Support
-            await buyCallSupport();
-          }
 
-          break;
-      }
-      break;
-    case C.put:
-      switch (M.BuyPut.category) {
-        case C.main:
-          // Sell Call Support
-          if (M.BuyCall.flag === true) {
-            await sellCallSupport();
-          }
-          // Buy Put Addon
-          if (M.BuyPut.addon === false && M.P_Addon.flag === true) {
+            // Buy Call Addon
+            if (
+              M.P_Addon.flag === true &&
+              M.BuyCall.addon === false &&
+              M.BuyAddon.flag === false
+            ) {
+              Helper.addMessage(C.info, "Delta Trigger => Call (Main)", C.P2);
+              await buyAddon(M.BuyCall);
+            }
+            break;
+          case C.support:
+            // Sell Put (Main) Addon
+            if (M.BuyPut.addon === true && M.BuyAddon.type === C.put) {
+              await sellAddon(M.BuyPut);
+            }
+
             // Trigger Message
-            Helper.addMessage(C.info, "Delta Trigger ==> Put (Main)", C.P2);
-            await buyAddon(M.BuyPut);
-          }
-          break;
-        case C.support:
-          // Sell Put Addon
-          if (M.BuyCall.addon === true && M.BuyAddon.type === C.call) {
-            await sellAddon(M.BuyCall);
-          }
+            Helper.addMessage(C.info, "Delta Trigger => Call (Support)", C.P2);
 
-          // Trigger Message
-          Helper.addMessage(C.info, "Delta Trigger ==> Put (Support)", C.P2);
-          // Manage Put Support
-          if (M.Buy.supportFlag === true) {
+            // Manage Call Support
+            if (M.Buy.supportFlag === true) {
+              // Buy Call Addon
+              if (M.BuyCall.addon === false && M.P_Addon.flag === true) {
+                await buyAddon(M.BuyCall);
+              } else {
+                // Reverse, if Already in Support with Addon
+                await reversePutWithoutSupport();
+              }
+            } else {
+              // Buy Call Support
+              await buyCallSupport();
+            }
+
+            break;
+        }
+        break;
+      case C.put:
+        switch (M.BuyPut.category) {
+          case C.main:
+            // Sell Call Support
+            if (M.BuyCall.flag === true) {
+              await sellCallSupport();
+            }
             // Buy Put Addon
             if (M.BuyPut.addon === false && M.P_Addon.flag === true) {
+              // Trigger Message
+              Helper.addMessage(C.info, "Delta Trigger => Put (Main)", C.P2);
               await buyAddon(M.BuyPut);
-            } else {
-              // Reverse, if Already in Support with Addon
-              await reverseCallWithoutSupport();
             }
-          } else {
-            // Buy Call Support
-            await buyPutSupport();
-          }
-          break;
-      }
-      break;
-  }
+            break;
+          case C.support:
+            // Sell Put Addon
+            if (M.BuyCall.addon === true && M.BuyAddon.type === C.call) {
+              await sellAddon(M.BuyCall);
+            }
 
-  // Update Delta Window
-  Helper.updateDeltaWindow();
+            // Trigger Message
+            Helper.addMessage(C.info, "Delta Trigger => Put (Support)", C.P2);
+            // Manage Put Support
+            if (M.Buy.supportFlag === true) {
+              // Buy Put Addon
+              if (M.BuyPut.addon === false && M.P_Addon.flag === true) {
+                await buyAddon(M.BuyPut);
+              } else {
+                // Reverse, if Already in Support with Addon
+                await reverseCallWithoutSupport();
+              }
+            } else {
+              // Buy Call Support
+              await buyPutSupport();
+            }
+            break;
+        }
+        break;
+    }
+
+    // Update Delta Window
+    Helper.updateDeltaWindow();
+  } catch (error) {
+    Helper.notifyMe(C.notify_error, Helper.findMsg(error), C.notify_high);
+    Helper.addMessage(C.error, "Manage Buy => " + Helper.findMsg(error), C.P1);
+  }
 }
 
 async function processBuyCallSupport() {
@@ -1305,7 +1373,7 @@ async function processBuyCallSupport() {
     M.BuyCapture?.callPer > M.BuyCapture?.putPer &&
     M.BuyCapture?.callPer >= 0
   ) {
-    Helper.addMessage(C.info, "Buy Support ==> Put > 0", C.P2);
+    Helper.addMessage(C.info, "Buy Support => Put > 0", C.P2);
     // Buy Call Support
     await buyCallSupport();
 
@@ -1318,12 +1386,12 @@ async function processBuyPutSupport(condition) {
   if (M.BuyPut.flag === true) {
     return;
   }
-
+  //  condition === true ||
   if (
-    condition === true ||
-    (M.BuyCapture?.putPer > M.BuyCapture?.callPer && M.BuyCapture?.putPer > 0)
+    M.BuyCapture?.putPer > M.BuyCapture?.callPer &&
+    M.BuyCapture?.putPer > 0
   ) {
-    Helper.addMessage(C.info, "Buy Support ==> Put > 0", C.P2);
+    Helper.addMessage(C.info, "Buy Support => Put > 0", C.P2);
 
     // Buy Put Support
     await buyPutSupport();
@@ -1344,7 +1412,7 @@ async function processBuyCallAddon(condition) {
     // Buy Put Addon
     order = await buyAddon(M.BuyCall);
     if (order === undefined) {
-      throw new Error("Buy ==> Call (Addon)");
+      throw new Error("Buy => Call (Addon)");
     }
 
     // Set Delta Window
@@ -1352,7 +1420,7 @@ async function processBuyCallAddon(condition) {
 
     // Trigger Message
     if (M.BuyAddon.flag == true) {
-      Helper.addMessage(C.info, "Support Trigger ==> Call > 0", C.P2);
+      Helper.addMessage(C.info, "Support Trigger => Call > 0", C.P2);
     }
   }
 }
@@ -1369,7 +1437,7 @@ async function processBuyPutAddon(condition) {
     // Buy Put Addon
     order = await buyAddon(M.BuyPut);
     if (order === undefined) {
-      throw new Error("Buy ==> Put (Addon)");
+      throw new Error("Buy => Put (Addon)");
     }
 
     // Set Delta Window
@@ -1377,7 +1445,7 @@ async function processBuyPutAddon(condition) {
 
     // Trigger Message
     if (M.BuyAddon.flag === true) {
-      Helper.addMessage(C.info, "Support Trigger ==> Put > 0", C.P2);
+      Helper.addMessage(C.info, "Support Trigger => Put > 0", C.P2);
     }
   }
 }
@@ -1407,7 +1475,8 @@ async function processCall() {
         M.P_SellReversal.count >= M.Buy.reverse + 1
       ) {
         // Max Reversal Reached
-        Helper.addMessage(C.info, "Sell Both ==> Max Reversal Reached", C.P2);
+        Helper.addMessage(C.info, "Sell Both => Max Reversal Reached", C.P2);
+        Helper.notifyMe(C.notify_sell, "Max Reversal Reached", C.notify_high);
         Helper.performAction(
           C.reverse,
           M.P_SellReversal.action,
@@ -1420,7 +1489,7 @@ async function processCall() {
       }
 
       // Else Reverse Options
-      Helper.addMessage(C.info, "Reversal ==> Call (Main) < Red", C.P2);
+      Helper.addMessage(C.info, "Reversal => Call (Main) < Red", C.P2);
       await reverseCallWithoutSupport();
       return;
     }
@@ -1432,11 +1501,12 @@ async function processCall() {
       // Sell Call Addon
       if (M.BuyCall.addon === true) {
         // Put Condition
-        putCond =
-          M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
-          M.BuyCapture?.putPer >= 0;
+        // putCond =
+        //   M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
+        //   M.BuyCapture?.putPer >= 0;
 
-        Helper.addMessage(C.info, "Sell Addon ==> Call (Main) < Orange", C.P2);
+        Helper.addMessage(C.info, "Sell Addon => Call (Main) < Orange", C.P2);
+        Helper.notifyMe(C.notify_sell, "Addon => Call (Main)", C.notify_medium);
         await sellAddon(M.BuyCall);
       }
 
@@ -1444,7 +1514,7 @@ async function processCall() {
         case true:
           // Sell Put Support Validation
           if (M.PutCandle.close < M.PutWindow.red) {
-            Helper.addMessage(C.info, "Sell ==> Put (Support) < Red", C.P2);
+            Helper.addMessage(C.info, "Sell => Put (Support) < Red", C.P2);
             await sellPutSupport();
           }
           break;
@@ -1484,7 +1554,12 @@ async function processCall() {
       }
     }
   } catch (error) {
-    throw new Error("Process Call ==> " + error);
+    Helper.addMessage(C.info, "Process Call => " + Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_sell,
+      "Process Call => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -1498,8 +1573,8 @@ async function processPut() {
         M.P_SellReversal.count >= M.Buy.reverse + 1
       ) {
         // Trigger Message
-        Helper.addMessage(C.info, "Support Trigger => Call (Main) < Red", C.P2);
-
+        Helper.addMessage(C.info, "Sell Both => Max Reversal Reached", C.P2);
+        Helper.notifyMe(C.notify_sell, "Max Reversal Reached", C.notify_high);
         Helper.performAction(
           C.reverse,
           M.P_SellReversal.action,
@@ -1528,7 +1603,8 @@ async function processPut() {
           M.BuyCapture?.callPer >= M.BuyCapture?.putPer &&
           M.BuyCapture?.callPer >= 0;
 
-        Helper.addMessage(C.info, "Sell Addon ==> Put (Main) < Orange", C.P2);
+        Helper.addMessage(C.info, "Sell Addon => Put (Main) < Orange", C.P2);
+        Helper.notifyMe(C.notify_sell, "Addon => Put (Main)", C.notify_medium);
         await sellAddon(M.BuyPut);
       }
 
@@ -1537,7 +1613,7 @@ async function processPut() {
           // Sell Call Support Validation
           if (M.CallCandle.close < M.CallWindow.red) {
             // Trigger Message
-            Helper.addMessage(C.info, "Sell ==> Call (Support) < Red", C.P2);
+            Helper.addMessage(C.info, "Sell => Call (Support) < Red", C.P2);
             await sellCallSupport(callCond);
           }
           break;
@@ -1560,7 +1636,7 @@ async function processPut() {
           M.BuyCapture?.putPer >= M.BuyCapture?.callPer &&
           M.BuyCapture?.putPer >= 0;
 
-        Helper.addMessage(C.info, "Sell Call Support ==> Put > Orange", C.P2);
+        Helper.addMessage(C.info, "Sell Call Support => Put > Orange", C.P2);
         await sellCallSupport();
       }
 
@@ -1577,7 +1653,12 @@ async function processPut() {
       }
     }
   } catch (error) {
-    throw new Error("Process Put ==> " + error);
+    Helper.addMessage(C.info, "Process Put => " + Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_sell,
+      "Process Put => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -1611,6 +1692,11 @@ async function reverseWithoutSupport() {
   } catch (error) {
     Helper.setBusy(false);
     Helper.addMessage(C.error, Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_error,
+      "Reverse => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -1718,9 +1804,20 @@ async function reverseCallWithoutSupport() {
 
     // Update Buy Log
     Helper.updateLog(C.buy);
+
+    Helper.notifyMe(
+      C.notify_reverse,
+      "Call Without Support => ",
+      C.notify_high,
+    );
   } catch (error) {
-    Helper.addMessage(C.error, "Call reversal ==> " + error);
-    Helper.notifyMe(C.error + "Call reversal ==> " + error);
+    Helper.setBusy(false);
+    Helper.addMessage(C.error, "Call Reversal => " + Helper.findMsg(error));
+    Helper.notifyMe(
+      C.notify_error,
+      "Call Reversal => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -1798,9 +1895,21 @@ async function reversePutWithoutSupport() {
 
     // Update Buy Log
     Helper.updateLog(C.buy);
+
+    // Notify
+    Helper.notifyMe(
+      C.notify_reverse,
+      "Put Without Support => " + error,
+      C.notify_high,
+    );
   } catch (error) {
-    Helper.addMessage(C.error, "Put reversal ==> " + error);
-    Helper.notifyMe(C.error + "Put reversal ==> " + error);
+    Helper.setBusy(false);
+    Helper.addMessage(C.error, "Put Reversal => " + Helper.findMsg(error));
+    Helper.notifyMe(
+      C.notify_error,
+      "Put Reversal => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -1814,6 +1923,11 @@ async function reverseWithSupport() {
   } catch (error) {
     Helper.setBusy(false);
     Helper.addMessage(C.error, Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_error,
+      "Put Reversal => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -1885,9 +1999,13 @@ async function reverseCallWithSupport() {
 
     // Update Para Flag
     M.paraFlag = true;
+
+    // Notify
+    Helper.notifyMe(C.notify_reverse, "Call With Support", C.notify_high);
   } catch (error) {
     Helper.setBusy(false);
     Helper.addMessage(C.error, Helper.findMsg(error), C.P1);
+    Helper.notifyMe(C.notify_error, "Call Reversal => " + error, C.notify_high);
   }
 }
 
@@ -1959,9 +2077,13 @@ async function reversePutWithSupport() {
 
     // Update Para Flag
     M.paraFlag = true;
+
+    // Notify
+    Helper.notifyMe(C.notify_reverse, "Put With Support", C.notify_high);
   } catch (error) {
     Helper.setBusy(false);
     Helper.addMessage(C.error, Helper.findMsg(error), C.P1);
+    Helper.notifyMe(C.notify_error, "Put Reversal => " + error, C.notify_high);
   }
 }
 
@@ -2293,8 +2415,7 @@ function refreshBuyInfo() {
 
 async function buyCallSupport() {
   if (M.BuyCall.flag === true) {
-    Helper.addMessage(C.error, "Cannot Buy Call Support, Exists");
-    return;
+    throw new Error("Cannot Buy Call Support, Exists");
   }
 
   // Sell Put Addon
@@ -2304,12 +2425,14 @@ async function buyCallSupport() {
 
   var order = await buySupport(M.BuyCall);
   if (order == undefined) {
-    Helper.addMessage(C.error, "Buy => Call (Support)", C.P2);
-    return;
+    throw new Error("Buy => Call (Support)");
   }
 
   // Move Put Orange Up
   moveOrangeUp(M.BuyPut);
+
+  // Capture Buy
+  Helper.captureBuy();
 
   // Update Buy Log
   Helper.updateLog(C.buy);
@@ -2344,13 +2467,17 @@ async function buySupport(Ticker) {
   order = await buyOrder(Ticker, M.P_Addon.flag);
 
   if (order == undefined) {
-    Helper.notifyMe("Error in Buy Support Order");
+    Helper.notifyMe(C.notify_error, "Buy => Support Order", C.notify_high);
     throw new Error("Error in Buy Support Order");
   }
 
   // Message
   Helper.addMessage(C.success, "Buy => " + Ticker.type + " (Support)", C.P2);
-  Helper.notifyMe(C.success + " : Buy => " + Ticker.type + " (Support)");
+  Helper.notifyMe(
+    C.notify_support,
+    Ticker.type + " (Support)",
+    C.notify_medium,
+  );
 
   // Ticker
   Ticker.flag = true;
@@ -2405,7 +2532,11 @@ async function sellSupport(Ticker) {
   var order = await sellOrder(Ticker);
 
   if (order == undefined) {
-    Helper.notifyMe("Error in Sell Support");
+    Helper.notifyMe(
+      C.notify_error,
+      "Sell => " + Ticker.type + " (Support)",
+      C.notify_medium,
+    );
     throw new Error("Error in Sell Support");
   }
 
@@ -2447,15 +2578,14 @@ async function sellSupport(Ticker) {
 
   // Message
   Helper.addMessage(C.success, "Sell => " + Ticker.type + " (Support)", C.P2);
-  Helper.notifyMe(C.success + " : Sell => " + Ticker.type + " (Support)");
+  Helper.notifyMe(C.notify_sell, Ticker.type + " (Support)", C.notify_medium);
 
   return order;
 }
 
 async function sellCallSupport() {
   if (M.BuyCall.flag === false) {
-    Helper.addMessage(C.error, "Cannot Sell Call Support, Dont Exists");
-    return;
+    throw new Error("Cannot Sell Call Support, Dont Exists");
   }
 
   // Sell Call Support
@@ -2474,8 +2604,7 @@ async function sellCallSupport() {
 
 async function buyPutSupport() {
   if (M.BuyPut.flag === true) {
-    Helper.addMessage(C.error, "Cannot Buy Put Support, Exists");
-    return;
+    throw new Error("Cannot Buy Put Support, Exists");
   }
 
   // Sell Call Addon
@@ -2486,42 +2615,58 @@ async function buyPutSupport() {
   // Buy Support
   var order = await buySupport(M.BuyPut);
   if (order == undefined) {
-    Helper.addMessage(C.error, "Buy => Put (Support)");
-    return;
+    throw new Error("Buy => Put (Support)");
   }
 
   // Move Call Orange Up
   moveOrangeUp(M.BuyCall);
 
+  // Capture Buy
+  Helper.captureBuy();
+
   // Update Buy Log
   Helper.updateLog(C.buy);
 }
 
+function moveOrangeHalfUp(Ticker) {
+  let gap = 0;
+  // if (M.Buy.supportFlag === false) {
+  gap = Helper.formatDecimal(M.Para.hold / 2);
+  // } else {
+  // gap = M.Para.hold;
+
+  // }
+  // Move Orange Up
+  Ticker.window.orange = Helper.addPercentage(Ticker.pnl.ltp, gap);
+  // Extend Green, If required
+  if (Ticker.window.orange > Ticker.window.green) {
+    Ticker.window.green = Ticker.window.orange;
+  }
+}
+
 function moveOrangeUp(Ticker) {
   let gap = 0;
-  if (M.Buy.supportFlag === false) {
-    gap = Helper.formatDecimal(M.Para.hold / 2);
-  } else {
-    gap = M.Para.hold;
-    Helper.captureBuy();
-  }
+  // if (M.Buy.supportFlag === false) {
+  //   gap = Helper.formatDecimal(M.Para.hold / 2);
+  // } else {
+  gap = M.Para.hold;
+
+  // }
+  // Move Orange Up
+  Ticker.window.orange = Helper.addPercentage(Ticker.pnl.ltp, gap);
   // Extend Green, If required
-  Ticker.window.orange = Helper.addPercentage(Ticker.window.orange, gap);
   if (Ticker.window.orange > Ticker.window.green) {
     Ticker.window.green = Ticker.window.orange;
   }
 }
 
 function moveOrangeDown(Ticker) {
-  // Donot Extend Red, if Required
-  Ticker.window.orange = Helper.addPercentage(
-    Ticker.window.green,
-    -M.Para.hold,
-  );
+  // Move Orange Down
+  Ticker.window.orange = Helper.addPercentage(Ticker.pnl.ltp, -M.Para.hold);
+  // Donot Extend Red
   if (Ticker.window.orange < Ticker.window.red) {
     Ticker.window.orange = Ticker.window.red;
   }
-  Helper.captureBuy();
 }
 
 async function sellPutSupport() {
@@ -2531,6 +2676,7 @@ async function sellPutSupport() {
 
   // Sell Put Support
   var order = await sellSupport(M.BuyPut);
+
   if (order == undefined) {
     throw new Error("Sell => Put (Support), Order Not Found");
   }
@@ -2568,8 +2714,7 @@ async function buyAddon(Ticker) {
     order = await buyAddonOrder();
 
     if (order == undefined) {
-      Helper.notifyMe("Error : Sell => " + Ticker.type + " (Addon)");
-      throw new Error("Buy ==> " + Ticker.type + "  (Addon) ");
+      throw new Error("Buy => " + Ticker.type + "  (Addon) ");
     }
 
     Ticker.addon = true;
@@ -2595,12 +2740,21 @@ async function buyAddon(Ticker) {
     updateTrn(C.buy, M.Buy.addon);
 
     // Message
-    Helper.addMessage(C.success, "Buy ==> " + Ticker.type + " (Addon)", C.P2);
-    Helper.notifyMe(C.success + " : Buy => " + Ticker.type + " (Addon)");
+    Helper.addMessage(C.success, "Buy => " + Ticker.type + " (Addon)", C.P2);
+    Helper.notifyMe(
+      C.notify_buy,
+      Ticker.type + " / " + Ticker.category + " (Addon)",
+      C.notify_medium,
+    );
 
     return order;
   } catch (error) {
-    Helper.addMessage(C.error, Helper.findMsg(error));
+    Helper.addMessage(C.error, Helper.findMsg(error), C.P1);
+    Helper.notifyMe(
+      C.notify_error,
+      "Buy Addon => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -2654,11 +2808,11 @@ async function buyAddonOrder() {
 
 async function sellAddon(Ticker) {
   if (M.BuyAddon.flag === false) {
-    throw new Error("Sell Addon ==> " + Ticker.type + "  Not Found");
+    throw new Error("Sell Addon => " + Ticker.type + "  Not Found");
   }
 
   if (Ticker.symbol !== M.BuyAddon.symbol) {
-    throw new Error("Sell Addon ==> " + Ticker.type + "  Invalid Symbol");
+    throw new Error("Sell Addon => " + Ticker.type + "  Invalid Symbol");
   }
 
   try {
@@ -2666,8 +2820,7 @@ async function sellAddon(Ticker) {
     var order = await sellOrder(M.BuyAddon);
 
     if (order == undefined) {
-      // Helper.notifyMe("Error ==> Sell Addon (" + Ticker.type + " )");
-      throw new Error("Sell Addon ==> (" + Ticker.type + " ) Order Not Found");
+      throw new Error("Sell Addon => (" + Ticker.type + " ) Order Not Found");
     }
 
     // Parent
@@ -2687,7 +2840,7 @@ async function sellAddon(Ticker) {
       Ticker.pnl.buy = order.average;
 
       // Allign Main Window
-      moveOrangeUp(Ticker);
+      moveOrangeHalfUp(Ticker);
     }
 
     // // Slippage
@@ -2713,16 +2866,27 @@ async function sellAddon(Ticker) {
       );
       M.P_SellAddon.flag = false;
       M.paraFlag = true;
+
+      // Notify
+      Helper.notifyMe(C.notify_sell, "Max Sell Addon Reached", C.notify_medium);
       return order;
     }
 
-    // Message
-    // Helper.addMessage(C.success, "Sell => " + Ticker.type + " (Addon)", C.P2);
-    // Helper.notifyMe(C.success + " : Sell => " + Ticker.type + " (Addon)");
+    // Notify
+    Helper.notifyMe(
+      C.notify_sell,
+      Ticker.type + " / " + Ticker.category + " (Addon)",
+      C.notify_medium,
+    );
 
     return order;
   } catch (error) {
     Helper.addMessage(C.error, Helper.findMsg(error));
+    Helper.notifyMe(
+      C.notify_error,
+      "Sell Addon => " + Helper.findMsg(error),
+      C.notify_high,
+    );
   }
 }
 
@@ -2757,7 +2921,7 @@ function settleAddon(Ticker, order) {
 
   // Message
   Helper.addMessage(C.success, "Sell => " + M.BuyAddon.type + " (Addon)", C.P2);
-  Helper.notifyMe(C.success + " + Sell => " + M.BuyAddon.type + " (Addon)");
+  // Helper.notifyMe(C.notify_sell, M.BuyAddon.type + " (Addon)", C.notify_high);
 
   Helper.updateDeltaWindow();
 
@@ -2788,7 +2952,7 @@ function updateParentPnl(Ticker, Order) {
       leftQty * Ticker.pnl.ltp * M.Buy.lotsize,
     );
     Helper.addMessage(
-      "Error Sell ==> " + Ticker.type + " (" + Ticker.category + ")",
+      "Error Sell => " + Ticker.type + " (" + Ticker.category + ")",
     );
   }
 

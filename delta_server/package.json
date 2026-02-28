@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "stop": "killall node",
     "debug": "node --inspect index.js",
     "nodemon": "nodemon --inspect index.js",
     "pm2_Debug": "pm2 start index.js --node-args='--inspect'",
@@ -26,6 +27,7 @@
     "mongoose": "^9.1.5",
     "nodemailer": "^7.0.13",
     "nodemon": "^3.1.11",
+    "ntfy": "^1.14.3",
     "websocket-heart-beat": "^0.1.3"
   }
 }

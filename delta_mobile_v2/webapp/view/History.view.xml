@@ -1,0 +1,156 @@
+<mvc:View
+    controllerName="ns.deltaapphost.controller.History"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%"
+    xmlns:tnt="sap.tnt"
+    busyIndicatorDelay="0"
+>
+    <Page
+        id="idHistPage"
+        showHeader="false"
+        floatingFooter="true"
+        class="appBackground"
+    >
+        <VBox id="idHistOuterBox">
+            <HBox
+                id="idHistToolbarBox"
+                width="680px"
+                class="sapUiTinyMarginTop"
+            >
+                <Toolbar
+                    id="idHistToolbar"
+                    class="appBackground"
+                    width="680px"
+                >
+                    <Button
+                        id="idBack"
+                        icon="sap-icon://navigation-left-arrow"
+                        press="onNavBack"
+                    />
+                    <Title
+                        id="idHistTitle"
+                        text="History"
+                        textAlign="Center"
+                    />
+                    <ToolbarSeparator id="idSep1" />
+                    <ToolbarSpacer id="idSpace1" />
+                    <HBox
+                        id="idHistDateHBox"
+                        width="350px"
+                        justifyContent="Center"
+                    >
+                        <Title
+                            id="idHistDateLabel"
+                            text="Date :"
+                            class="sapUiTinyMarginTop"
+                        />
+                        <DateRangeSelection
+                            id="idHistFilterDateRange"
+                            change="onDateChange"
+                            displayFormat="dd MMM"
+                            width="170px"
+                            class="sapUiTinyMarginBegin"
+                            dateValue="{FilterModel>/from}"
+                            secondDateValue="{FilterModel>/to}"
+                        />
+
+                        <!-- <tnt:InfoLabel
+                            id="idHistDays"
+                            text="{FilterModel>/days}"
+                            colorScheme="7"
+                            width="30px"
+                            class="sapUiTinyMarginBegin sapUiTinyMarginTop"
+                        /> -->
+                        <Button
+                            id="idHistSubmitButton"
+                            text="Submit"
+                            press="onSubmit"
+                            icon="sap-icon://activate"
+                            class="sapUiSmallMarginBegin"
+                        />
+                    </HBox>
+                    <ToolbarSpacer id="idSpace2" />
+                    <ToolbarSeparator id="idSep2" />
+
+                    <HBox id="idToolbarButtons">
+                        <Button
+                            id="idFilter"
+                            icon="sap-icon://filter"
+                            class="sapUiTinyMarginEnd"
+                            press="onHistFilter"
+                        />
+                        <Button
+                            id="idSummary"
+                            icon="sap-icon://overview-chart"
+                            class="sapUiTinyMarginEnd"
+                            press="onHistSummary"
+                        />
+                        <Button
+                            id="idTable"
+                            icon="sap-icon://legend"
+                            class="sapUiTinyMarginEnd"
+                            press="onHistTable"
+                        />
+
+                        <Button
+                            id="idFullscreen"
+                            icon="sap-icon://full-screen"
+                            class="sapUiTinyMarginEnd"
+                            press="onFullscreen"
+                        />
+                    </HBox>
+                </Toolbar>
+            </HBox>
+            <HBox
+                id="idHistBody"
+                class="sapUiTinyMarginTop"
+            >
+                <HBox
+                    id="idFilterBox"
+                    width="660px"
+                    justifyContent="Center"
+                    class="sapUiMediumMarginTop"
+                    visible="{ path: 'ScreenModel>/body', formatter: '.formatter.filterVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.HistoryFilter"
+                        type="XML"
+                    />
+                </HBox>
+                <HBox
+                    id="idSummaryBox"
+                    class="sapUiMediumMarginTop"
+                    width="660px"
+                    justifyContent="Center"
+                    visible="{ path: 'ScreenModel>/body', formatter: '.formatter.summaryVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.HistorySummary"
+                        type="XML"
+                    />
+                </HBox>
+                <HBox
+                    id="idTableBox"
+                    visible="{ path: 'ScreenModel>/body', formatter: '.formatter.TableVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.HistoryTable"
+                        type="XML"
+                    />
+                </HBox>
+                <HBox
+                    id="idItemBox"
+                    visible="{ path: 'ScreenModel>/body', formatter: '.formatter.ItemVisible' }"
+                >
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.HistoryItems"
+                        type="XML"
+                    />
+                </HBox>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

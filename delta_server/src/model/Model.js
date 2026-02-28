@@ -19,6 +19,7 @@ const I_Para = {
   msgSetting: C.fixed,
   layout: C.horizontal,
   chartLayout: C.horizontalHalf,
+  mLayout: C.horizontal,
   factor: 0,
   scale: C.none,
   profit: 0,
@@ -119,7 +120,7 @@ const I_Para = {
   notify: {
     email: false,
     whatsapp: false,
-    firebase: false,
+    notification: true,
   },
 };
 
@@ -470,7 +471,8 @@ const oDelta = {},
   aMarketSymbols = [C.btcSymbol, C.ethSymbol],
   serverStart = 0,
   buyMax = 0,
-  buyMin = 0;
+  buyMin = 0,
+  expiryAlert = 0;
 
 let appAction = C.none,
   isTracking = false,
@@ -655,6 +657,7 @@ module.exports = {
   serverStart,
   buyMax,
   buyMin,
+  expiryAlert,
 
   // Database
   recordModel,

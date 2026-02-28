@@ -234,17 +234,17 @@
                                 text="Whatsapp"
                                 width="130px"
                                 type="{ path: 'ParaModel>/notify/whatsapp', formatter: '.formatter.notifyDevice' }"
-                                icon="sap-icon://notification-2"
+                                icon="sap-icon://feedback"
                                 class="sapUiMediumMarginEnd"
                                 press="onWhatsappNotification"
                             />
                             <Button
                                 id="idFirebaseButton"
-                                text="Firebase"
-                                icon="sap-icon://legend"
+                                text="Notification"
+                                icon="sap-icon://notification-2"
                                 width="130px"
-                                type="{ path: 'ParaModel>/notify/firebase', formatter: '.formatter.notifyDevice' }"
-                                press="onFirebaseNotification"
+                                type="{ path: 'ParaModel>/notify/notification', formatter: '.formatter.notifyDevice' }"
+                                press="onPushNotification"
                             />
                         </HBox>
                     </content>

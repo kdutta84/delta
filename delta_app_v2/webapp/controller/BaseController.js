@@ -28,7 +28,6 @@ sap.ui.define(
     highcharts,
     formatter,
   ) {
-    debugger;
     // Popup Message
     var oMessagePopover = new MessagePopover({
       items: {
@@ -807,14 +806,15 @@ sap.ui.define(
         const remainingSeconds = seconds % 60;
 
         let result = [];
-        if (days > 0) result.push(`${days} day${days !== 1 ? "s" : ""}`);
-        if (hours > 0) result.push(`${hours} hour${hours !== 1 ? "s" : ""}`);
+        if (days > 0) result.push(`${days} d${days !== 1 ? "s" : ""}`);
+        if (hours > 0) result.push(`${hours} h${hours !== 1 ? "s" : ""}`);
         if (minutes > 0) result.push(`${minutes} ${minutes !== 1 ? "m" : "m"}`);
-        if (remainingSeconds > 0 || result.length === 0)
-          result.push(
-            `${remainingSeconds} ${remainingSeconds !== 1 ? "s" : "s"}`,
-          );
-
+        if (days == 0 && hours == 0 && minutes == 0) {
+          if (remainingSeconds > 0 || result.length === 0)
+            result.push(
+              `${remainingSeconds} ${remainingSeconds !== 1 ? "s" : "s"}`,
+            );
+        }
         // this.getView().byId("trackTimeMsg").setText(result.join(", "));
         return result.join(", ");
       },
@@ -828,8 +828,8 @@ sap.ui.define(
         const remainingSeconds = seconds % 60;
 
         let result = [];
-        if (days > 0) result.push(`${days} day${days !== 1 ? "s" : ""}`);
-        if (hours > 0) result.push(`${hours} hour${hours !== 1 ? "s" : ""}`);
+        if (days > 0) result.push(`${days} d${days !== 1 ? "s" : ""}`);
+        if (hours > 0) result.push(`${hours} h${hours !== 1 ? "s" : ""}`);
         if (minutes > 0) result.push(`${minutes} ${minutes !== 1 ? "m" : "m"}`);
 
         if (days == 0 && hours == 0 && minutes == 0) {
@@ -4580,14 +4580,13 @@ sap.ui.define(
         this.updateServerPara("notify", this.para.notify);
       },
       onWhatsappNotification: function () {
-        MessageToast.show("Whatsapp Function not Active");
+        MessageToast.show("Not Active");
         // this.para.notify.whatsapp = !this.para.notify.whatsapp;
         // this.updateServerPara("notify", this.para.notify);
       },
-      onFirebaseNotification: function () {
-        MessageToast.show("Firebase Function not Active");
-        // this.para.notify.firebase = !this.para.notify.firebase;
-        // this.updateServerPara("notify", this.para.notify);
+      onPushNotification: function () {
+        this.para.notify.notification = !this.para.notify.notification;
+        this.updateServerPara("notify", this.para.notify);
       },
       onResetParaLog: function () {
         this.confirmPopup("Delete Para Log")
@@ -5241,7 +5240,7 @@ sap.ui.define(
         ) {
           let gap = this.getCurrentTime() - this.buyInfo?.timestamp;
           if (gap > 0) {
-            time = this.convertSecondsForClock(gap);
+            time = this.convertSecondsToTime(gap);
           }
         }
         return time;

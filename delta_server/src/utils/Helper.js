@@ -2,8 +2,11 @@ var M = require("../model/Model");
 var C = require("../model/Constant");
 var Fs = require("fs");
 const env = require("dotenv").config();
-const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 const nodemailer = require("nodemailer");
+const { NtfyClient } = require("ntfy");
+const { unsubscribe } = require("diagnostics_channel");
+const ntfyClient = new NtfyClient("https://notify.coinpress.cloud");
 
 async function initPara() {
   try {
@@ -11,7 +14,7 @@ async function initPara() {
       case C.database:
         setDefaultPara();
         updateLog(C.para);
-        addMessage(C.info, "Parameter Initialized ==> Model", C.P3);
+        addMessage(C.info, "Parameter Initialized => Model", C.P3);
         break;
       case C.log:
         let paraLog = await readLog(C.para);
@@ -29,7 +32,7 @@ async function initPara() {
       default:
         setDefaultPara();
         updateLog(C.para);
-        addMessage(C.info, "Parameter Initialized ==> Model", C.P3);
+        addMessage(C.info, "Parameter Initialized => Model", C.P3);
     }
   } catch (error) {
     addMessage(C.error, findMsg(error), C.P1);
@@ -37,14 +40,26 @@ async function initPara() {
 }
 
 async function checkNewCandle() {
-  // Within Chart Period and no Active Buy
+  // End Candle
   if (getCurrentTime() <= M.P_Chart.endCandle) {
     return false;
   }
 
-  // Update Process
+  // Validate Chart Expiry for Buy Order
+  if (getCurrentTime() >= M.expiryAlert && M.Buy.flag == true) {
+    addMessage(C.error, "Chart Expiry => Please Sell Order", C.P1);
+    notifyMe(
+      C.notify_alert,
+      "Chart Expiry => Please Sell Order",
+      C.notify_high,
+    );
+  }
+
+  // End Chart
   if (getCurrentTime() >= M.P_Chart.endChart) {
+    // Init Expiry
     initExpiryPara();
+    // Restart Process
     await restartProcess();
     return;
   }
@@ -122,7 +137,7 @@ function checkAlarmTrigger() {
 
   M.paraFlag = true;
 
-  addMessage(C.info, "Alarm Trigger ==> Check Alert", C.P1);
+  addMessage(C.info, "Alarm Trigger => Check Alert", C.P1);
   performAction(C.alarm, C.alert, C.both, C.track);
 }
 
@@ -197,7 +212,7 @@ async function performAction(Trigger, Action, Index, Type) {
   // Buy Option
   if (Action === C.buy) {
     if (M.Buy.flag === true) {
-      addMessage(C.error, "Buy ==> BuyOrder Exists", C.P1);
+      addMessage(C.error, "Buy => BuyOrder Exists", C.P1);
       return;
     }
 
@@ -225,7 +240,7 @@ async function performAction(Trigger, Action, Index, Type) {
       M.P_Buy.putSymbol = putTicker.symbol;
     }
 
-    addMessage(C.info, "Buy ==> Trigger : " + Trigger, C.P2);
+    addMessage(C.info, "Buy => Trigger : " + Trigger, C.P2);
     // await Buy.initBuy();
     // As Buy File Cannot be called from Helper
     M.appAction = "BuyChart";
@@ -234,15 +249,15 @@ async function performAction(Trigger, Action, Index, Type) {
   // Sell Option
   if (Action === C.sell) {
     if (M.Buy.flag === false) {
-      addMessage(C.error, "Sell ==> BuyOrder Dont Exists", C.P1);
+      addMessage(C.error, "Sell => BuyOrder Dont Exists", C.P1);
       return;
     }
     if (M.Buy.index !== Index) {
-      addMessage(C.error, "Sell ==> Invalid Sell Order", C.P1);
+      addMessage(C.error, "Sell => Invalid Sell Order", C.P1);
       return;
     }
 
-    addMessage(C.info, "Sell ==> Trigger : " + Trigger, C.P2);
+    addMessage(C.info, "Sell => Trigger : " + Trigger, C.P2);
     // sellBoth();
     // As Buy File Cannot be called from Helper
     M.appAction = "SellBoth";
@@ -320,6 +335,17 @@ function setAlert(Trigger, Action, Index, Type) {
 
   M.aAlert.push(alert);
   M.alertFlag = true;
+
+  // Helper.notifyMe(
+  //   C.notify_alert,
+  //   alert.trigger +
+  //     " | " +
+  //     alert.action +
+  //     " | " +
+  //     alert.index +
+  //     " | " +
+  //     alert.type,
+  // );
 }
 
 function clearAlert() {
@@ -808,8 +834,11 @@ function initExpiryPara() {
     0,
   ); // 5:30:00 PM
 
+  // expiry = new Date(); // Testing
+  // today = new Date(); // Testing
+
   // Default Next date
-  if (today.getTime() > expiry.getTime()) {
+  if (today.getTime() >= expiry.getTime()) {
     expiry.setDate(today.getDate() + 1);
   }
 
@@ -817,6 +846,7 @@ function initExpiryPara() {
   if (M.Para.headerMiddle === C.backtest) {
     expiry.setDate(today.getDate() + 1);
   }
+
   // Set Expiry Para
   setExpiryPara(expiry);
 }
@@ -827,6 +857,7 @@ function setExpiryPara(expiry) {
   M.P_Expiry.time = +expiry;
   M.P_Expiry.text = dateToTextFormat(expiry);
   M.P_Expiry.symbol = dateToSymbolFormat(expiry);
+  M.expiryAlert = M.P_Expiry.time - 60 * 60000; // 60 Mins
 }
 
 function toDateFormat(expiry) {
@@ -973,7 +1004,7 @@ function addMessage(type, message, priority) {
   if (type === C.error && message !== "Insufficient Amount") {
     debugger;
   }
-  debugger;
+
   // Avoid Duplicate Messages
   if (M.lastMsg?.type === type && M.lastMsg?.message === message) {
     return;
@@ -1037,9 +1068,6 @@ async function getWallet() {
 }
 
 async function initSymbols() {
-  // Server Start
-  M.serverStart = +new Date();
-
   // Get Market Hsitory
   await getAllMarketHistory();
 
@@ -1364,8 +1392,14 @@ function unSubscribeSymbols(aSymbols) {
 
   // M.aSubscribed = M.aSubscribed.filter((item) => !aSymbols.includes(item));
 
-  if (M.Para.priceType == C.maker) {
-    aSymbols = aSymbols.map((symbol) => "MARK:" + symbol);
+  // if (M.Para.priceType == C.maker) {
+  //   aSymbols = aSymbols.map((symbol) => "MARK:" + symbol);
+  // }
+
+  for (let i = 0; i < aSymbols.length; i++) {
+    M.aSubscribed = M.aSubscribed.filter((item) => item !== aSymbols[i]);
+    addMessage(C.info, aSymbols[i] + " -  Un-Subscribed", C.P3);
+    aSymbols[i] = aSymbols[i].split(":")[1];
   }
 
   // OI & Volume
@@ -1381,11 +1415,6 @@ function unSubscribeSymbols(aSymbols) {
     },
   };
   oSocket.ws.send(JSON.stringify(oPayload));
-
-  for (let i = 0; i < aSymbols.length; i++) {
-    M.aSubscribed = M.aSubscribed.filter((item) => item !== aSymbols[i]);
-    addMessage(C.info, aSymbols[i] + " -  Un-Subscribed", C.P3);
-  }
 }
 
 function defineSymbol(symbol) {
@@ -2379,21 +2408,57 @@ function getMarketToOptionSymbols(aMarketData) {
 
 async function restartProcess() {
   setBusy(true, "Restart Process");
-  // Update Latest Para
-  // initExpiryPara();
+
+  // Init Required Para
   initChartPara();
   initTimeArray();
+
   // Update Symbols
-  await upadateSymbols();
+  await initSymbols();
+  // await upadateSymbols();
+
   M.Para.chart.category = C.market;
   M.Para.chart.symbol = C.btcSymbol;
+
+  // Flags
   M.paraFlag = true;
   M.chartFlag = true;
   M.strikeFlag = true;
+
   setBusy(false);
 }
 
 async function dbInsertRecord() {
+  const record = {
+    mode: M.Buy.mode,
+    timestamp: M.Buy.timestamp,
+    index: M.Buy.index,
+    type: M.Buy.type,
+    call: M.BuyCall.symbol,
+    put: M.BuyPut.symbol,
+    amount: M.Buy.amount,
+    pnl: M.Buy.pnl,
+    support: M.Buy.support,
+    supportPer: M.Buy.supportPer,
+    addonCount: M.Buy.addonCount,
+    addonPer: M.Buy.addonPer,
+    slippage: M.Buy.slippage,
+    slippagePer: M.Buy.slippagePer,
+    reverse: M.Buy.reverse,
+  };
+
+  try {
+    await M.recordModel.insertOne(record);
+    if (M.aTrn.length > 0) {
+      await M.historyModel.insertMany(M.aTrn);
+    }
+    addMessage(C.success, "DB => Records Saved", C.P3);
+  } catch (error) {
+    addMessage(C.success, error.message, C.P3);
+  }
+}
+
+async function dbInsertRecord_old() {
   const record = new M.recordModel({
     mode: M.Buy.mode,
     timestamp: M.Buy.timestamp,
@@ -2415,37 +2480,29 @@ async function dbInsertRecord() {
   // Save Record
   record
     .save()
-    .then((doc) => addMessage(C.success, "DB ==> Record Saved", C.P3))
+    .then((doc) => addMessage(C.success, "DB => Record Saved", C.P3))
     .catch((err) => addMessage(C.error, "Error saving DB Record", C.P3));
 
   // Save History
   M.historyModel
     .insertMany(M.aTrn)
     .then((docs) => {
-      addMessage(C.success, "DB ==> History Saved", C.P3);
+      addMessage(C.success, "DB => History Saved", C.P3);
     })
     .catch((err) => {
       addMessage(C.error, "Error saving DB History", C.P3);
     });
 }
-
-async function initMongoDb(params) {
-  mongoose
-    .connect(process.env.DB_URL)
-    .then(() => {
-      console.log("MongoDB Connected!");
-
-      // Record
-      const recordSchema = new mongoose.Schema(C.recordSchema);
-
-      M.recordModel = mongoose.model("record", recordSchema);
-
-      // History
-      const historySchema = new mongoose.Schema(C.historySchema);
-
-      M.historyModel = mongoose.model("history", historySchema);
-    })
-    .catch((err) => console.log("MongoDb Error :", err));
+async function initMongoDb() {
+  try {
+    const uri = process.env.DB_URL;
+    const client = new MongoClient(uri);
+    const database = client.db("delta");
+    M.recordModel = database.collection("record");
+    M.historyModel = database.collection("history");
+  } catch (error) {
+    addMessage(C.error, error.message, C.P3);
+  }
 }
 
 function initEmail() {
@@ -2462,25 +2519,33 @@ function initEmail() {
   M.mailOptions = {
     from: process.env.FROM,
     to: process.env.TO,
-    // subject: "Sending Email using Node.js", // Subject line
-    // text: "That was easy!", // Plain text body
-    // html: "<b>That was easy!</b>", // HTML body content
   };
 }
 
-async function notifyMe(Message) {
+async function notifyMe(tag, message, priority) {
   // Email
   if (M.P_Notify.email === true) {
-    sendEmail(Message);
+    sendEmail(message);
   }
+
   // // Whatsapp
   // if (M.P_Notify.email === true) {
   //   sendWhatsapp(Message);
   // }
-  // // Firebase
-  // if (M.P_Notify.email === true) {
-  //   sendFirebase(Message);
-  // }
+
+  // Notification
+  if (M.P_Notify.notification === true) {
+    sendNotification(tag, message, priority);
+  }
+}
+
+async function sendNotification(tag, message, priority) {
+  //  Title: message,
+  await fetch(process.env.NOTIFY_URL, {
+    method: "POST", // PUT works too
+    body: "⠀",
+    headers: { Tags: tag, Title: message, Priority: priority },
+  });
 }
 
 async function sendEmail(Message) {

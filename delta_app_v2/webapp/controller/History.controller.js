@@ -420,6 +420,37 @@ sap.ui.define(
           this.getRouter().navTo("RouteMain", {}, true);
         }
       },
+      onCharts: function () {
+        var masterUri = "https://www.delta.exchange/app/futures/trade";
+        var optionUri =
+          "https://www.delta.exchange/app/tradingview/price-chart/options";
+        // @ts-ignore
+        var url, index, path, inst, symbol;
+
+        let selIndex = this.getView().byId("idHistoryTable").getSelectedIndex();
+        let row = this.aHistory[selIndex];
+
+        let expiry = this.getSymbolExpiry(row.call);
+
+        if (new Date().getTime() > expiry.getTime()) {
+          MessageToast.show("Chart Expired");
+          return;
+        }
+
+        // Call
+        url = optionUri + "/" + row.index + "/" + row.call;
+        window.open(url);
+        // Put
+        url = optionUri + "/" + row.index + "/" + row.put;
+        window.open(url);
+      },
+      getSymbolExpiry: function (symbol) {
+        let symbolExp = symbol.split("-")[3];
+        let day = symbolExp.slice(0, 2);
+        let month = symbolExp.slice(2, 4) - 1;
+        let year = "20" + symbolExp.slice(4, 6);
+        return new Date(+year, month, day, 17, 30, 0, 0); // 5:30:00 PM
+      },
     });
   },
 );

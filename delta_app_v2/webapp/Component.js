@@ -71,8 +71,8 @@ sap.ui.define(
             if (result.status == that.error) {
               throw new Error("Server Error");
             } else {
-              sap.ui.getCore().layout = result.message;
-              that.getRouter().navTo(result.message, {}, true);
+              sap.ui.getCore().layout = result.data.app;
+              that.getRouter().navTo(result.data.app, {}, true);
             }
           })
           .catch((error) => {

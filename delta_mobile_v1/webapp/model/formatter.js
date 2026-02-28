@@ -3,6 +3,7 @@ sap.ui.define(function () {
 
   var Formatter = {
     headerTitleDisplay: function (HeaderLeft) {
+      debugger;
       if (HeaderLeft == this.display) {
         return true;
       } else {

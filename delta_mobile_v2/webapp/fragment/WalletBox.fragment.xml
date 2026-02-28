@@ -1,0 +1,139 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <HBox
+        id="idWalletOuterHBox"
+        class="sapUiTinyMarginTop sapUiTinyMarginBottom"
+    >
+        <VBox
+            id="idWalletLeftVBox"
+            class="sapUiTinyMarginBegin"
+            width="300px"
+        >
+            <!-- Expiry -->
+            <HBox
+                id="idStrikeGapHBox"
+                class="sapUiSmallMarginBottom"
+            >
+                <Button
+                    id="idStrikesGapButton"
+                    text="Strikes :"
+                    width="75px"
+                    press="onStrikeGapEdit"
+                    type="Transparent"
+                />
+                <StepInput
+                    id="idStrikeGapStepInput"
+                    min="0"
+                    step="1"
+                    value="{ParaModel>/strikeGap}"
+                    change="onStrikeGap"
+                    width="130px"
+                    textAlign="Center"
+                    editable="false"
+                    class="sapUiTinyMarginEnd"
+                />
+            </HBox>
+            <!-- Ussage -->
+            <HBox id="idAmountHBox">
+                <Button
+                    id="idAmountButton"
+                    text="Amount :"
+                    width="75px"
+                    press="onAmountPopup"
+                    type="Transparent"
+                />
+                <StepInput
+                    id="idAmountStepInput"
+                    min="0"
+                    step="10"
+                    value="{ parts:['ParaModel>/account/amount','ParaModel>/account/currency'], formatter: '.formatter.calcAmt' }"
+                    width="130px"
+                    editable="false"
+                    textAlign="Center"
+                />
+                <Button
+                    id="idCurrencyButton"
+                    width="45px"
+                    text="{ParaModel>/account/currency}"
+                    type="{ path: 'ParaModel>/account/per', formatter: '.formatter.currStatus' }"
+                    press="onAmountCurr"
+                    class="sapUiTinyMarginBegin"
+                />
+            </HBox>
+        </VBox>
+
+        <VBox id="idWalletRightVBox">
+            <HBox
+                id="idOrderTypeHBox"
+                class="sapUiSmallMarginBottom"
+            >
+                <Label
+                    id="idOrderTypeLabel"
+                    text="Order :"
+                    width="50px"
+                    class="sapUiSmallMarginBegin sapUiTinyMarginTop"
+                />
+                <MenuButton
+                    id="idOrderTypeMenuButton"
+                    text="{ParaModel>/orderType}"
+                    width="130px"
+                    icon="{ path: 'ParaModel>/orderType', formatter: '.formatter.orderTypeIcon' }"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Menu
+                        id="idOrderTypeMenu"
+                        itemSelected="onOrderType"
+                    >
+                        <MenuItem
+                            id="idMarketMenuItem"
+                            key="market"
+                            text="Market"
+                            icon="sap-icon://customer-and-supplier"
+                        />
+                        <MenuItem
+                            id="idLimitMenuItem"
+                            key="limit"
+                            text="Limit"
+                            icon="sap-icon://collections-insight"
+                        />
+                    </Menu>
+                </MenuButton>
+            </HBox>
+            <!-- Price Type -->
+            <HBox id="idPriceTypeHBox">
+                <Label
+                    id="idPriceLabel"
+                    text="Price :"
+                    width="50px"
+                    class="sapUiSmallMarginBegin sapUiTinyMarginTop"
+                />
+                <MenuButton
+                    id="idPriceTypeMenuButton"
+                    enabled="true"
+                    text="{ParaModel>/priceType}"
+                    icon="{ path: 'ParaModel>/priceType', formatter: '.formatter.priceTypeIcon' }"
+                    class="sapUiTinyMarginBegin"
+                    width="130px"
+                >
+                    <Menu
+                        id="idPriceTypeMenu"
+                        itemSelected="onPriceType"
+                    >
+                        <MenuItem
+                            id="idMakerMenuItem"
+                            text="Maker"
+                            icon="sap-icon://person-placeholder"
+                        />
+                        <MenuItem
+                            id="idTakerMenuItem"
+                            text="Taker"
+                            icon="sap-icon://family-care"
+                        />
+                    </Menu>
+                </MenuButton>
+            </HBox>
+        </VBox>
+    </HBox>
+</core:FragmentDefinition>

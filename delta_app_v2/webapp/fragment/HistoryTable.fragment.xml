@@ -7,7 +7,7 @@
         <table:Table
             id="idHistoryTable"
             rows="{HistoryModel>/}"
-            width="1330px"
+            width="1335px"
             rowMode="Auto"
             ariaLabelledBy="title"
             selectionMode="Single"
@@ -24,7 +24,7 @@
                     <HBox
                         id="idHistoryTitleHBox"
                         justifyContent="Center"
-                        width="1170px"
+                        width="1100px"
                     >
                         <Title
                             id="idHistoryTableTitle"
@@ -38,6 +38,12 @@
                         text="Back"
                         icon="sap-icon://nav-back"
                         press="onNavBack"
+                    />
+                    <Button
+                        id="idChartHistoryButton"
+                        text="Chart"
+                        icon="sap-icon://bar-chart"
+                        press="onCharts"
                     />
                     <Button
                         id="idFullscreenHistoryButton"
@@ -120,7 +126,7 @@
 
                 <table:Column
                     id="idHistoryStrikeCallColumn"
-                    width="80px"
+                    width="90px"
                     hAlign="Center"
                     headerSpan="2"
                 >
@@ -146,7 +152,7 @@
 
                 <table:Column
                     id="idHistoryStrikePutColumn"
-                    width="80px"
+                    width="90px"
                     hAlign="Center"
                 >
                     <table:multiLabels>

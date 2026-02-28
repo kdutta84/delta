@@ -17,7 +17,7 @@
                     id="idCurrDeltaObjectStatus"
                     visible="true"
                     class="sapMObjectStatusLarge"
-                    inverted="true"
+                    inverted="true" 
                 />
             </HBox> -->
             <!-- <HBox

@@ -1,0 +1,32 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "debug": "node --inspect index.js",
+    "nodemon": "nodemon --inspect index.js",
+    "pm2_Debug": "pm2 start index.js --node-args='--inspect'",
+    "pm2_Start": "pm2 start index.js",
+    "pm2_Restart": "pm  2 restart index",
+    "pm2_Restart_Debug": "pm2 restart index.js --node-args='--inspect'",
+    "pm2_List": "pm2 list",
+    "pm2_Status": "pm2 status",
+    "pm2_stop": "pm2 stop all"
+  },
+  "dependencies": {
+    "ccxt": "^4.5.18",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^9.1.5",
+    "nodemailer": "^7.0.13",
+    "nodemon": "^3.1.11",
+    "ntfy": "^1.14.3",
+    "websocket-heart-beat": "^0.1.3"
+  }
+}

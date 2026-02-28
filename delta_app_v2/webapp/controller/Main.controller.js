@@ -73,7 +73,7 @@ sap.ui.define(
               that
                 .getOwnerComponent()
                 .getRouter()
-                .navTo(result.message, {}, true);
+                .navTo(result.data.app, {}, true);
             }
           })
           .catch((error) => {

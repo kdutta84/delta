@@ -1,0 +1,226 @@
+<mvc:View
+    controllerName="ns.deltaapphost.controller.Vertical"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+>
+    <!-- Chart width = "660px" -->
+    <!-- Total width = "680px" -->
+
+    <!-- Chart height = "320px" -->
+    <!-- Total height = "350px" -->
+
+    <Page
+        id="idMobilePage"
+        showHeader="false"
+        floatingFooter="true"
+        class="appBackground"
+    >
+        <VBox id="idOuterVBox">
+            <HBox
+                id="idHeaderHBox"
+                width="680px"
+                class="sapUiTinyMarginTop"
+            >
+                <HBox
+                    id="idHeaderBox"
+                    width="400px"
+                    justifyContent="Center"
+                >
+                    <HBox id="idHeaderContentHBox">
+                        <core:Fragment
+                            fragmentName="ns.deltaapphost.fragment.Header"
+                            type="XML"
+                        />
+                    </HBox>
+                </HBox>
+                <ToolbarSeparator
+                    id="idsep1ToolbarSeparator"
+                    class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+                />
+                <HBox
+                    id="idCurrentDeltaHBox"
+                    justifyContent="Center"
+                    width="100px"
+                >
+                    <Button
+                        id="idCurrDeltaObjectStatus"
+                        text="0 %"
+                        icon="sap-icon://product"
+                        width="100px"
+                        type="Default"
+                    />
+                </HBox>
+                <HBox
+                    id="idStopwatchHBox"
+                    justifyContent="Center"
+                    width="100px"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idStopwatchButton"
+                        text="0.00"
+                        type="Transparent"
+                        width="100px"
+                        icon="sap-icon://fob-watch"
+                        press="onClockSettingPopup"
+                    >
+                        <dependents>
+                            <core:Fragment
+                                fragmentName="ns.deltaapphost.fragment.ClockSetting"
+                                type="XML"
+                            />
+                        </dependents>
+                    </Button>
+                </HBox>
+                <HBox
+                    id="idMessageBox"
+                    width="60px"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idMessagePopoverButton"
+                        text="0"
+                        width="60px"
+                        icon="sap-icon://email"
+                        ariaHasPopup="Dialog"
+                        press="onMessagePopover"
+                    />
+                </HBox>
+
+                <HBox
+                    id="idFulscreenbox"
+                    width="40px"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <Button
+                        id="idHeaderFullscreenButton"
+                        tooltip="Fullscreen"
+                        type="Transparent"
+                        icon="sap-icon://full-screen"
+                        press="onFullscreen"
+                        width="30px"
+                    />
+                </HBox>
+            </HBox>
+            <!-- ///////////////////////////////////// -->
+            <l:Splitter
+                id="idSplitter"
+                height="320px"
+            >
+                <VBox
+                    id="idLeftSidePanelVBox"
+                    visible="true"
+                    height="320px"
+                    width="10px"
+                    class="sapUiSmallMarginBegin"
+                >
+                    <layoutData>
+                        <l:SplitterLayoutData size="50px" />
+                    </layoutData>
+                    <VBox
+                        id="idChart1IconHBox"
+                        justifyContent="Center"
+                        height="110px"
+                    >
+                        <core:Icon
+                            src="sap-icon://activate"
+                            class="iconSize"
+                            color="{ path: 'ScreenModel>/mLocked', formatter: '.formatter.appIconColor' }"
+                            press="onSelectInput"
+                        />
+                    </VBox>
+                    <VBox
+                        id="idBar1IconHBox"
+                        justifyContent="Center"
+                        height="110px"
+                    >
+                        <core:Icon
+                            src="sap-icon://action-settings"
+                            class="iconSize"
+                            color="{ path: 'ScreenModel>/mLocked', formatter: '.formatter.appIconColor' }"
+                            press="onSelectSetting"
+                        />
+                    </VBox>
+                    <VBox
+                        id="idPnl1IconHBox"
+                        justifyContent="Center"
+                        height="110px"
+                    >
+                        <core:Icon
+                            src="sap-icon://locked"
+                            class="iconSize"
+                            color="#4169E1"
+                            press="onOpenLockPopup"
+                        />
+                    </VBox>
+                </VBox>
+
+                <HBox
+                    id="idMainBox"
+                    height="320px"
+                    class="sapUiTinyMarginBegin"
+                >
+                    <layoutData>
+                        <l:SplitterLayoutData size="610px" />
+                    </layoutData>
+
+                    <core:Fragment
+                        fragmentName="ns.deltaapphost.fragment.MainBox"
+                        type="XML"
+                    />
+                </HBox>
+                <VBox
+                    id="idRightSidePanelVBox"
+                    visible="true"
+                    height="320px"
+                    class="sapUiSmallMarginBegin"
+                >
+                    <layoutData>
+                        <l:SplitterLayoutData size="50px" />
+                    </layoutData>
+                    <VBox
+                        id="idChartIconHBox"
+                        justifyContent="Center"
+                        height="110px"
+                    >
+                        <core:Icon
+                            src="sap-icon://business-objects-experience"
+                            class="iconSize"
+                            color="{ path: 'ScreenModel>/mLocked', formatter: '.formatter.appIconColor' }"
+                            press="onSelectChart"
+                        />
+                    </VBox>
+                    <VBox
+                        id="idBarIconHBox"
+                        justifyContent="Center"
+                        height="110px"
+                    >
+                        <core:Icon
+                            src="sap-icon://bar-chart"
+                            class="iconSize"
+                            color="{ path: 'ScreenModel>/mLocked', formatter: '.formatter.appIconColor' }"
+                            press="onSelectOption"
+                        />
+                    </VBox>
+                    <VBox
+                        id="idPnlIconHBox"
+                        justifyContent="Center"
+                        height="110px"
+                    >
+                        <core:Icon
+                            src="sap-icon://database"
+                            class="iconSize"
+                            color="{ path: 'ScreenModel>/mLocked', formatter: '.formatter.appIconColor' }"
+                            press="onSelectPnl"
+                        />
+                    </VBox>
+                </VBox>
+            </l:Splitter>
+
+            <!-- ///////////////////////////////////// -->
+        </VBox>
+    </Page>
+</mvc:View>

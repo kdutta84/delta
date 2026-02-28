@@ -11,6 +11,18 @@ sap.ui.define(
       },
 
       init() {
+        // Ipad Issue Fix
+        if (typeof Promise.withResolvers === "undefined") {
+          Promise.withResolvers = function () {
+            let resolve, reject;
+            const promise = new Promise((res, rej) => {
+              resolve = res;
+              reject = rej;
+            });
+            return { promise, resolve, reject };
+          };
+        }
+
         // call the base component's init function
         UIComponent.prototype.init.apply(this, arguments);
 
@@ -19,7 +31,7 @@ sap.ui.define(
 
         // enable routing
         this.getRouter().initialize();
-        debugger;
+
         ////////////////////////////////
         // Highcharts Local Folder
         sap.ui.loader.config({

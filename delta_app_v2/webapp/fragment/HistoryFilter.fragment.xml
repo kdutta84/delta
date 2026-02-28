@@ -18,7 +18,6 @@
                 <Title
                     id="idDateLabel"
                     text="Date :"
-                    class="sapUiTinyMarginTop"
                 />
                 <DateRangeSelection
                     id="idHistoryFilterDateRange"

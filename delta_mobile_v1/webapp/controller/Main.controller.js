@@ -184,7 +184,6 @@ sap.ui.define(
         }
         this.screen.mBody = this.input;
         this.updateModel("ScreenModel", this.screen);
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       onSelectSetting: function () {
         if (this.screen.mLocked === false) {
@@ -193,8 +192,6 @@ sap.ui.define(
         }
         this.screen.mBody = this.setting;
         this.updateModel("ScreenModel", this.screen);
-        // this.para.mBody = this.setting;
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       onSelectChart: function () {
         if (this.screen.mLocked === false) {
@@ -203,9 +200,6 @@ sap.ui.define(
         }
         this.screen.mBody = this.chart;
         this.updateModel("ScreenModel", this.screen);
-
-        // this.para.mBody = this.chart;
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       onSelectOption: async function () {
         if (this.screen.mLocked === false) {
@@ -233,9 +227,6 @@ sap.ui.define(
         }
         this.screen.mBody = this.pnl;
         this.updateModel("ScreenModel", this.screen);
-
-        // this.para.mBody = this.pnl;
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       initScreenPara: function () {
         this.screen.headerMiddle = this.para.headerMiddle;
@@ -5104,7 +5095,7 @@ sap.ui.define(
           mHeader: this.title,
           mBody: this.initApp,
         };
-
+        debugger;
         var oModel = new JSONModel(this.screen);
         this.getView().setModel(oModel, "ScreenModel");
       },
@@ -5488,33 +5479,21 @@ sap.ui.define(
         await this.onBarType(oEvent);
         this.screen.mBody = this.book;
         this.updateModel("ScreenModel", this.screen);
-
-        // this.para.mBody = this.book;
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       onTrnHistory: async function (oEvent) {
         await this.onBarType(oEvent);
         this.screen.mBody = this.history;
         this.updateModel("ScreenModel", this.screen);
-
-        // this.para.mBody = this.history;
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       onBarMessage: async function (oEvent) {
         await this.onBarType(oEvent);
         this.screen.mBody = this.message;
         this.updateModel("ScreenModel", this.screen);
-
-        // this.para.mBody = this.message;
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       onBarAlert: async function (oEvent) {
         await this.onBarType(oEvent);
         this.screen.mBody = this.alert;
         this.updateModel("ScreenModel", this.screen);
-
-        // this.para.mBody = this.alert;
-        // this.updateServerPara("mBody", this.para.mBody);
       },
       onBarType: async function (oEvent) {
         var barType = oEvent.getSource().getText();
@@ -7377,6 +7356,8 @@ sap.ui.define(
         this.support = "Support";
         this.mainAddon = "MainAddon";
         this.supportAddon = "SupportAddon";
+        this.mainAdjust = "MainAdjust";
+        this.supportAdjust = "SupportAdjust";
         this.positive = "Positive";
         this.negative = "Negative";
         this.horizontal = "Horizontal";
@@ -7402,6 +7383,9 @@ sap.ui.define(
         this.milisec24Hr = 86400000;
         this.stopwatch = "Stopwatch";
         this.clock = "Clock";
+        this.serverPara = "Para";
+        this.log = "Log";
+        this.database = "Database";
 
         this.P1 = "P1";
         this.P2 = "P2";
